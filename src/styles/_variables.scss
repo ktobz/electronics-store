@@ -1,0 +1,27 @@
+// Color Palette
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$accent-color: #28a745;
+$background-color: #f8f9fa;
+$text-color: #333;
+$white: #ffffff;
+$black: #000000;
+
+// Typography
+$font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.5;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 64px;
+
+// Breakpoints
+$breakpoint-mobile: 576px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 992px;
+$breakpoint-large: 1200px;

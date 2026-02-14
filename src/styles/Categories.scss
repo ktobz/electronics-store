@@ -1,0 +1,55 @@
+@use '../styles/variables' as *;
+
+.categories {
+    background-color: $white;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+
+    @media (min-width: $breakpoint-tablet) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $spacing-lg;
+    }
+
+    @media (min-width: $breakpoint-desktop) {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl $spacing-md;
+    border-radius: 16px;
+    cursor: pointer;
+    color: $text-color;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 8px 16px rgba($black, 0.1);
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: $spacing-md;
+        color: $primary-color;
+
+        svg {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    &__name {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+}

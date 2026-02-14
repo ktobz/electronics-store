@@ -1,0 +1,93 @@
+@use '../styles/variables' as *;
+
+.footer {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding-top: $spacing-xxl;
+    font-size: 0.9rem;
+
+    &__container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: $spacing-xl;
+        padding-bottom: $spacing-xxl;
+
+        @media (min-width: $breakpoint-tablet) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (min-width: $breakpoint-desktop) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    &__heading {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: $spacing-md;
+        color: $white;
+    }
+
+    &__logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: $spacing-md;
+        color: $primary-color;
+    }
+
+    &__text {
+        color: #aeaeae;
+        line-height: 1.6;
+        margin-bottom: $spacing-md;
+    }
+
+    &__socials {
+        display: flex;
+        gap: $spacing-md;
+
+        a {
+            color: $white;
+            transition: color 0.2s;
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+
+    &__links {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+
+        a {
+            color: #aeaeae;
+
+            &:hover {
+                color: $white;
+                padding-left: 4px;
+            }
+        }
+    }
+
+    &__contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-md;
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            color: #aeaeae;
+        }
+    }
+
+    &__bottom {
+        background-color: #111;
+        padding: $spacing-md 0;
+        text-align: center;
+        color: #777;
+        margin-top: auto;
+    }
+}

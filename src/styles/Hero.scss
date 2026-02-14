@@ -1,0 +1,118 @@
+@use '../styles/variables' as *;
+
+.hero {
+    position: relative;
+    padding-top: 120px; // account for fixed navbar
+    padding-bottom: $spacing-xxl;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    overflow: hidden;
+
+    &__container {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: $spacing-xl;
+
+        @media (min-width: $breakpoint-desktop) {
+            flex-direction: row;
+            justify-content: space-between;
+            height: 600px;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        text-align: center;
+        z-index: 10;
+
+        @media (min-width: $breakpoint-desktop) {
+            text-align: left;
+        }
+    }
+
+    &__title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: $spacing-md;
+        color: $black;
+
+        @media (min-width: $breakpoint-desktop) {
+            font-size: 3.5rem;
+        }
+
+        .highlight {
+            color: $primary-color;
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 5px;
+                left: 0;
+                width: 100%;
+                height: 8px;
+                background-color: rgba($primary-color, 0.2);
+                z-index: -1;
+            }
+        }
+    }
+
+    &__description {
+        font-size: 1.1rem;
+        color: $secondary-color;
+        margin-bottom: $spacing-xl;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+
+        @media (min-width: $breakpoint-desktop) {
+            margin-left: 0;
+        }
+    }
+
+    &__cta {
+        display: flex;
+        gap: $spacing-md;
+        justify-content: center;
+
+        @media (min-width: $breakpoint-desktop) {
+            justify-content: flex-start;
+        }
+    }
+
+    &__image-wrapper {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba($black, 0.1);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+
+            &:hover {
+                transform: perspective(1000px) rotateY(0deg);
+            }
+        }
+
+        // Abstract background shapes
+        &::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba($primary-color, 0.1);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
