@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ShoppingCart, Search, Menu, X, Zap } from 'lucide-react';
+import { ShoppingCart, Search, Menu, X, Zap, Heart, Repeat, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '../context/StoreContext';
 import '../styles/Navbar.scss';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { cart, wishlist, compare } = useStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,10 +39,26 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="navbar__actions">
-          <button className="navbar__cart-btn">
-            <ShoppingCart />
-            <span className="navbar__cart-count">2</span>
+          <button className="navbar__action-btn" title="Compare">
+            <Repeat />
+            {compare.length > 0 && <span className="navbar__badge">{compare.length}</span>}
           </button>
+
+          <button className="navbar__action-btn" title="Wishlist">
+            <Heart />
+            {wishlist.length > 0 && <span className="navbar__badge">{wishlist.length}</span>}
+          </button>
+
+          <button className="navbar__action-btn" title="Cart">
+            <ShoppingCart />
+            {cart.length > 0 && <span className="navbar__badge">{cart.length}</span>}
+          </button>
+
+          <button className="navbar__login-btn">
+            <User size={18} />
+            Login
+          </button>
+
           <button className="navbar__mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X /> : <Menu />}
           </button>

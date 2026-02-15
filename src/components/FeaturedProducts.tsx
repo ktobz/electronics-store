@@ -1,53 +1,35 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShoppingBag, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import ProductCard from './ProductCard';
+import { fetchProducts, type Product } from '../services/mockApi';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import '../styles/FeaturedProducts.scss';
 
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    rating: number;
-    image: string;
-    category: string;
-}
-
-const products: Product[] = [
-    {
-        id: 1,
-        name: "Wireless Noise-Cancelling Headphones",
-        price: 299.99,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        category: "Audio"
-    },
-    {
-        id: 2,
-        name: "Smart Watch Series 7",
-        price: 399.99,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        category: "Wearables"
-    },
-    {
-        id: 3,
-        name: "4K Ultra HD Camera",
-        price: 599.99,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        category: "Photography"
-    },
-    {
-        id: 4,
-        name: "Gaming Console Pro",
-        price: 499.99,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        category: "Gaming"
-    }
-];
-
 const FeaturedProducts: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(0);
+    const limit = 4;
+
+    useEffect(() => {
+        const loadProducts = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchProducts(page, limit);
+                setProducts(data.products);
+                setTotal(data.total);
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadProducts();
+    }, [page]);
+
+    const totalPages = Math.ceil(total / limit);
+
     return (
         <section className="section featured-products" id="products">
             <div className="container">
@@ -56,35 +38,42 @@ const FeaturedProducts: React.FC = () => {
                     <p className="section-subtitle">Top picks for you this week</p>
                 </div>
 
-                <div className="product-grid">
-                    {products.map((product) => (
-                        <motion.div
-                            key={product.id}
-                            className="product-card"
-                            whileHover={{ y: -10 }}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <div className="product-card__image">
-                                <img src={product.image} alt={product.name} />
-                                <span className="product-card__category">{product.category}</span>
-                                <button className="product-card__add-btn">
-                                    <ShoppingBag size={20} />
-                                </button>
+                {loading ? (
+                    <div className="product-loading">
+                        <Loader2 className="animate-spin" size={48} />
+                        <p>Loading the latest tech...</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="product-grid">
+                            {products.map((product) => (
+                                <ProductCard key={product.id} product={product} />
+                            ))}
+                        </div>
+
+                        <div className="pagination">
+                            <button
+                                className="pagination__btn"
+                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                            >
+                                <ChevronLeft size={20} /> Previous
+                            </button>
+
+                            <div className="pagination__info">
+                                Page <span>{page}</span> of {totalPages}
                             </div>
-                            <div className="product-card__content">
-                                <div className="product-card__rating">
-                                    <Star size={16} fill="#ffc107" stroke="#ffc107" />
-                                    <span>{product.rating}</span>
-                                </div>
-                                <h3 className="product-card__title">{product.name}</h3>
-                                <div className="product-card__price">${product.price}</div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+
+                            <button
+                                className="pagination__btn"
+                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                disabled={page === totalPages}
+                            >
+                                Next <ChevronRight size={20} />
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </section>
     );

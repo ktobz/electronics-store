@@ -31,6 +31,7 @@
         font-weight: 700;
         color: $primary-color;
         gap: $spacing-xs;
+        margin-right: $spacing-lg;
 
         &-icon {
             width: 28px;
@@ -42,6 +43,7 @@
         display: none;
         position: relative;
         width: 300px;
+        margin-right: auto;
 
         @media (min-width: $breakpoint-desktop) {
             display: block;
@@ -76,6 +78,7 @@
     &__desktop-menu {
         display: none;
         gap: $spacing-lg;
+        margin-right: $spacing-xl;
 
         @media (min-width: $breakpoint-desktop) {
             display: flex;
@@ -112,25 +115,36 @@
     &__actions {
         display: flex;
         align-items: center;
-        gap: $spacing-md;
+        gap: $spacing-sm;
+
+        @media (min-width: $breakpoint-tablet) {
+            gap: $spacing-md;
+        }
     }
 
-    &__cart-btn {
+    &__action-btn {
         position: relative;
         color: $text-color;
         transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
 
         &:hover {
+            background-color: rgba($primary-color, 0.05);
             color: $primary-color;
         }
 
-        .navbar__cart-count {
+        .navbar__badge {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: 0;
+            right: 0;
             background-color: $accent-color;
             color: $white;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             width: 18px;
             height: 18px;
@@ -138,12 +152,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid $white;
+        }
+    }
+
+    &__login-btn {
+        display: none;
+        align-items: center;
+        gap: $spacing-xs;
+        padding: $spacing-xs $spacing-md;
+        border: 1px solid rgba($black, 0.1);
+        border-radius: 20px;
+        font-weight: 600;
+        transition: all 0.2s;
+
+        &:hover {
+            border-color: $primary-color;
+            color: $primary-color;
+            background-color: $white;
+        }
+
+        @media (min-width: $breakpoint-tablet) {
+            display: flex;
         }
     }
 
     &__mobile-toggle {
         display: block;
         color: $text-color;
+        margin-left: $spacing-sm;
 
         @media (min-width: $breakpoint-desktop) {
             display: none;
