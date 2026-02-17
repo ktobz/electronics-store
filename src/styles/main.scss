@@ -55,6 +55,25 @@ img {
     padding: $spacing-xxl 0;
 }
 
+.section-header {
+    margin-bottom: $spacing-xl;
+    text-align: left;
+    max-width: 800px;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: $spacing-xs;
+    color: $black;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: $secondary-color;
+    opacity: 0.8;
+}
+
 .btn {
     display: inline-block;
     padding: $spacing-sm $spacing-lg;

@@ -105,18 +105,232 @@ const products: Product[] = [
         rating: 4.7,
         image: "https://images.unsplash.com/photo-1592155931584-901ac15763e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
         category: "Gaming"
+    },
+    {
+        id: 11,
+        name: "Panasonic Lumix S5II",
+        brand: "Panasonic",
+        price: 1999.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Cameras"
+    },
+    {
+        id: 12,
+        name: "Panasonic OLED TV",
+        brand: "Panasonic",
+        price: 1499.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "TVs"
+    },
+    {
+        id: 13,
+        name: "Panasonic Microwave",
+        brand: "Panasonic",
+        price: 249.99,
+        rating: 4.5,
+        image: "https://images.unsplash.com/photo-1574265366533-5c02604edcf0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 14,
+        name: "Panasonic Air Purifier",
+        brand: "Panasonic",
+        price: 299.99,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1585338107529-13afc5f02586?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 15,
+        name: "Panasonic Earbuds",
+        brand: "Panasonic",
+        price: 129.99,
+        rating: 4.4,
+        image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Audio"
+    },
+    {
+        id: 16,
+        name: "Panasonic Beard Trimmer",
+        brand: "Panasonic",
+        price: 89.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1621607512214-6829748aa2eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Grooming"
+    },
+    {
+        id: 17,
+        name: "Panasonic Rice Cooker",
+        brand: "Panasonic",
+        price: 159.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1584286595398-a59f21d313f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 18,
+        name: "Panasonic Cordless Phone",
+        brand: "Panasonic",
+        price: 59.99,
+        rating: 4.6,
+        image: "https://images.unsplash.com/photo-1520923642038-b4259ace9439?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Communication"
+    },
+    {
+        id: 19,
+        name: "Panasonic Bread Maker",
+        brand: "Panasonic",
+        price: 199.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 20,
+        name: "Panasonic Hair Dryer",
+        brand: "Panasonic",
+        price: 79.99,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1522338242992-e1a54906a8da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Grooming"
+    },
+    {
+        id: 21,
+        name: "Galaxy Z Fold 5",
+        brand: "Samsung",
+        price: 1799.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Phones",
+        isNew: true
+    },
+    {
+        id: 22,
+        name: "Samsung Neo QLED 8K",
+        brand: "Samsung",
+        price: 2999.99,
+        rating: 5.0,
+        image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "TVs"
+    },
+    {
+        id: 23,
+        name: "Samsung Galaxy Tab S9",
+        brand: "Samsung",
+        price: 799.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1544244015-0cd4b3ffc6b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Tablets"
+    },
+    {
+        id: 24,
+        name: "Samsung Galaxy Watch 6",
+        brand: "Samsung",
+        price: 299.99,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Wearables"
+    },
+    {
+        id: 25,
+        name: "Samsung Odyssey G9",
+        brand: "Samsung",
+        price: 1299.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Monitors"
+    },
+    {
+        id: 26,
+        name: "Samsung 990 Pro SSD",
+        brand: "Samsung",
+        price: 169.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Components"
+    },
+    {
+        id: 27,
+        name: "Samsung Galaxy Buds2 Pro",
+        brand: "Samsung",
+        price: 229.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1588423770674-f2a96437e1c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Audio"
+    },
+    {
+        id: 28,
+        name: "Samsung Smart Fridge",
+        brand: "Samsung",
+        price: 2499.99,
+        rating: 4.6,
+        image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 29,
+        name: "Samsung Jet Bot AI+",
+        brand: "Samsung",
+        price: 899.99,
+        rating: 4.7,
+        image: "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Appliances"
+    },
+    {
+        id: 30,
+        name: "Samsung Soundbar Q990C",
+        brand: "Samsung",
+        price: 1399.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1545454675-3531bdf9915e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Audio"
+    },
+    {
+        id: 31,
+        name: "Apple iPad Pro M2",
+        brand: "Apple",
+        price: 1099.99,
+        rating: 4.9,
+        image: "https://images.unsplash.com/photo-1544244015-0cd4b3ffc6b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Tablets"
+    },
+    {
+        id: 32,
+        name: "Dell XPS 15",
+        brand: "Dell",
+        price: 1899.99,
+        rating: 4.8,
+        image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        category: "Laptops"
     }
 ];
 
-export const fetchProducts = (page: number = 1, limit: number = 4): Promise<{ products: Product[], total: number }> => {
+export const fetchProducts = (
+    page: number = 1,
+    limit: number = 10,
+    brand?: string,
+    category?: string
+): Promise<{ products: Product[], total: number }> => {
     return new Promise((resolve) => {
         setTimeout(() => {
+            let filteredProducts = products;
+            if (brand) {
+                filteredProducts = filteredProducts.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
+            }
+            if (category) {
+                filteredProducts = filteredProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+            }
+
             const start = (page - 1) * limit;
             const end = start + limit;
+            const paginatedProducts = filteredProducts.slice(start, end);
+
             resolve({
-                products: products.slice(start, end),
-                total: products.length
+                products: paginatedProducts,
+                total: filteredProducts.length
             });
-        }, 800); // Simulate network delay
+        }, 300);
     });
 };

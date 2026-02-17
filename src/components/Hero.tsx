@@ -1,135 +1,110 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ShoppingCart, Info, Star } from 'lucide-react';
 import '../styles/Hero.scss';
 
 const slides = [
     {
         id: 1,
-        title: "Next-Gen Tech For Your Lifestyle",
-        description: "Discover the latest gadgets and electronics designed to elevate your everyday experience. From smart home devices to high-performance audio.",
-        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        title: "The Future of Sound",
+        subtitle: "Experience crystal clear audio with our premium range of headphones.",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop",
         cta: "Shop Now",
-        link: "#products"
+        accent: "#f43f5e"
     },
     {
         id: 2,
-        title: "Stay Connected with Cutting-Edge Wearables",
-        description: "Track your fitness, receive notifications, and express your style with our premium smartwatches and fitness trackers.",
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        cta: "Explore Watches",
-        link: "#products"
+        title: "Next Gen Computing",
+        subtitle: "Unleash your creativity with the most powerful laptops in the market.",
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=2026&auto=format&fit=crop",
+        cta: "View Models",
+        accent: "#8b5cf6"
     },
     {
         id: 3,
-        title: "Immerse Yourself in Pure Sound",
-        description: "Experience music like never before with our range of high-fidelity headphones and wireless audio solutions.",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-        cta: "Browse Audio",
-        link: "#products"
+        title: "Capture Every Moment",
+        subtitle: "Professional grade photography tools for enthusiasts and pros.",
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2076&auto=format&fit=crop",
+        cta: "Explore Cameras",
+        accent: "#0ea5e9"
     }
 ];
 
 const Hero: React.FC = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [direction, setDirection] = useState(0);
+    const [current, setCurrent] = useState(0);
 
-    const nextSlide = useCallback(() => {
-        setDirection(1);
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
+    const next = useCallback(() => {
+        setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, []);
 
-    const prevSlide = useCallback(() => {
-        setDirection(-1);
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    const prev = useCallback(() => {
+        setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     }, []);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            nextSlide();
-        }, 5000);
+        const timer = setInterval(next, 6000);
         return () => clearInterval(timer);
-    }, [nextSlide]);
-
-    const variants = {
-        enter: (direction: number) => ({
-            x: direction > 0 ? 1000 : -1000,
-            opacity: 0
-        }),
-        center: {
-            zIndex: 1,
-            x: 0,
-            opacity: 1
-        },
-        exit: (direction: number) => ({
-            zIndex: 0,
-            x: direction < 0 ? 1000 : -1000,
-            opacity: 0
-        })
-    };
+    }, [next]);
 
     return (
         <section className="hero">
-            <div className="container hero__container">
-                <AnimatePresence initial={false} custom={direction} mode="wait">
-                    <motion.div
-                        key={currentSlide}
-                        custom={direction}
-                        variants={variants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{
-                            x: { type: "spring", stiffness: 300, damping: 30 },
-                            opacity: { duration: 0.5 }
-                        }}
-                        className="hero__slide"
-                    >
-                        <div className="hero__content">
-                            <h1 className="hero__title">
-                                {slides[currentSlide].title.split(' For ')[0]} <br />
-                                <span className="highlight">{slides[currentSlide].title.split(' For ')[1] ? `For ${slides[currentSlide].title.split(' For ')[1]}` : ''}</span>
-                            </h1>
-                            <p className="hero__description">
-                                {slides[currentSlide].description}
-                            </p>
-                            <div className="hero__cta">
-                                <button className="btn btn-primary">
-                                    {slides[currentSlide].cta} <ArrowRight size={18} />
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={current}
+                    className="hero__slide"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                    style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${slides[current].image})` }}
+                >
+                    <div className="container hero__container">
+                        <motion.div
+                            className="hero__content"
+                            initial={{ x: -50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.3, duration: 0.8 }}
+                        >
+                            <div className="hero__badge" style={{ backgroundColor: slides[current].accent }}>
+                                <Star size={14} fill="white" />
+                                <span>Electro Store Selection</span>
+                            </div>
+                            <h1 className="hero__title">{slides[current].title}</h1>
+                            <p className="hero__subtitle">{slides[current].subtitle}</p>
+
+                            <div className="hero__btns">
+                                <button className="btn btn-primary hero-btn">
+                                    <ShoppingCart size={18} />
+                                    {slides[current].cta}
                                 </button>
-                                <button className="btn btn-secondary">View Deals</button>
+                                <button className="btn btn-secondary hero-btn">
+                                    <Info size={18} />
+                                    Details
+                                </button>
                             </div>
-                        </div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            </AnimatePresence>
 
-                        <div className="hero__image-wrapper">
-                            <div className="hero__image-placeholder">
-                                <img src={slides[currentSlide].image} alt={slides[currentSlide].title} />
-                            </div>
-                        </div>
-                    </motion.div>
-                </AnimatePresence>
-
-                <div className="hero__controls">
-                    <button className="hero__control hero__control--prev" onClick={prevSlide}>
-                        <ChevronLeft size={24} />
-                    </button>
-                    <button className="hero__control hero__control--next" onClick={nextSlide}>
-                        <ChevronRight size={24} />
-                    </button>
-                </div>
-
-                <div className="hero__indicators">
-                    {slides.map((_, index) => (
+            {/* Controls */}
+            <div className="hero__controls">
+                <button onClick={prev} className="hero__control-btn" aria-label="Previous slide">
+                    <ChevronLeft size={24} />
+                </button>
+                <div className="hero__dots">
+                    {slides.map((_, i) => (
                         <button
-                            key={index}
-                            className={`hero__indicator ${index === currentSlide ? 'hero__indicator--active' : ''}`}
-                            onClick={() => {
-                                setDirection(index > currentSlide ? 1 : -1);
-                                setCurrentSlide(index);
-                            }}
+                            key={i}
+                            className={`hero__dot ${i === current ? 'active' : ''}`}
+                            onClick={() => setCurrent(i)}
+                            aria-label={`Go to slide ${i + 1}`}
                         />
                     ))}
                 </div>
+                <button onClick={next} className="hero__control-btn" aria-label="Next slide">
+                    <ChevronRight size={24} />
+                </button>
             </div>
         </section>
     );

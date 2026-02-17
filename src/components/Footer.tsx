@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 import '../styles/Footer.scss';
 
 const Footer: React.FC = () => {
@@ -11,11 +11,19 @@ const Footer: React.FC = () => {
                     <p className="footer__text">
                         Your one-stop shop for the latest electronics and gadgets. We bring the future to your doorstep.
                     </p>
-                    <div className="footer__socials">
-                        <a href="#" className="footer__social-link"><Facebook size={20} /></a>
-                        <a href="#" className="footer__social-link"><Twitter size={20} /></a>
-                        <a href="#" className="footer__social-link"><Instagram size={20} /></a>
-                        <a href="#" className="footer__social-link"><Linkedin size={20} /></a>
+                    <div className="footer__social">
+                        <a href="https://facebook.com/samsung" target="_blank" rel="noopener noreferrer" className="social-link" title="Facebook">
+                            <Facebook size={20} />
+                        </a>
+                        <a href="https://twitter.com/panasonic" target="_blank" rel="noopener noreferrer" className="social-link" title="Twitter">
+                            <Twitter size={20} />
+                        </a>
+                        <a href="https://instagram.com/sony" target="_blank" rel="noopener noreferrer" className="social-link" title="Instagram">
+                            <Instagram size={20} />
+                        </a>
+                        <a href="https://youtube.com/apple" target="_blank" rel="noopener noreferrer" className="social-link" title="Youtube">
+                            <Youtube size={20} />
+                        </a>
                     </div>
                 </div>
 
