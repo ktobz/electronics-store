@@ -2,8 +2,8 @@
 
 .hero {
     position: relative;
-    height: 95vh;
-    min-height: 600px;
+    height: 100vh;
+    min-height: 700px;
     width: 100%;
     margin-top: 0;
     overflow: hidden;
@@ -15,10 +15,35 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-size: cover;
-        background-position: center;
         display: flex;
         align-items: center;
+        perspective: 1000px;
+    }
+
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+        transition: transform 10s linear;
+        transform: scale(1.1);
+    }
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.6) 100%);
+        z-index: 2;
     }
 
     &__container {
@@ -31,65 +56,70 @@
     }
 
     &__content {
-        max-width: 800px;
+        max-width: 850px;
         color: $white;
         text-align: left;
+        padding-top: 80px; // space for navbar
     }
 
     &__badge {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 6px 14px;
-        border-radius: 30px;
-        font-weight: 700;
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
+        padding: 8px 18px;
+        border-radius: 40px;
+        font-weight: 800;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 15px rgba($black, 0.3);
+        margin-bottom: 28px;
+        box-shadow: 0 10px 30px rgba($black, 0.4);
     }
 
     &__title {
-        font-size: 5rem;
+        font-size: 5.5rem;
         font-weight: 900;
-        line-height: 1.05;
-        margin-bottom: 24px;
-        letter-spacing: -0.03em;
-        text-shadow: 0 2px 10px rgba($black, 0.3);
+        line-height: 1;
+        margin-bottom: 28px;
+        letter-spacing: -0.04em;
+        text-shadow: 0 5px 25px rgba($black, 0.4);
 
-        @media (max-width: 768px) {
-            font-size: 2.75rem;
+        @media (max-width: 992px) {
+            font-size: 4rem;
+        }
+
+        @media (max-width: 576px) {
+            font-size: 2.5rem;
         }
     }
 
     &__subtitle {
-        font-size: 1.4rem;
-        opacity: 0.9;
-        margin-bottom: 48px;
+        font-size: 1.5rem;
+        opacity: 0.85;
+        margin-bottom: 56px;
         line-height: 1.5;
-        max-width: 550px;
-        text-shadow: 0 2px 5px rgba($black, 0.2);
+        max-width: 600px;
+        text-shadow: 0 2px 10px rgba($black, 0.3);
 
         @media (max-width: 768px) {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
     }
 
     &__btns {
         display: flex;
-        gap: 16px;
+        gap: 20px;
         flex-wrap: wrap;
 
         .hero-btn {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 16px 36px;
-            font-size: 1.1rem;
+            gap: 12px;
+            padding: 18px 42px;
+            font-size: 1.15rem;
             font-weight: 800;
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .btn-primary {
@@ -97,77 +127,84 @@
             color: $black;
 
             &:hover {
-                background-color: #f3f4f6;
-                transform: translateY(-4px);
-                box-shadow: 0 10px 25px rgba($black, 0.2);
+                background-color: #eee;
+                transform: scale(1.05) translateY(-5px);
+                box-shadow: 0 15px 35px rgba($black, 0.3);
             }
         }
 
         .btn-secondary {
             background-color: rgba($white, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba($white, 0.3);
             color: $white;
 
             &:hover {
                 background-color: rgba($white, 0.2);
-                transform: translateY(-4px);
-                box-shadow: 0 10px 25px rgba($black, 0.2);
+                transform: scale(1.05) translateY(-5px);
+                box-shadow: 0 15px 35px rgba($black, 0.3);
             }
         }
     }
 
     &__controls {
         position: absolute;
-        bottom: 40px;
+        bottom: 50px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
-        gap: 24px;
+        gap: 32px;
         z-index: 10;
         color: $white;
     }
 
     &__control-btn {
-        background: rgba($white, 0.1);
-        backdrop-filter: blur(5px);
+        background: rgba($white, 0.05);
+        backdrop-filter: blur(10px);
         color: $white;
         border: 1px solid rgba($white, 0.2);
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
 
         &:hover {
             background: $white;
             color: $black;
             transform: scale(1.1);
+            box-shadow: 0 0 20px rgba($white, 0.3);
         }
     }
 
     &__dots {
         display: flex;
-        gap: 12px;
+        gap: 14px;
     }
 
     &__dot {
-        width: 12px;
-        height: 12px;
-        background: rgba($white, 0.3);
+        width: 14px;
+        height: 14px;
+        background: rgba($white, 0.25);
         cursor: pointer;
         border: none;
         border-radius: 50%;
-        transition: all 0.3s;
+        transition: all 0.4s ease;
 
         &.active {
             background: $white;
-            width: 32px;
-            border-radius: 10px;
+            width: 42px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba($white, 0.5);
         }
     }
+}
+
+// Subtle zoom effect on the background while the slide is active
+.hero__slide[style*="opacity: 1"] .hero__background {
+    transform: scale(1.2);
 }
