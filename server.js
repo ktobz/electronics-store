@@ -1,22 +1,8 @@
-export interface Product {
-    id: number;
-    name: string;
-    price: number;
-    originalPrice?: number;
-    rating: number;
-    image: string;
-    category: string;
-    isSale?: boolean;
-    isNew?: boolean;
-    brand: string;
-}
+const express = require('express');
+const cors = require('cors');
 
-// Helper function to generate image URLs
-const generateImageUrl = (seed: string, id: number): string => {
-    return `https://picsum.photos/seed/${seed}${id}/400/300.jpg`;
-};
-
-export const products: Product[] = [
+// Mock products data
+const products = [
     {
         id: 1,
         name: "iPhone 15 Pro",
@@ -34,7 +20,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1199.99,
         rating: 4.8,
-        image: generateImageUrl("phone", 6),
+        image: "https://picsum.photos/seed/galaxys24/400/300.jpg",
         category: "Phones",
         isNew: true
     },
@@ -44,7 +30,7 @@ export const products: Product[] = [
         brand: "Sony",
         price: 349.99,
         rating: 4.9,
-        image: generateImageUrl("audio", 8),
+        image: "https://picsum.photos/seed/sonyheadphones/400/300.jpg",
         category: "Audio"
     },
     {
@@ -53,7 +39,7 @@ export const products: Product[] = [
         brand: "Apple",
         price: 1999.99,
         rating: 4.9,
-        image: generateImageUrl("laptop", 4),
+        image: "https://picsum.photos/seed/macbookpro/400/300.jpg",
         category: "Laptops"
     },
     {
@@ -62,7 +48,7 @@ export const products: Product[] = [
         brand: "Sony",
         price: 499.99,
         rating: 4.8,
-        image: generateImageUrl("gaming", 10),
+        image: "https://picsum.photos/seed/ps5console/400/300.jpg",
         category: "Gaming"
     },
     {
@@ -71,7 +57,7 @@ export const products: Product[] = [
         brand: "Google",
         price: 899.99,
         rating: 4.7,
-        image: generateImageUrl("phone", 6),
+        image: "https://picsum.photos/seed/pixel8pro/400/300.jpg",
         category: "Phones",
         isSale: true
     },
@@ -81,7 +67,7 @@ export const products: Product[] = [
         brand: "Apple",
         price: 399.99,
         rating: 4.8,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/applewatch9/400/300.jpg",
         category: "Wearables"
     },
     {
@@ -90,7 +76,7 @@ export const products: Product[] = [
         brand: "Bose",
         price: 429.99,
         rating: 4.9,
-        image: generateImageUrl("audio", 8),
+        image: "https://picsum.photos/seed/boseqc/400/300.jpg",
         category: "Audio"
     },
     {
@@ -99,7 +85,7 @@ export const products: Product[] = [
         brand: "Microsoft",
         price: 1299.99,
         rating: 4.6,
-        image: generateImageUrl("laptop", 4),
+        image: "https://picsum.photos/seed/surfacelaptop/400/300.jpg",
         category: "Laptops"
     },
     {
@@ -108,7 +94,7 @@ export const products: Product[] = [
         brand: "ASUS",
         price: 699.99,
         rating: 4.7,
-        image: generateImageUrl("gaming", 10),
+        image: "https://picsum.photos/seed/rogally/400/300.jpg",
         category: "Gaming"
     },
     {
@@ -117,7 +103,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 1999.99,
         rating: 4.9,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/lumixs5/400/300.jpg",
         category: "Cameras"
     },
     {
@@ -126,7 +112,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 1499.99,
         rating: 4.8,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonictv/400/300.jpg",
         category: "TVs"
     },
     {
@@ -135,7 +121,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 249.99,
         rating: 4.5,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonicmicrowave/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -144,7 +130,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 299.99,
         rating: 4.7,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonicpurifier/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -153,7 +139,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 129.99,
         rating: 4.4,
-        image: generateImageUrl("audio", 8),
+        image: "https://picsum.photos/seed/panasonicearbuds/400/300.jpg",
         category: "Audio"
     },
     {
@@ -162,7 +148,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 89.99,
         rating: 4.8,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonictrimmer/400/300.jpg",
         category: "Grooming"
     },
     {
@@ -171,7 +157,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 159.99,
         rating: 4.9,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasoniccooker/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -180,7 +166,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 59.99,
         rating: 4.6,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonicphone/400/300.jpg",
         category: "Communication"
     },
     {
@@ -189,7 +175,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 199.99,
         rating: 4.8,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonicbread/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -198,7 +184,7 @@ export const products: Product[] = [
         brand: "Panasonic",
         price: 79.99,
         rating: 4.7,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/panasonicdryer/400/300.jpg",
         category: "Grooming"
     },
     {
@@ -207,7 +193,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1799.99,
         rating: 4.8,
-        image: generateImageUrl("phone", 6),
+        image: "https://picsum.photos/seed/galaxyfold5/400/300.jpg",
         category: "Phones",
         isNew: true
     },
@@ -217,7 +203,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 2999.99,
         rating: 5.0,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/samsungqled/400/300.jpg",
         category: "TVs"
     },
     {
@@ -226,7 +212,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 799.99,
         rating: 4.9,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/galaxytabs9/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -235,7 +221,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 299.99,
         rating: 4.7,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/galaxywatch6/400/300.jpg",
         category: "Wearables"
     },
     {
@@ -244,7 +230,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1299.99,
         rating: 4.9,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/odysseyg9/400/300.jpg",
         category: "Monitors"
     },
     {
@@ -253,7 +239,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 169.99,
         rating: 4.9,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/samsungssd/400/300.jpg",
         category: "Components"
     },
     {
@@ -262,7 +248,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 229.99,
         rating: 4.8,
-        image: generateImageUrl("audio", 8),
+        image: "https://picsum.photos/seed/galaxybuds2/400/300.jpg",
         category: "Audio"
     },
     {
@@ -271,7 +257,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 2499.99,
         rating: 4.6,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/samsungfridge/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -280,7 +266,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 899.99,
         rating: 4.7,
-        image: generateImageUrl("product", 7),
+        image: "https://picsum.photos/seed/samsungrobot/400/300.jpg",
         category: "Appliances"
     },
     {
@@ -289,278 +275,8 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1399.99,
         rating: 4.9,
-        image: generateImageUrl("audio", 8),
+        image: "https://picsum.photos/seed/samsungsoundbar/400/300.jpg",
         category: "Audio"
-    },
-    {
-        id: 31,
-        name: "Apple iPad Pro M2",
-        brand: "Apple",
-        price: 1099.99,
-        rating: 4.9,
-        image: generateImageUrl("product", 7),
-        category: "Tablets"
-    },
-    {
-        id: 32,
-        name: "Dell XPS 15",
-        brand: "Dell",
-        price: 1899.99,
-        rating: 4.8,
-        image: generateImageUrl("laptop", 32),
-        category: "Laptops"
-    },
-    {
-        id: 33,
-        name: "iPad Air",
-        brand: "Apple",
-        price: 599.99,
-        rating: 4.7,
-        image: generateImageUrl("tablet", 33),
-        category: "Tablets"
-    },
-    {
-        id: 34,
-        name: "Galaxy Tab S9",
-        brand: "Samsung",
-        price: 799.99,
-        rating: 4.6,
-        image: generateImageUrl("tablet", 34),
-        category: "Tablets"
-    },
-    {
-        id: 35,
-        name: "AirPods Pro",
-        brand: "Apple",
-        price: 249.99,
-        rating: 4.8,
-        image: generateImageUrl("audio", 35),
-        category: "Audio"
-    },
-    {
-        id: 36,
-        name: "Galaxy Buds Pro",
-        brand: "Samsung",
-        price: 199.99,
-        rating: 4.5,
-        image: generateImageUrl("audio", 36),
-        category: "Audio"
-    },
-    {
-        id: 37,
-        name: "Sony WH-1000XM4",
-        brand: "Sony",
-        price: 299.99,
-        rating: 4.9,
-        image: generateImageUrl("audio", 37),
-        category: "Audio"
-    },
-    {
-        id: 38,
-        name: "Bose QuietComfort 45",
-        brand: "Bose",
-        price: 329.99,
-        rating: 4.7,
-        image: generateImageUrl("audio", 38),
-        category: "Audio"
-    },
-    {
-        id: 39,
-        name: "Xbox Series X",
-        brand: "Microsoft",
-        price: 499.99,
-        rating: 4.8,
-        image: generateImageUrl("gaming", 39),
-        category: "Gaming"
-    },
-    {
-        id: 40,
-        name: "Nintendo Switch",
-        brand: "Nintendo",
-        price: 299.99,
-        rating: 4.6,
-        image: generateImageUrl("gaming", 40),
-        category: "Gaming"
-    },
-    {
-        id: 41,
-        name: "Steam Deck",
-        brand: "Valve",
-        price: 399.99,
-        rating: 4.5,
-        image: generateImageUrl("gaming", 41),
-        category: "Gaming"
-    },
-    {
-        id: 42,
-        name: "Apple Watch Ultra",
-        brand: "Apple",
-        price: 799.99,
-        rating: 4.8,
-        image: generateImageUrl("wearable", 42),
-        category: "Wearables"
-    },
-    {
-        id: 43,
-        name: "Galaxy Watch 6",
-        brand: "Samsung",
-        price: 299.99,
-        rating: 4.6,
-        image: generateImageUrl("wearable", 43),
-        category: "Wearables"
-    },
-    {
-        id: 44,
-        name: "Fitbit Sense 2",
-        brand: "Fitbit",
-        price: 249.99,
-        rating: 4.4,
-        image: generateImageUrl("wearable", 44),
-        category: "Wearables"
-    },
-    {
-        id: 45,
-        name: "Garmin Fenix 7",
-        brand: "Garmin",
-        price: 699.99,
-        rating: 4.7,
-        image: generateImageUrl("wearable", 45),
-        category: "Wearables"
-    },
-    {
-        id: 46,
-        name: "Canon EOS R5",
-        brand: "Canon",
-        price: 3899.99,
-        rating: 4.9,
-        image: generateImageUrl("camera", 46),
-        category: "Cameras"
-    },
-    {
-        id: 47,
-        name: "Sony Alpha A7 IV",
-        brand: "Sony",
-        price: 2499.99,
-        rating: 4.8,
-        image: generateImageUrl("camera", 47),
-        category: "Cameras"
-    },
-    {
-        id: 48,
-        name: "Nikon Z9",
-        brand: "Nikon",
-        price: 5499.99,
-        rating: 4.9,
-        image: generateImageUrl("camera", 48),
-        category: "Cameras"
-    },
-    {
-        id: 49,
-        name: "LG OLED C3",
-        brand: "LG",
-        price: 1499.99,
-        rating: 4.8,
-        image: generateImageUrl("tv", 49),
-        category: "TVs"
-    },
-    {
-        id: 50,
-        name: "Sony Bravia XR",
-        brand: "Sony",
-        price: 1999.99,
-        rating: 4.7,
-        image: generateImageUrl("tv", 50),
-        category: "TVs"
-    },
-    {
-        id: 51,
-        name: "Samsung QLED 8K",
-        brand: "Samsung",
-        price: 2999.99,
-        rating: 5.0,
-        image: generateImageUrl("tv", 51),
-        category: "TVs"
-    },
-    {
-        id: 52,
-        name: "Dyson V15 Detect",
-        brand: "Dyson",
-        price: 749.99,
-        rating: 4.6,
-        image: generateImageUrl("appliance", 52),
-        category: "Appliances"
-    },
-    {
-        id: 53,
-        name: "iRobot Roomba j7+",
-        brand: "iRobot",
-        price: 899.99,
-        rating: 4.5,
-        image: generateImageUrl("appliance", 53),
-        category: "Appliances"
-    },
-    {
-        id: 54,
-        name: "Instant Pot Duo",
-        brand: "Instant Pot",
-        price: 99.99,
-        rating: 4.4,
-        image: generateImageUrl("appliance", 54),
-        category: "Appliances"
-    },
-    {
-        id: 55,
-        name: "KitchenAid Mixer",
-        brand: "KitchenAid",
-        price: 379.99,
-        rating: 4.8,
-        image: generateImageUrl("appliance", 55),
-        category: "Appliances"
-    },
-    {
-        id: 56,
-        name: "Nespresso Vertuo",
-        brand: "Nespresso",
-        price: 199.99,
-        rating: 4.3,
-        image: generateImageUrl("appliance", 56),
-        category: "Appliances"
-    },
-    {
-        id: 57,
-        name: "Dyson Airwrap",
-        brand: "Dyson",
-        price: 599.99,
-        rating: 4.5,
-        image: generateImageUrl("grooming", 57),
-        category: "Grooming"
-    },
-    {
-        id: 58,
-        name: "Philips OneBlade",
-        brand: "Philips",
-        price: 79.99,
-        rating: 4.2,
-        image: generateImageUrl("grooming", 58),
-        category: "Grooming"
-    },
-    {
-        id: 59,
-        name: "Braun Series 9",
-        brand: "Braun",
-        price: 299.99,
-        rating: 4.6,
-        image: generateImageUrl("grooming", 59),
-        category: "Grooming"
-    },
-    {
-        id: 60,
-        name: "Oral-B iO",
-        brand: "Oral-B",
-        price: 199.99,
-        rating: 4.4,
-        image: generateImageUrl("grooming", 60),
-        category: "Grooming"
     },
     // 20 Additional Samsung Products
     {
@@ -570,7 +286,7 @@ export const products: Product[] = [
         price: 399.99,
         originalPrice: 449.99,
         rating: 4.7,
-        image: generateImageUrl("watch", 61),
+        image: "https://picsum.photos/seed/galaxywatch6/400/300.jpg",
         category: "Wearables",
         isSale: true
     },
@@ -580,7 +296,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1099.99,
         rating: 4.8,
-        image: generateImageUrl("tablet", 62),
+        image: "https://picsum.photos/seed/tabs9ultra/400/300.jpg",
         category: "Tablets",
         isNew: true
     },
@@ -590,7 +306,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 449.99,
         rating: 4.5,
-        image: generateImageUrl("phone", 63),
+        image: "https://picsum.photos/seed/galaxya54/400/300.jpg",
         category: "Phones"
     },
     {
@@ -600,7 +316,7 @@ export const products: Product[] = [
         price: 229.99,
         originalPrice: 279.99,
         rating: 4.6,
-        image: generateImageUrl("audio", 64),
+        image: "https://picsum.photos/seed/buds2pro/400/300.jpg",
         category: "Audio",
         isSale: true
     },
@@ -610,7 +326,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 699.99,
         rating: 4.4,
-        image: generateImageUrl("monitor", 65),
+        image: "https://picsum.photos/seed/monitorm8/400/300.jpg",
         category: "Monitors"
     },
     {
@@ -619,7 +335,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 599.99,
         rating: 4.6,
-        image: generateImageUrl("phone", 66),
+        image: "https://picsum.photos/seed/galaxys23fe/400/300.jpg",
         category: "Phones",
         isNew: true
     },
@@ -629,7 +345,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 1399.99,
         rating: 4.7,
-        image: generateImageUrl("laptop", 67),
+        image: "https://picsum.photos/seed/galaxybook3/400/300.jpg",
         category: "Laptops"
     },
     {
@@ -638,7 +354,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 99.99,
         rating: 4.3,
-        image: generateImageUrl("wearable", 68),
+        image: "https://picsum.photos/seed/galaxyfit3/400/300.jpg",
         category: "Wearables"
     },
     {
@@ -647,7 +363,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 349.99,
         rating: 4.4,
-        image: generateImageUrl("phone", 69),
+        image: "https://picsum.photos/seed/galaxya34/400/300.jpg",
         category: "Phones"
     },
     {
@@ -656,7 +372,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 149.99,
         rating: 4.5,
-        image: generateImageUrl("smart", 70),
+        image: "https://picsum.photos/seed/smartthings/400/300.jpg",
         category: "Smart Home"
     },
     {
@@ -665,7 +381,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 279.99,
         rating: 4.3,
-        image: generateImageUrl("tablet", 71),
+        image: "https://picsum.photos/seed/taba9plus/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -675,7 +391,7 @@ export const products: Product[] = [
         price: 999.99,
         originalPrice: 1199.99,
         rating: 4.8,
-        image: generateImageUrl("phone", 72),
+        image: "https://picsum.photos/seed/galaxys23ultra/400/300.jpg",
         category: "Phones",
         isSale: true
     },
@@ -685,7 +401,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 349.99,
         rating: 4.6,
-        image: generateImageUrl("watch", 73),
+        image: "https://picsum.photos/seed/watch5pro/400/300.jpg",
         category: "Wearables"
     },
     {
@@ -694,7 +410,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 449.99,
         rating: 4.5,
-        image: generateImageUrl("tablet", 74),
+        image: "https://picsum.photos/seed/tabs9fe/400/300.jpg",
         category: "Tablets",
         isNew: true
     },
@@ -704,7 +420,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 199.99,
         rating: 4.2,
-        image: generateImageUrl("phone", 75),
+        image: "https://picsum.photos/seed/galaxya14/400/300.jpg",
         category: "Phones"
     },
     {
@@ -713,7 +429,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 99.99,
         rating: 4.4,
-        image: generateImageUrl("audio", 76),
+        image: "https://picsum.photos/seed/budsfe/400/300.jpg",
         category: "Audio"
     },
     {
@@ -722,7 +438,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 599.99,
         rating: 4.6,
-        image: generateImageUrl("tv", 77),
+        image: "https://picsum.photos/seed/tvq60c/400/300.jpg",
         category: "TVs"
     },
     {
@@ -731,7 +447,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 279.99,
         rating: 4.3,
-        image: generateImageUrl("phone", 78),
+        image: "https://picsum.photos/seed/galaxya24/400/300.jpg",
         category: "Phones"
     },
     {
@@ -740,7 +456,7 @@ export const products: Product[] = [
         brand: "Samsung",
         price: 699.99,
         rating: 4.5,
-        image: generateImageUrl("tablet", 79),
+        image: "https://picsum.photos/seed/tabactivepro/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -750,7 +466,7 @@ export const products: Product[] = [
         price: 249.99,
         originalPrice: 349.99,
         rating: 4.5,
-        image: generateImageUrl("watch", 80),
+        image: "https://picsum.photos/seed/watch4classic/400/300.jpg",
         category: "Wearables",
         isSale: true
     },
@@ -761,7 +477,7 @@ export const products: Product[] = [
         brand: "Google",
         price: 999.99,
         rating: 4.7,
-        image: generateImageUrl("phone", 81),
+        image: "https://picsum.photos/seed/pixel8pro/400/300.jpg",
         category: "Phones",
         isNew: true
     },
@@ -771,7 +487,7 @@ export const products: Product[] = [
         brand: "OnePlus",
         price: 799.99,
         rating: 4.6,
-        image: generateImageUrl("phone", 82),
+        image: "https://picsum.photos/seed/oneplus12/400/300.jpg",
         category: "Phones"
     },
     {
@@ -780,7 +496,7 @@ export const products: Product[] = [
         brand: "Xiaomi",
         price: 699.99,
         rating: 4.5,
-        image: generateImageUrl("phone", 83),
+        image: "https://picsum.photos/seed/xiaomi14pro/400/300.jpg",
         category: "Phones"
     },
     {
@@ -789,7 +505,7 @@ export const products: Product[] = [
         brand: "Oppo",
         price: 899.99,
         rating: 4.4,
-        image: generateImageUrl("phone", 84),
+        image: "https://picsum.photos/seed/oppofindx6/400/300.jpg",
         category: "Phones"
     },
     {
@@ -798,7 +514,7 @@ export const products: Product[] = [
         brand: "Vivo",
         price: 749.99,
         rating: 4.3,
-        image: generateImageUrl("phone", 85),
+        image: "https://picsum.photos/seed/vivox100/400/300.jpg",
         category: "Phones"
     },
     {
@@ -807,7 +523,7 @@ export const products: Product[] = [
         brand: "Realme",
         price: 599.99,
         rating: 4.4,
-        image: generateImageUrl("phone", 86),
+        image: "https://picsum.photos/seed/realme5pro/400/300.jpg",
         category: "Phones"
     },
     {
@@ -816,7 +532,7 @@ export const products: Product[] = [
         brand: "Nothing",
         price: 699.99,
         rating: 4.5,
-        image: generateImageUrl("phone", 87),
+        image: "https://picsum.photos/seed/nothingphone2/400/300.jpg",
         category: "Phones",
         isNew: true
     },
@@ -826,7 +542,7 @@ export const products: Product[] = [
         brand: "ASUS",
         price: 1099.99,
         rating: 4.7,
-        image: generateImageUrl("gaming", 88),
+        image: "https://picsum.photos/seed/rogphone8/400/300.jpg",
         category: "Gaming"
     },
     {
@@ -835,7 +551,7 @@ export const products: Product[] = [
         brand: "Razer",
         price: 899.99,
         rating: 4.5,
-        image: generateImageUrl("gaming", 89),
+        image: "https://picsum.photos/seed/razerphone2/400/300.jpg",
         category: "Gaming"
     },
     {
@@ -844,7 +560,7 @@ export const products: Product[] = [
         brand: "Lenovo",
         price: 799.99,
         rating: 4.3,
-        image: generateImageUrl("gaming", 90),
+        image: "https://picsum.photos/seed/legionphone2/400/300.jpg",
         category: "Gaming"
     },
     {
@@ -853,7 +569,7 @@ export const products: Product[] = [
         brand: "Apple",
         price: 1099.99,
         rating: 4.9,
-        image: generateImageUrl("tablet", 91),
+        image: "https://picsum.photos/seed/ipadprom2/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -862,7 +578,7 @@ export const products: Product[] = [
         brand: "Microsoft",
         price: 999.99,
         rating: 4.6,
-        image: generateImageUrl("tablet", 92),
+        image: "https://picsum.photos/seed/surfacepro9/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -871,7 +587,7 @@ export const products: Product[] = [
         brand: "Amazon",
         price: 249.99,
         rating: 4.5,
-        image: generateImageUrl("tablet", 93),
+        image: "https://picsum.photos/seed/kindleoasis/400/300.jpg",
         category: "Tablets"
     },
     {
@@ -881,7 +597,7 @@ export const products: Product[] = [
         price: 299.99,
         originalPrice: 349.99,
         rating: 4.8,
-        image: generateImageUrl("audio", 94),
+        image: "https://picsum.photos/seed/sonyxm4/400/300.jpg",
         category: "Audio",
         isSale: true
     },
@@ -891,7 +607,7 @@ export const products: Product[] = [
         brand: "Bose",
         price: 329.99,
         rating: 4.7,
-        image: generateImageUrl("audio", 95),
+        image: "https://picsum.photos/seed/boseqc45/400/300.jpg",
         category: "Audio"
     },
     {
@@ -900,7 +616,7 @@ export const products: Product[] = [
         brand: "JBL",
         price: 249.99,
         rating: 4.4,
-        image: generateImageUrl("audio", 96),
+        image: "https://picsum.photos/seed/jbltourpro2/400/300.jpg",
         category: "Audio"
     },
     {
@@ -909,7 +625,7 @@ export const products: Product[] = [
         brand: "Apple",
         price: 249.99,
         rating: 4.8,
-        image: generateImageUrl("audio", 97),
+        image: "https://picsum.photos/seed/airpodspro2/400/300.jpg",
         category: "Audio"
     },
     {
@@ -918,7 +634,7 @@ export const products: Product[] = [
         brand: "Dell",
         price: 1199.99,
         rating: 4.7,
-        image: generateImageUrl("laptop", 98),
+        image: "https://picsum.photos/seed/dellxps13/400/300.jpg",
         category: "Laptops"
     },
     {
@@ -927,7 +643,7 @@ export const products: Product[] = [
         brand: "HP",
         price: 1099.99,
         rating: 4.6,
-        image: generateImageUrl("laptop", 99),
+        image: "https://picsum.photos/seed/hpspectre/400/300.jpg",
         category: "Laptops"
     },
     {
@@ -936,7 +652,7 @@ export const products: Product[] = [
         brand: "LG",
         price: 1399.99,
         rating: 4.5,
-        image: generateImageUrl("laptop", 100),
+        image: "https://picsum.photos/seed/lggram17/400/300.jpg",
         category: "Laptops"
     },
     // 40 Car Products
@@ -947,7 +663,7 @@ export const products: Product[] = [
         price: 74999.99,
         originalPrice: 79999.99,
         rating: 4.9,
-        image: generateImageUrl("tesla", 101),
+        image: "https://picsum.photos/seed/teslas/400/300.jpg",
         category: "Cars",
         isSale: true,
         isNew: true
@@ -958,7 +674,7 @@ export const products: Product[] = [
         brand: "Tesla",
         price: 38999.99,
         rating: 4.8,
-        image: generateImageUrl("tesla", 102),
+        image: "https://picsum.photos/seed/tesla3/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -968,7 +684,7 @@ export const products: Product[] = [
         brand: "Tesla",
         price: 42999.99,
         rating: 4.7,
-        image: generateImageUrl("tesla", 103),
+        image: "https://picsum.photos/seed/teslay/400/300.jpg",
         category: "Cars"
     },
     {
@@ -978,7 +694,7 @@ export const products: Product[] = [
         price: 84999.99,
         originalPrice: 94999.99,
         rating: 4.6,
-        image: generateImageUrl("tesla", 104),
+        image: "https://picsum.photos/seed/teslax/400/300.jpg",
         category: "Cars",
         isSale: true
     },
@@ -988,7 +704,7 @@ export const products: Product[] = [
         brand: "BMW",
         price: 51999.99,
         rating: 4.5,
-        image: generateImageUrl("bmw", 105),
+        image: "https://picsum.photos/seed/bmwi4/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -998,7 +714,7 @@ export const products: Product[] = [
         brand: "BMW",
         price: 84999.99,
         rating: 4.7,
-        image: generateImageUrl("bmw", 106),
+        image: "https://picsum.photos/seed/bmwix/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1007,7 +723,7 @@ export const products: Product[] = [
         brand: "BMW",
         price: 94999.99,
         rating: 4.8,
-        image: generateImageUrl("bmw", 107),
+        image: "https://picsum.photos/seed/bmwi7/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1016,7 +732,7 @@ export const products: Product[] = [
         brand: "Mercedes-Benz",
         price: 95999.99,
         rating: 4.6,
-        image: generateImageUrl("mercedes", 108),
+        image: "https://picsum.photos/seed/mercedeseqs/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1026,7 +742,7 @@ export const products: Product[] = [
         brand: "Mercedes-Benz",
         price: 62999.99,
         rating: 4.5,
-        image: generateImageUrl("mercedes", 109),
+        image: "https://picsum.photos/seed/mercedeseqe/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1035,7 +751,7 @@ export const products: Product[] = [
         brand: "Mercedes-Benz",
         price: 42999.99,
         rating: 4.4,
-        image: generateImageUrl("mercedes", 110),
+        image: "https://picsum.photos/seed/mercedeseqc/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1044,7 +760,7 @@ export const products: Product[] = [
         brand: "Audi",
         price: 102999.99,
         rating: 4.7,
-        image: generateImageUrl("audi", 111),
+        image: "https://picsum.photos/seed/audietron/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1054,7 +770,7 @@ export const products: Product[] = [
         brand: "Audi",
         price: 49999.99,
         rating: 4.5,
-        image: generateImageUrl("audi", 112),
+        image: "https://picsum.photos/seed/audiq4/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1063,7 +779,7 @@ export const products: Product[] = [
         brand: "Audi",
         price: 74999.99,
         rating: 4.6,
-        image: generateImageUrl("audi", 113),
+        image: "https://picsum.photos/seed/audiq8/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1072,7 +788,7 @@ export const products: Product[] = [
         brand: "Porsche",
         price: 82999.99,
         rating: 4.8,
-        image: generateImageUrl("porsche", 114),
+        image: "https://picsum.photos/seed/porschetaycan/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1082,7 +798,7 @@ export const products: Product[] = [
         brand: "Porsche",
         price: 62999.99,
         rating: 4.6,
-        image: generateImageUrl("porsche", 115),
+        image: "https://picsum.photos/seed/porschemacan/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1092,7 +808,7 @@ export const products: Product[] = [
         price: 35999.99,
         originalPrice: 39999.99,
         rating: 4.3,
-        image: generateImageUrl("vw", 116),
+        image: "https://picsum.photos/seed/vwid4/400/300.jpg",
         category: "Cars",
         isSale: true
     },
@@ -1102,7 +818,7 @@ export const products: Product[] = [
         brand: "Volkswagen",
         price: 42999.99,
         rating: 4.4,
-        image: generateImageUrl("vw", 117),
+        image: "https://picsum.photos/seed/vwid7/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1111,7 +827,7 @@ export const products: Product[] = [
         brand: "Ford",
         price: 42999.99,
         rating: 4.5,
-        image: generateImageUrl("ford", 118),
+        image: "https://picsum.photos/seed/fordmustange/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1121,7 +837,7 @@ export const products: Product[] = [
         brand: "Ford",
         price: 54999.99,
         rating: 4.6,
-        image: generateImageUrl("ford", 119),
+        image: "https://picsum.photos/seed/fordf150/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1130,7 +846,7 @@ export const products: Product[] = [
         brand: "Hyundai",
         price: 38999.99,
         rating: 4.4,
-        image: generateImageUrl("hyundai", 120),
+        image: "https://picsum.photos/seed/hyundaiioniq5/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1140,7 +856,7 @@ export const products: Product[] = [
         price: 35999.99,
         originalPrice: 37999.99,
         rating: 4.3,
-        image: generateImageUrl("kia", 121),
+        image: "https://picsum.photos/seed/kiaev6/400/300.jpg",
         category: "Cars",
         isSale: true
     },
@@ -1150,7 +866,7 @@ export const products: Product[] = [
         brand: "Nissan",
         price: 42999.99,
         rating: 4.2,
-        image: generateImageUrl("nissan", 122),
+        image: "https://picsum.photos/seed/nissanariya/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1159,7 +875,7 @@ export const products: Product[] = [
         brand: "Lucid Motors",
         price: 77499.99,
         rating: 4.7,
-        image: generateImageUrl("lucid", 123),
+        image: "https://picsum.photos/seed/lucidair/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1169,7 +885,7 @@ export const products: Product[] = [
         brand: "Rivian",
         price: 69999.99,
         rating: 4.5,
-        image: generateImageUrl("rivian", 124),
+        image: "https://picsum.photos/seed/rivianr1t/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1178,7 +894,7 @@ export const products: Product[] = [
         brand: "Rivian",
         price: 74999.99,
         rating: 4.6,
-        image: generateImageUrl("rivian", 125),
+        image: "https://picsum.photos/seed/rivianr1s/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1187,7 +903,7 @@ export const products: Product[] = [
         brand: "Genesis",
         price: 54999.99,
         rating: 4.4,
-        image: generateImageUrl("genesis", 126),
+        image: "https://picsum.photos/seed/genesisgv60/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1196,7 +912,7 @@ export const products: Product[] = [
         brand: "Cadillac",
         price: 61999.99,
         rating: 4.3,
-        image: generateImageUrl("cadillac", 127),
+        image: "https://picsum.photos/seed/cadillacclyriq/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1205,7 +921,7 @@ export const products: Product[] = [
         brand: "GMC",
         price: 85999.99,
         rating: 4.2,
-        image: generateImageUrl("gmc", 128),
+        image: "https://picsum.photos/seed/gmchummer/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1215,7 +931,7 @@ export const products: Product[] = [
         price: 25999.99,
         originalPrice: 27999.99,
         rating: 4.1,
-        image: generateImageUrl("chevy", 129),
+        image: "https://picsum.photos/seed/chevrolt/400/300.jpg",
         category: "Cars",
         isSale: true
     },
@@ -1225,7 +941,7 @@ export const products: Product[] = [
         brand: "Toyota",
         price: 38999.99,
         rating: 4.5,
-        image: generateImageUrl("toyota", 130),
+        image: "https://picsum.photos/seed/toyotabz4x/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1235,7 +951,7 @@ export const products: Product[] = [
         brand: "Honda",
         price: 34999.99,
         rating: 4.3,
-        image: generateImageUrl("honda", 131),
+        image: "https://picsum.photos/seed/hondaprologue/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1244,7 +960,7 @@ export const products: Product[] = [
         brand: "Mazda",
         price: 32999.99,
         rating: 4.2,
-        image: generateImageUrl("mazda", 132),
+        image: "https://picsum.photos/seed/mazdamx30/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1253,7 +969,7 @@ export const products: Product[] = [
         brand: "Subaru",
         price: 37999.99,
         rating: 4.1,
-        image: generateImageUrl("subaru", 133),
+        image: "https://picsum.photos/seed/subarusolterra/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1262,7 +978,7 @@ export const products: Product[] = [
         brand: "Mini",
         price: 29999.99,
         rating: 4.0,
-        image: generateImageUrl("mini", 134),
+        image: "https://picsum.photos/seed/minicooperse/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1271,7 +987,7 @@ export const products: Product[] = [
         brand: "Volvo",
         price: 41999.99,
         rating: 4.3,
-        image: generateImageUrl("volvo", 135),
+        image: "https://picsum.photos/seed/volvoxc40/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1280,7 +996,7 @@ export const products: Product[] = [
         brand: "Jaguar",
         price: 64999.99,
         rating: 4.4,
-        image: generateImageUrl("jaguar", 136),
+        image: "https://picsum.photos/seed/jaguaripace/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1289,7 +1005,7 @@ export const products: Product[] = [
         brand: "Land Rover",
         price: 98999.99,
         rating: 4.6,
-        image: generateImageUrl("landrover", 137),
+        image: "https://picsum.photos/seed/landrover/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1298,7 +1014,7 @@ export const products: Product[] = [
         brand: "Fisker",
         price: 32999.99,
         rating: 4.2,
-        image: generateImageUrl("fisker", 138),
+        image: "https://picsum.photos/seed/fiskerocean/400/300.jpg",
         category: "Cars",
         isNew: true
     },
@@ -1308,7 +1024,7 @@ export const products: Product[] = [
         brand: "Polestar",
         price: 45999.99,
         rating: 4.3,
-        image: generateImageUrl("polestar", 139),
+        image: "https://picsum.photos/seed/polestar2/400/300.jpg",
         category: "Cars"
     },
     {
@@ -1317,49 +1033,309 @@ export const products: Product[] = [
         brand: "Smart",
         price: 24999.99,
         rating: 3.9,
-        image: generateImageUrl("smart", 140),
+        image: "https://picsum.photos/seed/smarteq/400/300.jpg",
         category: "Cars"
     }
 ];
 
-export const fetchProducts = (
-    page: number = 1,
-    limit: number = 10,
-    brand?: string,
-    category?: string
-): Promise<{ products: Product[], total: number }> => {
-    return new Promise((resolve) => {
-        // Reduced delay for better UX and reliability
-        setTimeout(() => {
-            let filteredProducts = [...products];
+const app = express();
+const PORT = 3001;
 
-            if (brand && brand !== 'all') {
-                filteredProducts = filteredProducts.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
-            }
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-            if (category && category !== 'all') {
-                filteredProducts = filteredProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
-            }
+// Helper function to simulate delay
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-            const start = (page - 1) * limit;
-            const end = start + limit;
-            const paginatedProducts = filteredProducts.slice(start, end);
-
-            resolve({
-                products: paginatedProducts,
-                total: filteredProducts.length
-            });
-        }, 100);
+// Products API
+app.get('/api/products', async (req, res) => {
+    await delay(200);
+    
+    let filteredProducts = [...products];
+    const { page = 1, limit = 10, category, brand, minPrice, maxPrice, search, sortBy = 'rating', sortOrder = 'desc' } = req.query;
+    
+    // Apply filters
+    if (brand && brand !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
+    }
+    
+    if (category && category !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    
+    if (minPrice) {
+        filteredProducts = filteredProducts.filter(p => p.price >= parseFloat(minPrice));
+    }
+    
+    if (maxPrice) {
+        filteredProducts = filteredProducts.filter(p => p.price <= parseFloat(maxPrice));
+    }
+    
+    if (search) {
+        const searchLower = search.toLowerCase();
+        filteredProducts = filteredProducts.filter(p => 
+            p.name.toLowerCase().includes(searchLower) ||
+            p.category.toLowerCase().includes(searchLower) ||
+            p.brand.toLowerCase().includes(searchLower)
+        );
+    }
+    
+    // Apply sorting
+    filteredProducts.sort((a, b) => {
+        let aVal = a[sortBy];
+        let bVal = b[sortBy];
+        
+        if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+        }
+        
+        if (sortOrder === 'asc') {
+            return aVal > bVal ? 1 : -1;
+        } else {
+            return aVal < bVal ? 1 : -1;
+        }
     });
-};
+    
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + parseInt(limit);
+    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+    
+    res.json({
+        products: paginatedProducts,
+        total: filteredProducts.length,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(filteredProducts.length / limit)
+    });
+});
 
-// User Stories Data Helpers (Adding these for upcoming features)
-export const fetchPoints = (): number => {
-    const points = localStorage.getItem('electro_points');
-    return points ? parseInt(points) : 500; // Starting bonus
-};
+app.get('/api/products/:id', async (req, res) => {
+    await delay(100);
+    const product = products.find(p => p.id === parseInt(req.params.id));
+    
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    res.json(product);
+});
 
-export const addPoints = (amount: number) => {
-    const current = fetchPoints();
-    localStorage.setItem('electro_points', (current + amount).toString());
-};
+app.get('/api/products/featured', async (req, res) => {
+    await delay(150);
+    const { limit = 8 } = req.query;
+    
+    const featured = products
+        .filter(p => p.rating >= 4.5)
+        .slice(0, parseInt(limit));
+    
+    res.json({
+        products: featured,
+        total: featured.length
+    });
+});
+
+app.get('/api/products/sale', async (req, res) => {
+    await delay(150);
+    const { limit = 10 } = req.query;
+    
+    const saleProducts = products
+        .filter(p => p.isSale)
+        .slice(0, parseInt(limit));
+    
+    res.json({
+        products: saleProducts,
+        total: saleProducts.length
+    });
+});
+
+app.get('/api/products/new', async (req, res) => {
+    await delay(150);
+    const { limit = 10 } = req.query;
+    
+    const newProducts = products
+        .filter(p => p.isNew)
+        .slice(0, parseInt(limit));
+    
+    res.json({
+        products: newProducts,
+        total: newProducts.length
+    });
+});
+
+app.get('/api/products/:id/related', async (req, res) => {
+    await delay(100);
+    const product = products.find(p => p.id === parseInt(req.params.id));
+    const { limit = 4 } = req.query;
+    
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    const related = products
+        .filter(p => p.id !== product.id && (p.category === product.category || p.brand === product.brand))
+        .slice(0, parseInt(limit));
+    
+    res.json({
+        products: related,
+        total: related.length
+    });
+});
+
+// Categories API
+app.get('/api/categories', async (req, res) => {
+    await delay(100);
+    const categories = [...new Set(products.map(p => p.category))];
+    res.json(categories);
+});
+
+// Brand-specific endpoints
+app.get('/api/brands/samsung', async (req, res) => {
+    await delay(200);
+    const { page = 1, limit = 10, category, minPrice, maxPrice } = req.query;
+    
+    let samsungProducts = products.filter(p => p.brand.toLowerCase() === 'samsung');
+    
+    if (category && category !== 'all') {
+        samsungProducts = samsungProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    
+    if (minPrice) {
+        samsungProducts = samsungProducts.filter(p => p.price >= parseFloat(minPrice));
+    }
+    
+    if (maxPrice) {
+        samsungProducts = samsungProducts.filter(p => p.price <= parseFloat(maxPrice));
+    }
+    
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + parseInt(limit);
+    const paginatedProducts = samsungProducts.slice(startIndex, endIndex);
+    
+    res.json({
+        products: paginatedProducts,
+        total: samsungProducts.length,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(samsungProducts.length / limit),
+        brand: 'Samsung'
+    });
+});
+
+app.get('/api/brands/panasonic', async (req, res) => {
+    await delay(200);
+    const { page = 1, limit = 10, category, minPrice, maxPrice } = req.query;
+    
+    let panasonicProducts = products.filter(p => p.brand.toLowerCase() === 'panasonic');
+    
+    if (category && category !== 'all') {
+        panasonicProducts = panasonicProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    
+    if (minPrice) {
+        panasonicProducts = panasonicProducts.filter(p => p.price >= parseFloat(minPrice));
+    }
+    
+    if (maxPrice) {
+        panasonicProducts = panasonicProducts.filter(p => p.price <= parseFloat(maxPrice));
+    }
+    
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + parseInt(limit);
+    const paginatedProducts = panasonicProducts.slice(startIndex, endIndex);
+    
+    res.json({
+        products: paginatedProducts,
+        total: panasonicProducts.length,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(panasonicProducts.length / limit),
+        brand: 'Panasonic'
+    });
+});
+
+// Brands API
+app.get('/api/brands', async (req, res) => {
+    await delay(100);
+    const brands = [...new Set(products.map(p => p.brand))];
+    res.json(brands);
+});
+
+// Search API
+app.get('/api/search', async (req, res) => {
+    await delay(200);
+    const { q, page = 1, limit = 10, category, brand } = req.query;
+    
+    if (!q) {
+        return res.status(400).json({ error: 'Search query is required' });
+    }
+    
+    let searchResults = products.filter(p => 
+        p.name.toLowerCase().includes(q.toLowerCase()) ||
+        p.category.toLowerCase().includes(q.toLowerCase()) ||
+        p.brand.toLowerCase().includes(q.toLowerCase())
+    );
+    
+    if (category && category !== 'all') {
+        searchResults = searchResults.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    
+    if (brand && brand !== 'all') {
+        searchResults = searchResults.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
+    }
+    
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + parseInt(limit);
+    const paginatedResults = searchResults.slice(startIndex, endIndex);
+    
+    res.json({
+        products: paginatedResults,
+        total: searchResults.length,
+        query: q,
+        page: parseInt(page),
+        limit: parseInt(limit)
+    });
+});
+
+app.get('/api/search/suggestions', async (req, res) => {
+    await delay(100);
+    const { q } = req.query;
+    
+    if (!q) {
+        return res.json([]);
+    }
+    
+    const suggestions = products
+        .filter(p => p.name.toLowerCase().includes(q.toLowerCase()))
+        .slice(0, 5)
+        .map(p => p.name);
+    
+    res.json(suggestions);
+});
+
+app.get('/api/search/popular', async (req, res) => {
+    await delay(100);
+    res.json([
+        'iPhone', 'Samsung', 'Laptop', 'Headphones', 'Gaming',
+        'Smart Watch', 'Tablet', 'Camera', 'TV', 'Speaker'
+    ]);
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
+});
+
+app.listen(PORT, () => {
+    console.log(`🚀 API Server running on http://localhost:${PORT}`);
+    console.log(`📦 Products endpoint: http://localhost:${PORT}/api/products`);
+    console.log(`🔍 Search endpoint: http://localhost:${PORT}/api/search`);
+});

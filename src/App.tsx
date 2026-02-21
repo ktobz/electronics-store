@@ -6,9 +6,15 @@ import Categories from './components/Categories';
 import Footer from './components/Footer';
 import ProductsPage from './pages/ProductsPage';
 import OrderTracking from './pages/OrderTracking';
+import ComparisonPage from './pages/ComparisonPage';
+import Recommendations from './components/Recommendations';
 import BlogSection from './components/BlogSection';
 import WhatsAppChatbot from './components/WhatsAppChatbot';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import { StoreProvider } from './context/StoreContext';
+import Toast from './components/Toast';
+import CartDrawer from './components/CartDrawer';
 import './styles/main.scss';
 
 function App() {
@@ -16,6 +22,8 @@ function App() {
     <Router>
       <StoreProvider>
         <div className="app">
+          <Toast />
+          <CartDrawer />
           <Navbar />
           <main>
             <Routes>
@@ -24,10 +32,14 @@ function App() {
                   <Hero />
                   <Categories />
                   <FeaturedProducts />
+                  <Recommendations />
                 </>
               } />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
               <Route path="/tracking" element={<OrderTracking />} />
+              <Route path="/compare" element={<ComparisonPage />} />
             </Routes>
           </main>
           <BlogSection />

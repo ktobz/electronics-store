@@ -5,39 +5,78 @@
     border-radius: 12px;
     overflow: hidden;
     position: relative;
-    transition: box-shadow 0.3s ease;
-    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+    width: 280px;
+    height: 380px;
+
+    &.compact {
+        width: 260px;
+        height: 340px;
+    }
 
     &:hover {
-        box-shadow: 0 10px 30px rgba($black, 0.08);
-        border-color: rgba($primary-color, 0.1);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+        transform: translateY(-5px);
     }
 
     &__image-container {
         position: relative;
-        height: 280px;
+        height: 200px;
         background-color: #f8f9fa;
         overflow: hidden;
 
-        &:hover .product-card__actions {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        &:hover .product-card__add-cart {
-            transform: translateY(0);
+        .compact & {
+            height: 180px;
         }
     }
 
     &__image {
         width: 100%;
         height: 100%;
-        object-fit: contain; // Changed to contain for product clarity
-        padding: $spacing-lg;
-        transition: transform 0.5s ease;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
 
-        &:hover {
-            transform: scale(1.05);
+    &__video-mock {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: #000;
+
+        .blur-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            filter: blur(8px);
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: $white;
+            gap: $spacing-sm;
+            background: radial-gradient(circle, rgba($primary-color, 0.2) 0%, transparent 70%);
+
+            span {
+                font-size: 0.8rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
         }
     }
 

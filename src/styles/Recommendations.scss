@@ -1,0 +1,7 @@
+@use '../styles/variables' as *;
+
+.recommendations {
+    padding: $spacing-xxl 0;
+    background-color: rgba($black, 0.02);
+    border-top: 1px solid rgba($black, 0.05);
+}

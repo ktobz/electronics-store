@@ -1,5 +1,18 @@
 @use 'variables' as *;
 
+:root {
+    --font-family-base: "Inter", sans-serif;
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+}
+
+[data-theme='dark'] {
+    --bg-color: #0f172a;
+    --text-color: #f1f5f9;
+    --card-bg: #1e293b;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,8 +23,9 @@ body {
     font-family: $font-family-base;
     font-size: $font-size-base;
     line-height: $line-height-base;
-    color: $text-color;
-    background-color: $background-color;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -36,6 +50,14 @@ button {
     border: none;
     background: none;
     font-family: inherit;
+}
+
+.app {
+    padding-top: 80px; // Height of the navbar
+}
+
+main {
+    min-height: calc(100vh - 80px - 400px); // Subtracting navbar and footer approx height
 }
 
 img {

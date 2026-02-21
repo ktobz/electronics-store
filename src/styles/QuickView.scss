@@ -1,0 +1,181 @@
+@use '../styles/variables' as *;
+
+.quick-view-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($black, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md;
+}
+
+.quick-view-modal {
+    background: var(--card-bg);
+    color: var(--text-color);
+    width: 100%;
+    max-width: 1100px;
+    max-height: 90vh;
+    border-radius: 24px;
+    position: relative;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba($black, 0.3);
+
+    .close-btn {
+        position: absolute;
+        top: $spacing-lg;
+        right: $spacing-lg;
+        z-index: 10;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.quick-view__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    @media (max-width: $breakpoint-tablet) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.quick-view__image {
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xxl;
+
+    img {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: contain;
+    }
+}
+
+.quick-view__info {
+    padding: $spacing-xxl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    .category {
+        font-weight: 700;
+        color: $primary-color;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+    }
+
+    h2 {
+        font-size: 2.25rem;
+        font-weight: 800;
+    }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+
+        span {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    }
+
+    .price-box {
+        display: flex;
+        align-items: baseline;
+        gap: $spacing-md;
+
+        .current-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: $primary-color;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            opacity: 0.5;
+            font-size: 1.25rem;
+        }
+    }
+
+    .description {
+        line-height: 1.6;
+        opacity: 0.8;
+    }
+
+    .meta-info {
+        display: flex;
+        gap: $spacing-xl;
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: $primary-color;
+        }
+    }
+
+    .add-to-cart {
+        width: 100%;
+        padding: $spacing-lg;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        gap: $spacing-md;
+    }
+}
+
+.reviews-section {
+    margin-top: $spacing-xl;
+    padding-top: $spacing-xl;
+    border-top: 1px solid rgba($black, 0.05);
+
+    h3 {
+        margin-bottom: $spacing-lg;
+    }
+
+    .review-item {
+        margin-bottom: $spacing-lg;
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: $spacing-md;
+            margin-bottom: $spacing-xs;
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .stars {
+                display: flex;
+                align-items: center;
+                gap: $spacing-xs;
+                font-size: 0.8rem;
+                opacity: 0.7;
+            }
+        }
+
+        .comment {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+    }
+}

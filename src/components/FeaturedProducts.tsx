@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import { fetchProducts, type Product } from '../services/mockApi';
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { productAPI } from '../services/api';
+import { type Product } from '../services/mockApi';
+import { ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import '../styles/FeaturedProducts.scss';
 
 const FeaturedProducts: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const limit = 4;
@@ -14,19 +16,21 @@ const FeaturedProducts: React.FC = () => {
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
+            setError(null);
             try {
-                const data = await fetchProducts(page, limit);
-                setProducts(data.products);
-                setTotal(data.total);
+                const data = await productAPI.getFeaturedProducts(limit);
+                setProducts(data.products || data);
+                setTotal(data.total || data.length || 0);
             } catch (error) {
-                console.error("Failed to fetch products:", error);
+                console.error("Failed to fetch featured products:", error);
+                setError("Failed to load featured products. Please try again later.");
             } finally {
                 setLoading(false);
             }
         };
 
         loadProducts();
-    }, [page]);
+    }, [page, limit]);
 
     const totalPages = Math.ceil(total / limit);
 
@@ -42,6 +46,14 @@ const FeaturedProducts: React.FC = () => {
                     <div className="product-loading">
                         <Loader2 className="animate-spin" size={48} />
                         <p>Loading the latest tech...</p>
+                    </div>
+                ) : error ? (
+                    <div className="product-error">
+                        <AlertCircle size={48} />
+                        <p>{error}</p>
+                        <button onClick={() => window.location.reload()} className="retry-btn">
+                            Try Again
+                        </button>
                     </div>
                 ) : (
                     <>

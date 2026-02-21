@@ -1,7 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Star, Heart, Repeat, Eye } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import QuickView from './QuickView';
 import '../styles/ProductCard.scss';
 
 import { type Product } from '../services/mockApi';
@@ -12,6 +13,9 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const { addToCart, toggleWishlist, toggleCompare, isInWishlist, isInCompare } = useStore();
+    const [isHovered, setIsHovered] = React.useState(false);
+    const [showQuickView, setShowQuickView] = React.useState(false);
+    const [imageError, setImageError] = React.useState(false);
 
     const discountPercentage = product.originalPrice
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -19,7 +23,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
     return (
         <motion.div
-            className="product-card"
+            className="product-card compact"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             whileHover={{ y: -5 }}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -27,7 +33,39 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             transition={{ duration: 0.3 }}
         >
             <div className="product-card__image-container">
-                <img src={product.image} alt={product.name} className="product-card__image" />
+                <AnimatePresence mode="wait">
+                    {!isHovered ? (
+                        <motion.img
+                            key="static"
+                            src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image}
+                            alt={product.name}
+                            className="product-card__image"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onError={() => setImageError(true)}
+                        />
+                    ) : (
+                        <motion.div
+                            key="video"
+                            className="product-card__video-mock"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <img 
+                                src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image} 
+                                alt={product.name} 
+                                className="blur-bg"
+                                onError={() => setImageError(true)}
+                            />
+                            <div className="video-overlay">
+                                <Eye size={32} />
+                                <span>Previewing Tech...</span>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Badges */}
                 <div className="product-card__badges">
@@ -35,35 +73,47 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     {product.isSale && <span className="badge badge--sale">-{discountPercentage}%</span>}
                 </div>
 
-                {/* Action Buttons Overlay */}
-                <div className="product-card__actions">
-                    <button
-                        className={`action-btn ${isInWishlist(product.id) ? 'active' : ''}`}
-                        onClick={() => toggleWishlist(product.id)}
-                        title="Add to Wishlist"
-                    >
-                        <Heart size={18} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
-                    </button>
-                    <button
-                        className={`action-btn ${isInCompare(product.id) ? 'active' : ''}`}
-                        onClick={() => toggleCompare(product.id)}
-                        title="Compare"
-                    >
-                        <Repeat size={18} />
-                    </button>
-                    <button className="action-btn" title="Quick View">
-                        <Eye size={18} />
-                    </button>
-                </div>
-
-                {/* Add to Cart Button */}
-                <button
-                    className="product-card__add-cart"
-                    onClick={() => addToCart(product.id)}
-                >
-                    <ShoppingBag size={18} />
-                    Add to Cart
-                </button>
+                {/* Action Buttons Overlay - Inside Image */}
+                <AnimatePresence>
+                    {isHovered && (
+                        <motion.div
+                            className="product-card__image-actions"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <button
+                                className={`action-btn action-btn--cart ${isInCompare(product.id) ? 'active' : ''}`}
+                                onClick={() => addToCart(product.id)}
+                                title="Add to Cart"
+                            >
+                                <ShoppingBag size={18} />
+                            </button>
+                            <button
+                                className={`action-btn action-btn--wishlist ${isInWishlist(product.id) ? 'active' : ''}`}
+                                onClick={() => toggleWishlist(product.id)}
+                                title="Add to Wishlist"
+                            >
+                                <Heart size={18} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
+                            </button>
+                            <button
+                                className={`action-btn action-btn--compare ${isInCompare(product.id) ? 'active' : ''}`}
+                                onClick={() => toggleCompare(product.id)}
+                                title="Compare"
+                            >
+                                <Repeat size={18} />
+                            </button>
+                            <button
+                                className="action-btn action-btn--quickview"
+                                onClick={() => setShowQuickView(true)}
+                                title="Quick View"
+                            >
+                                <Eye size={18} />
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             <div className="product-card__content">
@@ -89,6 +139,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     )}
                 </div>
             </div>
+            {showQuickView && (
+                <QuickView product={product} onClose={() => setShowQuickView(false)} />
+            )}
         </motion.div>
     );
 };
