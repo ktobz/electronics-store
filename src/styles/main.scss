@@ -53,11 +53,11 @@ button {
 }
 
 .app {
-    padding-top: 80px; // Height of the navbar
+    padding-top: 64px; // Navbar height
 }
 
 main {
-    min-height: calc(100vh - 80px - 400px); // Subtracting navbar and footer approx height
+    min-height: calc(100vh - 64px - 400px);
 }
 
 img {

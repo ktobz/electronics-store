@@ -1,11 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Star, Menu, X, Heart, Repeat, User, ChevronDown, Moon, Sun, Trophy, Search } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ShoppingCart, Star, X, Heart, User,
+  ChevronDown, Moon, Sun, Trophy, Search, Zap,
+  Smartphone, Laptop, Headphones, Gamepad2, Watch,
+  Globe, FileText, Megaphone, AppWindow, Rocket
+} from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { getCurrentUser } from '../services/supabase';
 import '../styles/Navbar.scss';
 
+// ─── Accordion Section ────────────────────────────────────────────────────────
+interface AccordionSectionProps {
+  label: string;
+  icon: React.ReactNode;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}
+
+const AccordionSection: React.FC<AccordionSectionProps> = ({
+  label, icon, isOpen, onToggle, children
+}) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(isOpen ? contentRef.current.scrollHeight : 0);
+    }
+  }, [isOpen]);
+
+  return (
+    <div className={`mobile-accordion ${isOpen ? 'is-open' : ''}`}>
+      <button className="accordion-trigger" onClick={onToggle} aria-expanded={isOpen}>
+        <span className="accordion-trigger__left">
+          {icon}
+          <span>{label}</span>
+        </span>
+        <ChevronDown
+          size={16}
+          className="accordion-chevron"
+          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+        />
+      </button>
+      <div
+        className="accordion-content"
+        style={{ height: `${height}px`, overflow: 'hidden', transition: 'height 0.35s cubic-bezier(0.4,0,0.2,1)' }}
+      >
+        <div ref={contentRef} className="accordion-content__inner">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Main Navbar ──────────────────────────────────────────────────────────────
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -15,26 +66,34 @@ const Navbar: React.FC = () => {
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const navigate = useNavigate();
   const { cart, wishlist, compare, points, isDarkMode, toggleDarkMode, setCartOpen } = useStore();
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    const checkUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      } catch (error) {
-        setUser(null);
-      }
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-    checkUser();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    getCurrentUser().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,249 +111,304 @@ const Navbar: React.FC = () => {
       setUser(null);
       setShowUserMenu(false);
       navigate('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch (err) {
+      console.error('Logout failed:', err);
     }
   };
 
-  const toggleAccordion = (section: string) => {
-    setActiveAccordion(activeAccordion === section ? null : section);
-  };
+  const closeMenu = () => setIsOpen(false);
+
+  const toggleAccordion = (id: string) =>
+    setActiveAccordion(prev => (prev === id ? null : id));
 
   return (
     <>
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="container navbar__container">
-          <NavLink to="/" className="navbar__logo">
-            <Star className="navbar__logo-icon" fill="currentColor" />
-            <span>Electro Store</span>
+      <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} ${isDarkMode ? 'navbar--dark' : ''}`} role="navigation">
+        <div className="navbar__inner">
+
+          {/* ── Logo ─────────────────────────────────────────── */}
+          <NavLink to="/" className="navbar__logo" aria-label="Electro Store Home">
+            <div className="navbar__logo-icon">
+              <Zap size={18} />
+            </div>
+            <span className="navbar__logo-text">Electro<em>Store</em></span>
           </NavLink>
 
-          <div className="navbar__desktop-menu">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/products">Products</NavLink>
-            <div className="navbar__dropdown">
-              <button className="dropdown-trigger">
-                Brands <ChevronDown size={14} />
+          {/* ── Desktop Links ─────────────────────────────────── */}
+          <div className="navbar__desktop-links">
+            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`} end>
+              Home
+            </NavLink>
+            <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}>
+              Products
+            </NavLink>
+
+            {/* Brands dropdown */}
+            <div className="nav-dropdown">
+              <button className="nav-link nav-link--dropdown">
+                Brands <ChevronDown size={13} />
               </button>
-              <div className="dropdown-menu">
-                <NavLink to="/brands/samsung">Samsung</NavLink>
-                <NavLink to="/brands/panasonic">Panasonic</NavLink>
-                <NavLink to="/brands/apple">Apple</NavLink>
-                <NavLink to="/brands/sony">Sony</NavLink>
+              <div className="nav-dropdown__panel">
+                <NavLink to="/products?brand=Samsung" className="dropdown-item">
+                  <Smartphone size={14} /> Samsung
+                </NavLink>
+                <NavLink to="/products?brand=Panasonic" className="dropdown-item">
+                  <Zap size={14} /> Panasonic
+                </NavLink>
+                <NavLink to="/products?brand=Apple" className="dropdown-item">
+                  <Laptop size={14} /> Apple
+                </NavLink>
+                <NavLink to="/products?brand=Sony" className="dropdown-item">
+                  <Headphones size={14} /> Sony
+                </NavLink>
               </div>
             </div>
-            <NavLink to="/deals">Deals</NavLink>
-            <NavLink to="/compare" className="compare-link">
-              Compare {compare.length > 0 && <span>({compare.length})</span>}
+
+            <NavLink to="/compare" className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}>
+              Compare {compare.length > 0 && <span className="nav-count">{compare.length}</span>}
             </NavLink>
           </div>
 
-          <div className="navbar__center">
-            <form onSubmit={handleSearch} className="navbar__search">
-              <Search size={18} className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
-          </div>
+          {/* ── Search ────────────────────────────────────────── */}
+          <form onSubmit={handleSearch} className="navbar__search" role="search">
+            <Search size={16} className="navbar__search-icon" />
+            <input
+              type="search"
+              placeholder="Search electronics..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              aria-label="Search products"
+            />
+            {searchQuery && (
+              <button type="button" className="navbar__search-clear" onClick={() => setSearchQuery('')}>
+                <X size={14} />
+              </button>
+            )}
+          </form>
 
+          {/* ── Right Icons ───────────────────────────────────── */}
           <div className="navbar__actions">
-            <div className="navbar__points" title="Your Electro Points">
-              <Trophy size={16} />
+            {/* Points */}
+            <div className="navbar__points" title={`${points} Electro Points`}>
+              <Trophy size={15} />
               <span>{points}</span>
             </div>
 
-            <button className="navbar__action-btn" onClick={toggleDarkMode} title="Toggle Theme">
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            {/* Dark Mode */}
+            <button className="navbar__icon-btn" onClick={toggleDarkMode} title="Toggle theme" aria-label="Toggle dark mode">
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            <NavLink to="/wishlist" className="navbar__action-btn">
-              <Heart size={20} />
+            {/* Wishlist */}
+            <NavLink to="/wishlist" className="navbar__icon-btn" aria-label="Wishlist">
+              <Heart size={18} />
               {wishlist.length > 0 && <span className="navbar__badge">{wishlist.length}</span>}
             </NavLink>
 
-            <button className="navbar__action-btn" onClick={() => setCartOpen(true)}>
-              <ShoppingCart size={20} />
+            {/* Cart */}
+            <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
+              <ShoppingCart size={18} />
               {cart.length > 0 && <span className="navbar__badge">{cart.length}</span>}
             </button>
 
-            <div className="navbar__user-section">
+            {/* User / Auth */}
+            <div className="navbar__user" ref={userMenuRef}>
               {user ? (
-                <div className="user-menu">
+                <>
                   <button
-                    className="user-avatar"
-                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="navbar__user-btn"
+                    onClick={() => setShowUserMenu(v => !v)}
+                    aria-expanded={showUserMenu}
+                    aria-haspopup="true"
                   >
-                    <User size={20} />
-                    <span>{user.user_metadata?.name || user.email?.split('@')[0]}</span>
-                    <ChevronDown size={14} />
+                    <div className="navbar__avatar">
+                      {(user.user_metadata?.name || user.email || 'U')[0].toUpperCase()}
+                    </div>
+                    <ChevronDown size={13} className={showUserMenu ? 'rotate-180' : ''} />
                   </button>
-                  <AnimatePresence>
-                    {showUserMenu && (
-                      <motion.div
-                        className="user-dropdown"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <NavLink to="/profile" onClick={() => setShowUserMenu(false)}>
-                          <User size={16} /> Profile
-                        </NavLink>
-                        <NavLink to="/orders" onClick={() => setShowUserMenu(false)}>
-                          <ShoppingCart size={16} /> Orders
-                        </NavLink>
-                        <button onClick={handleLogout}>
-                          <X size={16} /> Logout
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                  {showUserMenu && (
+                    <div className="navbar__user-menu">
+                      <div className="user-menu__header">
+                        <strong>{user.user_metadata?.name || user.email?.split('@')[0]}</strong>
+                        <small>{user.email}</small>
+                      </div>
+                      <NavLink to="/profile" className="user-menu__item" onClick={() => setShowUserMenu(false)}>
+                        <User size={15} /> Profile
+                      </NavLink>
+                      <NavLink to="/orders" className="user-menu__item" onClick={() => setShowUserMenu(false)}>
+                        <ShoppingCart size={15} /> Orders
+                      </NavLink>
+                      <button className="user-menu__item user-menu__item--danger" onClick={handleLogout}>
+                        <X size={15} /> Logout
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
-                <div className="auth-buttons">
-                  <NavLink to="/login" className="btn btn-outline">
-                    Login
-                  </NavLink>
-                  <NavLink to="/signup" className="btn btn-primary">
-                    Sign Up
-                  </NavLink>
+                <div className="navbar__auth-btns">
+                  <NavLink to="/login" className="btn-ghost">Login</NavLink>
+                  <NavLink to="/signup" className="btn-solid">Sign Up</NavLink>
                 </div>
               )}
-
-              <button className="navbar__mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
-                <div className={`hamburger ${isOpen ? 'active' : ''}`}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </button>
             </div>
+
+            {/* Hamburger */}
+            <button
+              className={`navbar__hamburger ${isOpen ? 'is-open' : ''}`}
+              onClick={() => setIsOpen(v => !v)}
+              aria-label="Toggle mobile menu"
+              aria-expanded={isOpen}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
           </div>
         </div>
       </nav>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="navbar__mobile-menu"
-            initial={{ opacity: 0, x: -300 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -300 }}
-            transition={{ duration: 0.3 }}
+      {/* ── Mobile Backdrop ──────────────────────────────────── */}
+      {isOpen && (
+        <div className="mobile-backdrop" onClick={closeMenu} aria-hidden="true" />
+      )}
+
+      {/* ── Mobile Drawer ────────────────────────────────────── */}
+      <div className={`mobile-drawer ${isOpen ? 'mobile-drawer--open' : ''}`} role="dialog" aria-modal="true" aria-label="Navigation menu">
+        {/* Header */}
+        <div className="mobile-drawer__header">
+          <NavLink to="/" className="navbar__logo" onClick={closeMenu}>
+            <div className="navbar__logo-icon">
+              <Zap size={18} />
+            </div>
+            <span className="navbar__logo-text">Electro<em>Store</em></span>
+          </NavLink>
+          <button className="mobile-drawer__close" onClick={closeMenu} aria-label="Close menu">
+            <X size={22} />
+          </button>
+        </div>
+
+        {/* Mobile Search */}
+        <form onSubmit={handleSearch} className="mobile-drawer__search" role="search">
+          <Search size={16} />
+          <input
+            type="search"
+            placeholder="Search electronics..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
+        </form>
+
+        {/* Nav Links */}
+        <nav className="mobile-drawer__nav">
+          <NavLink to="/" className="mobile-nav-link" onClick={closeMenu} end>Home</NavLink>
+          <NavLink to="/products" className="mobile-nav-link" onClick={closeMenu}>Products</NavLink>
+          <NavLink to="/compare" className="mobile-nav-link" onClick={closeMenu}>
+            Compare {compare.length > 0 && <span className="nav-count">{compare.length}</span>}
+          </NavLink>
+
+          {/* Accordion 1 — Brands */}
+          <AccordionSection
+            id="brands"
+            label="Brands"
+            icon={<Star size={16} />}
+            isOpen={activeAccordion === 'brands'}
+            onToggle={() => toggleAccordion('brands')}
           >
-            <div className="mobile-nav-header">
-              <NavLink to="/" className="navbar__logo" onClick={() => setIsOpen(false)}>
-                <Star className="navbar__logo-icon" fill="currentColor" />
-                <span>Electro Store</span>
-              </NavLink>
-              <button className="mobile-close" onClick={() => setIsOpen(false)}>
-                <X size={24} />
-              </button>
-            </div>
+            <NavLink to="/products?brand=Samsung" className="accordion-link" onClick={closeMenu}>
+              <Smartphone size={14} /> Samsung
+            </NavLink>
+            <NavLink to="/products?brand=Panasonic" className="accordion-link" onClick={closeMenu}>
+              <Zap size={14} /> Panasonic
+            </NavLink>
+            <NavLink to="/products?brand=Apple" className="accordion-link" onClick={closeMenu}>
+              <Laptop size={14} /> Apple
+            </NavLink>
+            <NavLink to="/products?brand=Sony" className="accordion-link" onClick={closeMenu}>
+              <Headphones size={14} /> Sony
+            </NavLink>
+          </AccordionSection>
 
-            <form onSubmit={handleSearch} className="mobile-search">
-              <Search size={18} className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
+          {/* Accordion 2 — Categories */}
+          <AccordionSection
+            id="categories"
+            label="Categories"
+            icon={<Gamepad2 size={16} />}
+            isOpen={activeAccordion === 'categories'}
+            onToggle={() => toggleAccordion('categories')}
+          >
+            <NavLink to="/products?category=Phones" className="accordion-link" onClick={closeMenu}>
+              <Smartphone size={14} /> Phones
+            </NavLink>
+            <NavLink to="/products?category=Laptops" className="accordion-link" onClick={closeMenu}>
+              <Laptop size={14} /> Laptops
+            </NavLink>
+            <NavLink to="/products?category=Audio" className="accordion-link" onClick={closeMenu}>
+              <Headphones size={14} /> Audio
+            </NavLink>
+            <NavLink to="/products?category=Gaming" className="accordion-link" onClick={closeMenu}>
+              <Gamepad2 size={14} /> Gaming
+            </NavLink>
+            <NavLink to="/products?category=Wearables" className="accordion-link" onClick={closeMenu}>
+              <Watch size={14} /> Wearables
+            </NavLink>
+          </AccordionSection>
 
-            <div className="mobile-nav-items">
-              <NavLink to="/" onClick={() => setIsOpen(false)}>Home</NavLink>
-              <NavLink to="/products" onClick={() => setIsOpen(false)}>Products</NavLink>
-              
-              <div className="mobile-accordion">
-                <button 
-                  className="accordion-trigger"
-                  onClick={() => toggleAccordion('brands')}
-                >
-                  Brands <ChevronDown size={16} className={`chevron ${activeAccordion === 'brands' ? 'open' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {activeAccordion === 'brands' && (
-                    <motion.div
-                      className="accordion-content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <NavLink to="/brands/samsung" onClick={() => setIsOpen(false)}>Samsung</NavLink>
-                      <NavLink to="/brands/panasonic" onClick={() => setIsOpen(false)}>Panasonic</NavLink>
-                      <NavLink to="/brands/apple" onClick={() => setIsOpen(false)}>Apple</NavLink>
-                      <NavLink to="/brands/sony" onClick={() => setIsOpen(false)}>Sony</NavLink>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+          {/* Accordion 3 — Pages */}
+          <AccordionSection
+            id="pages"
+            label="Pages"
+            icon={<Globe size={16} />}
+            isOpen={activeAccordion === 'pages'}
+            onToggle={() => toggleAccordion('pages')}
+          >
+            <NavLink to="/blog" className="accordion-link" onClick={closeMenu}>
+              <FileText size={14} /> Blog
+            </NavLink>
+            <NavLink to="/marketing" className="accordion-link" onClick={closeMenu}>
+              <Megaphone size={14} /> Marketing
+            </NavLink>
+            <NavLink to="/apps" className="accordion-link" onClick={closeMenu}>
+              <AppWindow size={14} /> Apps &amp; Resources
+            </NavLink>
+            <NavLink to="/join" className="accordion-link" onClick={closeMenu}>
+              <Rocket size={14} /> Join Our Journey
+            </NavLink>
+          </AccordionSection>
+        </nav>
+
+        {/* Footer: auth / user */}
+        <div className="mobile-drawer__footer">
+          {user ? (
+            <div className="mobile-user">
+              <div className="mobile-user__info">
+                <div className="navbar__avatar navbar__avatar--lg">
+                  {(user.user_metadata?.name || user.email || 'U')[0].toUpperCase()}
+                </div>
+                <div>
+                  <strong>{user.user_metadata?.name || user.email?.split('@')[0]}</strong>
+                  <small>{user.email}</small>
+                </div>
               </div>
-
-              <div className="mobile-accordion">
-                <button 
-                  className="accordion-trigger"
-                  onClick={() => toggleAccordion('categories')}
-                >
-                  Categories <ChevronDown size={16} className={`chevron ${activeAccordion === 'categories' ? 'open' : ''}`} />
+              <div className="mobile-user__actions">
+                <NavLink to="/profile" className="mobile-action-link" onClick={closeMenu}>
+                  <User size={15} /> Profile
+                </NavLink>
+                <NavLink to="/orders" className="mobile-action-link" onClick={closeMenu}>
+                  <ShoppingCart size={15} /> Orders
+                </NavLink>
+                <button className="mobile-action-link mobile-action-link--danger" onClick={handleLogout}>
+                  <X size={15} /> Logout
                 </button>
-                <AnimatePresence>
-                  {activeAccordion === 'categories' && (
-                    <motion.div
-                      className="accordion-content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <NavLink to="/products?category=Phones" onClick={() => setIsOpen(false)}>Phones</NavLink>
-                      <NavLink to="/products?category=Laptops" onClick={() => setIsOpen(false)}>Laptops</NavLink>
-                      <NavLink to="/products?category=Audio" onClick={() => setIsOpen(false)}>Audio</NavLink>
-                      <NavLink to="/products?category=Gaming" onClick={() => setIsOpen(false)}>Gaming</NavLink>
-                      <NavLink to="/products?category=Tablets" onClick={() => setIsOpen(false)}>Tablets</NavLink>
-                      <NavLink to="/products?category=Wearables" onClick={() => setIsOpen(false)}>Wearables</NavLink>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
-
-              <NavLink to="/deals" onClick={() => setIsOpen(false)}>Deals</NavLink>
-              <NavLink to="/compare" onClick={() => setIsOpen(false)}>
-                Compare {compare.length > 0 && <span>({compare.length})</span>}
-              </NavLink>
             </div>
-
+          ) : (
             <div className="mobile-auth">
-              {user ? (
-                <div className="mobile-user-info">
-                  <div className="user-welcome">
-                    <User size={20} />
-                    <span>{user.user_metadata?.name || user.email?.split('@')[0]}</span>
-                  </div>
-                  <div className="mobile-user-actions">
-                    <NavLink to="/profile" onClick={() => setIsOpen(false)}>Profile</NavLink>
-                    <NavLink to="/orders" onClick={() => setIsOpen(false)}>Orders</NavLink>
-                    <button onClick={handleLogout}>Logout</button>
-                  </div>
-                </div>
-              ) : (
-                <div className="mobile-auth-buttons">
-                  <NavLink to="/login" className="btn btn-outline" onClick={() => setIsOpen(false)}>
-                    Login
-                  </NavLink>
-                  <NavLink to="/signup" className="btn btn-primary" onClick={() => setIsOpen(false)}>
-                    Sign Up
-                  </NavLink>
-                </div>
-              )}
+              <NavLink to="/login" className="mobile-btn-ghost" onClick={closeMenu}>Login</NavLink>
+              <NavLink to="/signup" className="mobile-btn-solid" onClick={closeMenu}>Sign Up</NavLink>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </div>
+      </div>
     </>
   );
 };

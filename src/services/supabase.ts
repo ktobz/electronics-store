@@ -70,11 +70,10 @@ export const signOut = async () => {
 
 export const getCurrentUser = async () => {
   try {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) throw error;
-    return user;
-  } catch (error) {
-    console.error('Get current user error:', error);
+    // Use getSession to avoid 'Auth session missing' errors when logged out
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user ?? null;
+  } catch {
     return null;
   }
 };
