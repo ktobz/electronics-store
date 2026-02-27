@@ -52,10 +52,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
+                            onClick={() => setShowQuickView(true)}
+                            style={{ cursor: 'pointer' }}
                         >
-                            <img 
-                                src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image} 
-                                alt={product.name} 
+                            <img
+                                src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image}
+                                alt={product.name}
                                 className="blur-bg"
                                 onError={() => setImageError(true)}
                             />

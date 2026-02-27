@@ -11,6 +11,21 @@ export interface Product {
     brand: string;
 }
 
+export interface BlogPost {
+    id: number;
+    title: string;
+    excerpt: string;
+    content: string;
+    image: string;
+    date: string;
+    author: string;
+    authorRole: string;
+    authorImage: string;
+    category: string;
+    readTime: string;
+    tags: string[];
+}
+
 // Helper function to generate image URLs
 const generateImageUrl = (seed: string, id: number): string => {
     return `https://picsum.photos/seed/${seed}${id}/400/300.jpg`;
@@ -1349,6 +1364,107 @@ export const fetchProducts = (
                 products: paginatedProducts,
                 total: filteredProducts.length
             });
+        }, 100);
+    });
+};
+
+// Blog Data
+export const blogPosts: BlogPost[] = [
+    {
+        id: 1,
+        title: "The Future of Smart Homes: Top Trends for 2024",
+        excerpt: "Discover how AI and IoT are transforming our living spaces into intelligent environments.",
+        content: `
+# The Revolution of Living Spaces
+
+AI and IoT have moved beyond being just buzzwords. Today, they are the backbone of the modern home. In 2024, we're seeing an unprecedented shift from "connected" to "intelligent" homes.
+
+### Proactive Intelligence
+The next generation of smart home devices doesn't just wait for your command; it anticipates your needs. Imagine your coffee machine starting as your alarm detects you've woken up, or your lighting adjusting based on the time of day and your specific mood.
+
+### Efficiency and Sustainability
+Smart thermostats and energy monitors are becoming more sophisticated, learning your habits to minimize waste and lower bills without sacrificing comfort.
+
+### Enhanced Security
+Biometric locks and AI-powered security cameras offer a new level of peace of mind, distinguishing between residents, guests, and potential intruders with incredible accuracy.
+        `,
+        image: "https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        date: "Oct 20, 2023",
+        author: "Alex Rivers",
+        authorRole: "Senior Tech Analyst",
+        authorImage: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100",
+        category: "Tech News",
+        readTime: "5 min read",
+        tags: ["Smart Home", "AI", "IoT", "2024 Trends"]
+    },
+    {
+        id: 2,
+        title: "Sony vs Bose: Which Headphones Should You Choose?",
+        excerpt: "An in-depth comparison of the latest noise-canceling flagships in the audio world.",
+        content: `
+# The Battle for Audio Supremacy
+
+Choosing between Sony and Bose has never been harder. Both brands have recently released their flagship noise-canceling headphones, and the competition is fierce.
+
+### Sound Quality
+Sony tends to favor a slightly more bass-heavy, dynamic sound signature, while Bose aims for a more balanced and neutral frequency response. Your preference will depend on your musical tastes.
+
+### Noise Cancellation
+Bose has long been the king of ANC, but Sony's latest models are closing the gap rapidly. In some high-frequency scenarios, Sony actually manages to edge ahead.
+
+### Comfort and Design
+The Bose QuietComfort series lives up to its name with a lightweight, ergonomic design. Sony's WH-1000XM series feels premium and sturdy but can be slightly heavier for long listening sessions.
+        `,
+        image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        date: "Oct 18, 2023",
+        author: "Sarah Chen",
+        authorRole: "Audio Specialist",
+        authorImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100",
+        category: "Comparison",
+        readTime: "8 min read",
+        tags: ["Audio", "Headphones", "Sony", "Bose", "Review"]
+    },
+    {
+        id: 3,
+        title: "Revolutionizing Photography with Panasonic Lumix S5II",
+        excerpt: "Why this camera is a game-changer for both videographers and photographers alike.",
+        content: `
+# The New Era of Hybrid Shooting
+
+Panasonic has finally answered the prayers of hybrid shooters everywhere with the Lumix S5II, introducing Phase Hybrid AF into their full-frame mirrorless lineup.
+
+### Phase Hybrid AF
+The headline feature is the autofocus. It's fast, reliable, and keeps track of subjects with impressive tenacity, even in challenging lighting conditions.
+
+### Video Capabilities
+Panasonic's legacy in video shines through. With internal 6K recording, incredible stabilization, and professional-grade color tools, it's a powerhouse for small-to-medium productions.
+
+### Handling and Ergonomics
+The S5II feels like a tool designed by photographers for photographers. The dials are intuitive, the grip is secure, and the weather-sealed body inspires confidence in the field.
+        `,
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        date: "Oct 15, 2023",
+        author: "Mark Evans",
+        authorRole: "Professional Photographer",
+        authorImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100",
+        category: "Cameras",
+        readTime: "6 min read",
+        tags: ["Panasonic", "Mirrorless", "Hybrid Camera", "Photography", "Videography"]
+    }
+];
+
+export const fetchBlogPosts = (): Promise<BlogPost[]> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(blogPosts);
+        }, 100);
+    });
+};
+
+export const fetchBlogPostById = (id: number): Promise<BlogPost | undefined> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(blogPosts.find(post => post.id === id));
         }, 100);
     });
 };

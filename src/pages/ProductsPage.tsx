@@ -77,8 +77,7 @@ const ProductsPage: React.FC = () => {
             }
         };
 
-        const timeoutId = setTimeout(loadProducts, 300);
-        return () => clearTimeout(timeoutId);
+        loadProducts();
     }, [activeTab, searchTerm, priceRange, minRating, page, sortBy, sortOrder]);
 
     const totalPages = Math.ceil(total / limit);

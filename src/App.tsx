@@ -12,6 +12,8 @@ import BlogSection from './components/BlogSection';
 import WhatsAppChatbot from './components/WhatsAppChatbot';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 import { StoreProvider } from './context/StoreContext';
 import Toast from './components/Toast';
 import CartDrawer from './components/CartDrawer';
@@ -40,6 +42,8 @@ function App() {
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/tracking" element={<OrderTracking />} />
               <Route path="/compare" element={<ComparisonPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:id" element={<BlogPostPage />} />
             </Routes>
           </main>
           <BlogSection />

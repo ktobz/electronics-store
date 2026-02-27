@@ -1,12 +1,12 @@
-// Color Palette
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$accent-color: #28a745;
-$background-color: #f8f9fa;
-$text-color: #333;
+// Color Palette - Multi-Million Dollar Aesthetic
+$primary-color: #0d0d0f; // Deep Midnight
+$secondary-color: #1a1a1c; // Graphite
+$accent-color: #c5a059; // Champagne Gold
+$background-color: #fafafa; // Ultra-clean Off-white
+$text-color: #1a1a1c;
 $white: #ffffff;
 $black: #000000;
-$light-gray: #e9ecef;
+$light-gray: #f2f2f2;
 
 // Typography
 $font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
@@ -14,12 +14,13 @@ $font-size-base: 16px;
 $line-height-base: 1.5;
 
 // Spacing
-$spacing-xs: 4px;
-$spacing-sm: 8px;
-$spacing-md: 16px;
-$spacing-lg: 24px;
-$spacing-xl: 32px;
-$spacing-xxl: 64px;
+// Spacing - Refined for "Luxury" feel
+$spacing-xs: 6px;
+$spacing-sm: 12px;
+$spacing-md: 20px;
+$spacing-lg: 32px;
+$spacing-xl: 48px;
+$spacing-xxl: 80px;
 
 // Breakpoints
 $breakpoint-mobile: 576px;

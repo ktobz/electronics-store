@@ -8,25 +8,25 @@ const slides = [
         id: 1,
         title: "The Zenith of Sound",
         subtitle: "Immerse yourself in pure, high-fidelity audio with our flagship wireless headphones collection.",
-        image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=2065&auto=format&fit=crop",
+        image: "/src/images/hero-1.png",
         cta: "Shop Audio",
-        accent: "#f43f5e"
+        accent: "#c5a059"
     },
     {
         id: 2,
         title: "Precision Engineering",
         subtitle: "Experience the ultimate power and portability with our latest ultrabook series.",
-        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop",
+        image: "/src/images/hero-2.png",
         cta: "Explore Tech",
-        accent: "#8b5cf6"
+        accent: "#c5a059"
     },
     {
         id: 3,
         title: "Visions of Tomorrow",
         subtitle: "Capture life's most precious details with our professional-grade photography tools.",
-        image: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?q=80&w=2070&auto=format&fit=crop",
+        image: "/src/images/hero-3.png",
         cta: "View Cameras",
-        accent: "#0ea5e9"
+        accent: "#c5a059"
     }
 ];
 
@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
             scale: 1,
             transition: {
                 duration: 1.2,
-                ease: [0.6, 0.01, -0.05, 0.9]
+                ease: [0.6, 0.01, -0.05, 0.9] as any
             }
         },
         exit: (custom: boolean) => ({
@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
             scale: 0.9,
             transition: {
                 duration: 0.8,
-                ease: "easeInOut"
+                ease: "easeInOut" as any
             }
         })
     };
@@ -83,7 +83,7 @@ const Hero: React.FC = () => {
             transition: {
                 delay: 0.5 + i * 0.15,
                 duration: 0.8,
-                ease: "easeOut"
+                ease: "easeOut" as any
             }
         })
     };

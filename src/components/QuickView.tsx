@@ -53,14 +53,16 @@ const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
                             </p>
 
                             <div className="meta-info">
-                                <div className="meta-item"><Truck size={18} /> <span>Free Shipping</span></div>
-                                <div className="meta-item"><ShieldCheck size={18} /> <span>2-Year Warranty</span></div>
+                                <div className="meta-item"><Truck size={18} /> <span>Free Express Shipping</span></div>
+                                <div className="meta-item"><ShieldCheck size={18} /> <span>2-Year International Warranty</span></div>
                             </div>
 
-                            <button className="btn btn-primary add-to-cart" onClick={() => { addToCart(product.id); onClose(); }}>
-                                <ShoppingBag size={20} />
-                                Add to Cart
-                            </button>
+                            <div className="action-row">
+                                <button className="btn btn-primary add-to-cart" onClick={() => { addToCart(product.id); onClose(); }}>
+                                    <ShoppingBag size={20} />
+                                    Add to Collection
+                                </button>
+                            </div>
 
                             <div className="reviews-section">
                                 <h3>Customer Reviews</h3>

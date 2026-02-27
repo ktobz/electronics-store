@@ -3,10 +3,10 @@
 .hero {
     position: relative;
     height: calc(100vh - 80px);
-    min-height: 600px;
+    min-height: 700px;
     width: 100%;
     overflow: hidden;
-    background-color: #000;
+    background-color: #050505;
 
     &__slide {
         position: absolute;
@@ -16,7 +16,7 @@
         height: 100%;
         display: flex;
         align-items: center;
-        perspective: 1000px;
+        perspective: 1200px;
     }
 
     &__background {
@@ -28,8 +28,8 @@
         background-size: cover;
         background-position: center;
         z-index: 1;
-        transition: transform 10s linear;
-        transform: scale(1.1);
+        transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform: scale(1.05);
     }
 
     &__overlay {
@@ -38,11 +38,21 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to right,
-                rgba(0, 0, 0, 0.8) 0%,
+        background: radial-gradient(circle at 20% 50%,
+                rgba(0, 0, 0, 0.7) 0%,
                 rgba(0, 0, 0, 0.4) 50%,
-                rgba(0, 0, 0, 0.6) 100%);
+                rgba(0, 0, 0, 0.8) 100%);
         z-index: 2;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.8) 100%);
+        }
     }
 
     &__container {
@@ -55,155 +65,166 @@
     }
 
     &__content {
-        max-width: 850px;
+        max-width: 900px;
         color: $white;
         text-align: left;
-        padding-top: 80px; // space for navbar
+        padding-top: 40px;
     }
 
     &__badge {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 18px;
-        border-radius: 40px;
+        gap: 10px;
+        padding: 10px 22px;
+        border-radius: 50px;
         font-weight: 800;
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        margin-bottom: 28px;
-        box-shadow: 0 10px 30px rgba($black, 0.4);
+        margin-bottom: 32px;
+        box-shadow: 0 15px 35px rgba($black, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba($white, 0.1);
     }
 
     &__title {
-        font-size: 5.5rem;
+        font-size: 6.5rem;
         font-weight: 900;
-        line-height: 1;
-        margin-bottom: 28px;
-        letter-spacing: -0.04em;
-        text-shadow: 0 5px 25px rgba($black, 0.4);
+        line-height: 0.95;
+        margin-bottom: 32px;
+        letter-spacing: -0.05em;
+        background: linear-gradient(to bottom right, #fff 40%, rgba(255, 255, 255, 0.6));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
 
         @media (max-width: 992px) {
-            font-size: 4rem;
+            font-size: 4.5rem;
         }
 
         @media (max-width: 576px) {
-            font-size: 2.5rem;
+            font-size: 3rem;
         }
     }
 
     &__subtitle {
-        font-size: 1.5rem;
-        opacity: 0.85;
-        margin-bottom: 56px;
-        line-height: 1.5;
-        max-width: 600px;
-        text-shadow: 0 2px 10px rgba($black, 0.3);
+        font-size: 1.75rem;
+        font-weight: 400;
+        opacity: 0.9;
+        margin-bottom: 60px;
+        line-height: 1.4;
+        max-width: 650px;
+        color: rgba(255, 255, 255, 0.8);
 
         @media (max-width: 768px) {
-            font-size: 1.15rem;
+            font-size: 1.25rem;
         }
     }
 
     &__btns {
         display: flex;
-        gap: 20px;
+        gap: 24px;
         flex-wrap: wrap;
 
         .hero-btn {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 18px 42px;
-            font-size: 1.15rem;
+            gap: 14px;
+            padding: 20px 48px;
+            font-size: 1.1rem;
             font-weight: 800;
-            border-radius: 14px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 16px;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .btn-primary {
-            background-color: $white;
+            background: $white;
             color: $black;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 
             &:hover {
-                background-color: #eee;
-                transform: scale(1.05) translateY(-5px);
-                box-shadow: 0 15px 35px rgba($black, 0.3);
+                transform: translateY(-8px);
+                box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
             }
         }
 
         .btn-secondary {
-            background-color: rgba($white, 0.1);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba($white, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: $white;
 
             &:hover {
-                background-color: rgba($white, 0.2);
-                transform: scale(1.05) translateY(-5px);
-                box-shadow: 0 15px 35px rgba($black, 0.3);
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-8px);
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+                border-color: rgba(255, 255, 255, 0.4);
             }
         }
     }
 
     &__controls {
         position: absolute;
-        bottom: 50px;
+        bottom: 60px;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
         align-items: center;
-        gap: 32px;
+        gap: 40px;
         z-index: 10;
-        color: $white;
     }
 
     &__control-btn {
-        background: rgba($white, 0.05);
-        backdrop-filter: blur(10px);
-        color: $white;
-        border: 1px solid rgba($white, 0.2);
-        width: 56px;
-        height: 56px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        color: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 
         &:hover {
             background: $white;
             color: $black;
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba($white, 0.3);
+            transform: scale(1.15);
+            box-shadow: 0 15px 45px rgba(255, 255, 255, 0.2);
         }
     }
 
     &__dots {
         display: flex;
-        gap: 14px;
+        gap: 16px;
     }
 
     &__dot {
-        width: 14px;
-        height: 14px;
-        background: rgba($white, 0.25);
+        width: 12px;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.2);
         cursor: pointer;
         border: none;
         border-radius: 50%;
-        transition: all 0.4s ease;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 
         &.active {
             background: $white;
-            width: 42px;
+            width: 48px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba($white, 0.5);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
         }
     }
 }
 
-// Subtle zoom effect on the background while the slide is active
-.hero__slide[style*="opacity: 1"] .hero__background {
-    transform: scale(1.2);
+// Improved active state animation
+.hero__slide {
+    &.active {
+        .hero__background {
+            transform: scale(1.15);
+        }
+    }
 }
