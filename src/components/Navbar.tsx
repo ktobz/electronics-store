@@ -142,6 +142,9 @@ const Navbar: React.FC = () => {
             <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}>
               Products
             </NavLink>
+            <NavLink to="/shop-by-category" className={({ isActive }) => `nav-link ${isActive ? 'nav-link--active' : ''}`}>
+              Categories
+            </NavLink>
 
             {/* Brands dropdown */}
             <div className="nav-dropdown">
@@ -302,6 +305,7 @@ const Navbar: React.FC = () => {
         <nav className="mobile-drawer__nav">
           <NavLink to="/" className="mobile-nav-link" onClick={closeMenu} end>Home</NavLink>
           <NavLink to="/products" className="mobile-nav-link" onClick={closeMenu}>Products</NavLink>
+          <NavLink to="/shop-by-category" className="mobile-nav-link" onClick={closeMenu}>Categories</NavLink>
           <NavLink to="/compare" className="mobile-nav-link" onClick={closeMenu}>
             Compare {compare.length > 0 && <span className="nav-count">{compare.length}</span>}
           </NavLink>

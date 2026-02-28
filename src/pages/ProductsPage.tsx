@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts, type Product } from '../services/mockApi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Package, AlertCircle, Filter } from 'lucide-react';
+import { Search, Package, AlertCircle, Filter, SlidersHorizontal, Star, ChevronDown, DollarSign } from 'lucide-react';
 import '../styles/ProductsPage.scss';
 
 const ProductsPage: React.FC = () => {
@@ -86,40 +86,52 @@ const ProductsPage: React.FC = () => {
         <div className="products-page">
             <header className="products-page__header">
                 <div className="container">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="products-header__title"
+                        transition={{ duration: 0.8 }}
                     >
-                        {activeTab === 'all' ? 'All Electronics' : `Official ${activeTab} Store`}
-                    </motion.h1>
-                    <p className="products-header__subtitle">
-                        Discover the latest in technology and innovation.
-                    </p>
+                        <h1 className="products-header__title">Premium Collection</h1>
+                        <p className="products-header__subtitle">Discover our curated selection of high-end electronics</p>
+                    </motion.div>
                 </div>
             </header>
 
             <div className="container">
                 <div className="products-page__layout">
                     <aside className="products-page__sidebar">
+                        <div className="sidebar-header">
+                            <SlidersHorizontal size={20} />
+                            <h3>Filters</h3>
+                        </div>
+
                         <div className="filter-group">
-                            <h4>Price Range</h4>
-                            <input
-                                type="range"
-                                min="0"
-                                max="3000"
-                                step="100"
-                                value={priceRange}
-                                onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                            />
-                            <div className="range-labels">
-                                <span>$0</span>
-                                <span>Max: ${priceRange.toLocaleString()}</span>
+                            <h4>
+                                <DollarSign size={16} />
+                                Price Range
+                            </h4>
+                            <div className="price-range-container">
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="3000"
+                                    step="50"
+                                    value={priceRange}
+                                    onChange={(e) => setPriceRange(parseInt(e.target.value))}
+                                    className="price-slider"
+                                />
+                                <div className="range-display">
+                                    <span className="range-min">$0</span>
+                                    <span className="range-max">${priceRange.toLocaleString()}</span>
+                                </div>
                             </div>
                         </div>
 
                         <div className="filter-group">
-                            <h4>Minimum Rating</h4>
+                            <h4>
+                                <Star size={16} />
+                                Minimum Rating
+                            </h4>
                             <div className="stars-filter">
                                 {[4, 3, 2, 1].map(star => (
                                     <label key={star} className="star-option">
@@ -129,10 +141,22 @@ const ProductsPage: React.FC = () => {
                                             checked={minRating === star}
                                             onChange={() => setMinRating(star)}
                                         />
-                                        <span>{star}+ Stars</span>
+                                        <div className="star-content">
+                                            <div className="stars">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star
+                                                        key={i}
+                                                        size={12}
+                                                        fill={i < star ? "#f59e0b" : "none"}
+                                                        color={i < star ? "#f59e0b" : "#d1d5db"}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span>{star}+ Stars</span>
+                                        </div>
                                     </label>
                                 ))}
-                                <button className="clear-filter" onClick={() => setMinRating(0)}>Clear</button>
+                                <button className="clear-filter" onClick={() => setMinRating(0)}>Clear Rating</button>
                             </div>
                         </div>
                     </aside>

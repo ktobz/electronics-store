@@ -14,6 +14,12 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
+import CustomersBoughtPage from './pages/CustomersBoughtPage';
+import ShopByCategoryPage from './pages/ShopByCategoryPage';
+import CategoryPage from './pages/CategoryPage';
+import FAQPage from './pages/FAQPage';
+import ShippingReturnsPage from './pages/ShippingReturnsPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import { StoreProvider } from './context/StoreContext';
 import Toast from './components/Toast';
 import CartDrawer from './components/CartDrawer';
@@ -44,6 +50,12 @@ function App() {
               <Route path="/compare" element={<ComparisonPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:id" element={<BlogPostPage />} />
+              <Route path="/customers-bought" element={<CustomersBoughtPage />} />
+              <Route path="/shop-by-category" element={<ShopByCategoryPage />} />
+              <Route path="/category/:categoryId" element={<CategoryPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
             </Routes>
           </main>
           <BlogSection />

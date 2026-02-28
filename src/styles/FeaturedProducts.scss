@@ -17,7 +17,7 @@
 
     .section-subtitle {
         color: $secondary-color;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 }
 
@@ -38,6 +38,146 @@
 
     svg {
         color: $primary-color;
+    }
+}
+
+.featured-stories {
+    margin: $spacing-xxl 0;
+
+    .stories-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: $spacing-xl;
+        color: $black;
+    }
+
+    .stories-container {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+
+        .story-carousel {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .story-card {
+            background: $white;
+            padding: $spacing-xl;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba($black, 0.08);
+            border: 1px solid rgba($black, 0.05);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .story-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: $spacing-lg;
+
+                .user-info {
+                    display: flex;
+                    align-items: center;
+                    gap: $spacing-md;
+
+                    .user-avatar {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 3px solid rgba($accent-color, 0.2);
+                    }
+
+                    .user-details {
+                        .user-name {
+                            font-size: 1.1rem;
+                            font-weight: 700;
+                            margin: 0 0 4px 0;
+                            color: $black;
+                        }
+
+                        .user-role {
+                            font-size: 0.9rem;
+                            color: $secondary-color;
+                            margin: 0 0 8px 0;
+                        }
+
+                        .user-rating {
+                            display: flex;
+                            gap: 2px;
+                        }
+                    }
+                }
+
+                .story-product {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: rgba($accent-color, 0.1);
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    color: $accent-color;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                }
+            }
+
+            .story-content {
+                display: flex;
+                align-items: flex-start;
+                gap: $spacing-md;
+
+                .quote-icon {
+                    color: $accent-color;
+                    opacity: 0.3;
+                    flex-shrink: 0;
+                    margin-top: 4px;
+                }
+
+                .story-text {
+                    font-size: 1rem;
+                    line-height: 1.6;
+                    color: $text-color;
+                    font-style: italic;
+                    margin: 0;
+                }
+            }
+        }
+
+        .story-dots {
+            display: flex;
+            justify-content: center;
+            gap: $spacing-sm;
+            margin-top: $spacing-lg;
+
+            .story-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #ddd;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &.active {
+                    width: 24px;
+                    border-radius: 12px;
+                    background: $accent-color;
+                }
+
+                &:hover {
+                    background: $accent-color;
+                    opacity: 0.7;
+                }
+            }
+        }
     }
 }
 

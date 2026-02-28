@@ -3,12 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ShoppingCart, Info, Star } from 'lucide-react';
 import '../styles/Hero.scss';
 
+import hero1 from '../images/hero-1.png';
+import hero2 from '../images/hero-2.png';
+import hero3 from '../images/hero-3.png';
+
 const slides = [
     {
         id: 1,
         title: "The Zenith of Sound",
         subtitle: "Immerse yourself in pure, high-fidelity audio with our flagship wireless headphones collection.",
-        image: "/src/images/hero-1.png",
+        image: hero1,
         cta: "Shop Audio",
         accent: "#c5a059"
     },
@@ -16,7 +20,7 @@ const slides = [
         id: 2,
         title: "Precision Engineering",
         subtitle: "Experience the ultimate power and portability with our latest ultrabook series.",
-        image: "/src/images/hero-2.png",
+        image: hero2,
         cta: "Explore Tech",
         accent: "#c5a059"
     },
@@ -24,7 +28,7 @@ const slides = [
         id: 3,
         title: "Visions of Tomorrow",
         subtitle: "Capture life's most precious details with our professional-grade photography tools.",
-        image: "/src/images/hero-3.png",
+        image: hero3,
         cta: "View Cameras",
         accent: "#c5a059"
     }
@@ -100,7 +104,11 @@ const Hero: React.FC = () => {
                     animate="visible"
                     exit="exit"
                 >
-                    <div className="hero__background" style={{ backgroundImage: `url(${slides[current].image})` }} />
+                    <img
+                        src={slides[current].image}
+                        alt={slides[current].title}
+                        className="hero__background-img"
+                    />
                     <div className="hero__overlay" />
 
                     <div className="container hero__container">
