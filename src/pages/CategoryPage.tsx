@@ -497,8 +497,7 @@ const CategoryPage: React.FC = () => {
                                                 className="quick-view-btn"
                                                 onClick={() => setQuickViewProduct(product)}
                                             >
-                                                <Eye size={16} />
-                                                Quick View
+                                                <Eye size={14} />
                                             </button>
                                         </div>
                                         {product.rating >= 4.5 && (

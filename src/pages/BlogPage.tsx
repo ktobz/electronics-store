@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, ArrowRight, Search, Clock } from 'lucide-react';
+import { Calendar, ArrowRight, Search, Clock, TrendingUp, Award, Zap } from 'lucide-react';
 import { fetchBlogPosts, type BlogPost } from '../services/mockApi';
 import '../styles/BlogPage.scss';
 
@@ -39,21 +39,52 @@ const BlogPage: React.FC = () => {
         <div className="blog-page">
             <section className="blog-hero">
                 <div className="container">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="blog-hero__title"
+                        transition={{ duration: 0.8 }}
+                        className="hero-content"
                     >
-                        Tech Insights
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="blog-hero__subtitle"
-                    >
-                        Deep dives, comparisons, and the latest from the world of premium electronics.
-                    </motion.p>
+                        <div className="hero-icon">
+                            <TrendingUp size={48} />
+                        </div>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="blog-hero__title"
+                        >
+                            Tech Insights
+                        </motion.h1>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="blog-hero__subtitle"
+                        >
+                            Discover cutting-edge technology trends, expert analysis, and in-depth reviews from industry leaders
+                        </motion.p>
+                        
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="hero-stats"
+                        >
+                            <div className="stat-item">
+                                <Award size={20} />
+                                <span>Expert Analysis</span>
+                            </div>
+                            <div className="stat-item">
+                                <Zap size={20} />
+                                <span>Latest Trends</span>
+                            </div>
+                            <div className="stat-item">
+                                <Clock size={20} />
+                                <span>Real-time Updates</span>
+                            </div>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
 
