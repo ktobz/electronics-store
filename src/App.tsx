@@ -20,6 +20,10 @@ import CategoryPage from './pages/CategoryPage';
 import FAQPage from './pages/FAQPage';
 import ShippingReturnsPage from './pages/ShippingReturnsPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import PromoDetailsPage from './pages/PromoDetailsPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import AboutUsPage from './pages/AboutUsPage';
+import ContactPage from './pages/ContactPage';
 import { StoreProvider } from './context/StoreContext';
 import Toast from './components/Toast';
 import CartDrawer from './components/CartDrawer';
@@ -56,6 +60,10 @@ function App() {
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/promo-details" element={<PromoDetailsPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/about" element={<AboutUsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
             </Routes>
           </main>
           <BlogSection />

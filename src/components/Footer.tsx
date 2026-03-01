@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 import '../styles/Footer.scss';
 
@@ -30,21 +31,21 @@ const Footer: React.FC = () => {
                 <div className="footer__column">
                     <h4 className="footer__heading">Quick Links</h4>
                     <ul className="footer__links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#products">Products</a></li>
-                        <li><a href="#categories">Categories</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/products">Products</Link></li>
+                        <li><Link to="/shop-by-category">Categories</Link></li>
+                        <li><Link to="/about">About Us</Link></li>
+                        <li><Link to="/contact">Contact</Link></li>
                     </ul>
                 </div>
 
                 <div className="footer__column">
                     <h4 className="footer__heading">Customer Service</h4>
                     <ul className="footer__links">
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Shipping & Returns</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><Link to="/faq">FAQ</Link></li>
+                        <li><Link to="/shipping-returns">Shipping & Returns</Link></li>
+                        <li><Link to="/privacy">Privacy Policy</Link></li>
+                        <li><Link to="/terms">Terms of Service</Link></li>
                     </ul>
                 </div>
 

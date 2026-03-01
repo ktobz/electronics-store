@@ -2,7 +2,7 @@
 
 .faq-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 50%, #f1f5f9 100%);
+    background-color: #050505; color: #e2e8f0;
 
     .container {
         max-width: 1200px;
@@ -13,7 +13,7 @@
     // Hero Section
     .faq-hero {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
         color: white;
         position: relative;
         overflow: hidden;
@@ -110,7 +110,7 @@
     // Stats Section
     .stats-section {
         padding: 60px 0;
-        background: white;
+        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
 
         .stats-grid {
             display: grid;
@@ -120,12 +120,12 @@
             .stat-card {
                 text-align: center;
                 padding: 32px 24px;
-                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 20px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
 
                 .stat-icon {
-                    color: #667eea;
+                    color: #c5a059;
                     margin-bottom: 16px;
                     display: flex;
                     align-items: center;
@@ -135,12 +135,12 @@
                 .stat-value {
                     font-size: 2.5rem;
                     font-weight: 800;
-                    color: #1e293b;
+                    color: #ffffff;
                     margin-bottom: 8px;
                 }
 
                 .stat-label {
-                    color: #64748b;
+                    color: #a0a0a0;
                     font-weight: 600;
                 }
             }
@@ -156,7 +156,7 @@
                 font-size: 1.5rem;
                 font-weight: 700;
                 margin-bottom: 24px;
-                color: #1e293b;
+                color: #ffffff;
             }
 
             .category-pills {
@@ -169,23 +169,23 @@
                     align-items: center;
                     gap: 8px;
                     padding: 12px 20px;
-                    background: white;
-                    border: 2px solid #e2e8f0;
+                    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                     border-radius: 25px;
                     cursor: pointer;
                     transition: all 0.3s ease;
                     font-weight: 600;
-                    color: #64748b;
+                    color: #a0a0a0;
 
                     &:hover {
-                        border-color: #667eea;
-                        color: #667eea;
+                        border-color: #c5a059;
+                        color: #c5a059;
                         transform: translateY(-2px);
                     }
 
                     &.active {
-                        background: #667eea;
-                        border-color: #667eea;
+                        background: linear-gradient(135deg, #c5a059 0%, #b08d48 100%);
+                        border-color: #c5a059;
                         color: white;
                     }
                 }
@@ -202,15 +202,15 @@
             margin: 0 auto;
 
             .faq-item {
-                background: white;
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 16px;
                 margin-bottom: 16px;
                 overflow: hidden;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 transition: all 0.3s ease;
 
                 &:hover {
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                     transform: translateY(-2px);
                 }
 
@@ -232,14 +232,14 @@
                         text-align: left;
 
                         .question-icon {
-                            color: #667eea;
+                            color: #c5a059;
                             flex-shrink: 0;
                         }
 
                         .question-text {
                             font-size: 1.1rem;
                             font-weight: 600;
-                            color: #1e293b;
+                            color: #ffffff;
                             line-height: 1.5;
                         }
                     }
@@ -251,17 +251,17 @@
 
                     &:hover {
                         .question-toggle {
-                            color: #667eea;
+                            color: #c5a059;
                         }
                     }
                 }
 
                 .faq-answer {
-                    border-top: 1px solid #e2e8f0;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
 
                     .answer-content {
                         padding: 0 24px 24px 60px;
-                        color: #64748b;
+                        color: #a0a0a0;
                         line-height: 1.7;
                         font-size: 1rem;
                     }
@@ -271,7 +271,7 @@
             .no-results {
                 text-align: center;
                 padding: 80px 20px;
-                color: #64748b;
+                color: #a0a0a0;
 
                 svg {
                     margin-bottom: 24px;
@@ -281,7 +281,7 @@
                 h3 {
                     font-size: 1.5rem;
                     margin-bottom: 8px;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 p {
@@ -294,7 +294,7 @@
     // Contact Section
     .contact-section {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
 
         .contact-content {
             text-align: center;
@@ -366,8 +366,8 @@
                         align-items: center;
                         gap: 8px;
                         padding: 12px 24px;
-                        background: white;
-                        color: #667eea;
+                        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
+                        color: #c5a059;
                         border: none;
                         border-radius: 25px;
                         font-weight: 600;

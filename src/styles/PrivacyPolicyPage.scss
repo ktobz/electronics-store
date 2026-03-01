@@ -2,7 +2,7 @@
 
 .privacy-policy-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 50%, #f1f5f9 100%);
+    background-color: #050505; color: #e2e8f0;
 
     .container {
         max-width: 1200px;
@@ -13,7 +13,7 @@
     // Hero Section
     .hero-section {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
         color: white;
         text-align: center;
 
@@ -74,7 +74,7 @@
                 font-size: 2.5rem;
                 font-weight: 800;
                 margin-bottom: 24px;
-                color: #1e293b;
+                color: #ffffff;
 
                 @media (max-width: 768px) {
                     font-size: 2rem;
@@ -83,7 +83,7 @@
 
             p {
                 font-size: 1.1rem;
-                color: #64748b;
+                color: #a0a0a0;
                 line-height: 1.7;
                 margin-bottom: 48px;
             }
@@ -98,10 +98,10 @@
                     align-items: center;
                     gap: 12px;
                     padding: 20px;
-                    background: white;
+                    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                     border-radius: 16px;
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                    border: 1px solid #e2e8f0;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
 
                     svg {
                         color: #10b981;
@@ -110,7 +110,7 @@
 
                     span {
                         font-weight: 600;
-                        color: #1e293b;
+                        color: #ffffff;
                         text-align: left;
                     }
                 }
@@ -128,14 +128,14 @@
             gap: 32px;
 
             .privacy-card {
-                background: white;
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 20px;
                 padding: 32px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 transition: all 0.3s ease;
 
                 &:hover {
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                    box-shadow: 0 20px 40px rgba(197, 160, 89, 0.1);
                     transform: translateY(-4px);
                 }
 
@@ -148,7 +148,7 @@
                     .card-icon {
                         width: 50px;
                         height: 50px;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
                         border-radius: 12px;
                         display: flex;
                         align-items: center;
@@ -159,12 +159,12 @@
                     h3 {
                         font-size: 1.3rem;
                         font-weight: 700;
-                        color: #1e293b;
+                        color: #ffffff;
                     }
                 }
 
                 .card-content {
-                    color: #64748b;
+                    color: #a0a0a0;
                     line-height: 1.6;
                     margin-bottom: 20px;
                 }
@@ -172,7 +172,7 @@
                 .expand-btn {
                     background: none;
                     border: none;
-                    color: #667eea;
+                    color: #c5a059;
                     font-weight: 600;
                     cursor: pointer;
                     padding: 8px 0;
@@ -186,7 +186,7 @@
                 .card-details {
                     margin-top: 20px;
                     padding-top: 20px;
-                    border-top: 1px solid #e2e8f0;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
 
                     ul {
                         list-style: none;
@@ -197,7 +197,7 @@
                             align-items: center;
                             gap: 8px;
                             margin-bottom: 12px;
-                            color: #64748b;
+                            color: #a0a0a0;
 
                             svg {
                                 color: #10b981;
@@ -213,7 +213,7 @@
     // Rights Section
     .rights-section {
         padding: 80px 0;
-        background: white;
+        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
 
         .section-header {
             text-align: center;
@@ -223,7 +223,7 @@
                 font-size: 2.5rem;
                 font-weight: 800;
                 margin-bottom: 16px;
-                color: #1e293b;
+                color: #ffffff;
 
                 @media (max-width: 768px) {
                     font-size: 2rem;
@@ -232,7 +232,7 @@
 
             p {
                 font-size: 1.1rem;
-                color: #64748b;
+                color: #a0a0a0;
             }
         }
 
@@ -244,32 +244,32 @@
             .right-card {
                 text-align: center;
                 padding: 32px;
-                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 20px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
 
                 .right-icon {
                     width: 60px;
                     height: 60px;
-                    background: white;
+                    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin: 0 auto 24px;
-                    color: #667eea;
-                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                    color: #c5a059;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
                 }
 
                 h3 {
                     font-size: 1.3rem;
                     font-weight: 700;
                     margin-bottom: 12px;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 p {
-                    color: #64748b;
+                    color: #a0a0a0;
                     line-height: 1.6;
                 }
             }
@@ -286,7 +286,7 @@
                 font-weight: 800;
                 margin-bottom: 48px;
                 text-align: center;
-                color: #1e293b;
+                color: #ffffff;
 
                 @media (max-width: 768px) {
                     font-size: 2rem;
@@ -303,18 +303,18 @@
                     align-items: flex-start;
                     gap: 20px;
                     padding: 32px;
-                    background: white;
+                    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                     border-radius: 20px;
-                    border: 1px solid #e2e8f0;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                     transition: all 0.3s ease;
 
                     &:hover {
-                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                         transform: translateY(-2px);
                     }
 
                     svg {
-                        color: #667eea;
+                        color: #c5a059;
                         flex-shrink: 0;
                     }
 
@@ -323,11 +323,11 @@
                             font-size: 1.3rem;
                             font-weight: 700;
                             margin-bottom: 8px;
-                            color: #1e293b;
+                            color: #ffffff;
                         }
 
                         p {
-                            color: #64748b;
+                            color: #a0a0a0;
                             line-height: 1.6;
                         }
                     }
@@ -339,7 +339,7 @@
     // Contact Section
     .contact-section {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
 
         .contact-content {
             text-align: center;
@@ -403,7 +403,7 @@
     // Footer Section
     .footer-section {
         padding: 40px 0;
-        background: #1e293b;
+        background: #000000; border-top: 1px solid rgba(255, 255, 255, 0.05);
 
         .footer-content {
             text-align: center;
@@ -427,7 +427,7 @@
             }
 
             .copyright {
-                color: #64748b;
+                color: #a0a0a0;
                 font-size: 0.9rem;
             }
         }

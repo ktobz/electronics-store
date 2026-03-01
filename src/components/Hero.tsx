@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ShoppingCart, Info, Star } from 'lucide-react';
 import '../styles/Hero.scss';
@@ -14,6 +15,7 @@ const slides = [
         subtitle: "Immerse yourself in pure, high-fidelity audio with our flagship wireless headphones collection.",
         image: hero1,
         cta: "Shop Audio",
+        link: "/category/audio",
         accent: "#c5a059"
     },
     {
@@ -22,6 +24,7 @@ const slides = [
         subtitle: "Experience the ultimate power and portability with our latest ultrabook series.",
         image: hero2,
         cta: "Explore Tech",
+        link: "/category/laptops",
         accent: "#c5a059"
     },
     {
@@ -30,11 +33,13 @@ const slides = [
         subtitle: "Capture life's most precious details with our professional-grade photography tools.",
         image: hero3,
         cta: "View Cameras",
+        link: "/category/cameras",
         accent: "#c5a059"
     }
 ];
 
 const Hero: React.FC = () => {
+    const navigate = useNavigate();
     const [current, setCurrent] = useState(0);
     const [isReversed, setIsReversed] = useState(false);
 
@@ -65,7 +70,7 @@ const Hero: React.FC = () => {
             scale: 1,
             transition: {
                 duration: 1.2,
-                ease: [0.6, 0.01, -0.05, 0.9] as any
+                ease: [0.6, 0.01, 0.05, 0.9] as any
             }
         },
         exit: (custom: boolean) => ({
@@ -152,11 +157,17 @@ const Hero: React.FC = () => {
                                 custom={3}
                                 className="hero__btns"
                             >
-                                <button className="btn btn-primary hero-btn">
+                                <button
+                                    className="btn btn-primary hero-btn"
+                                    onClick={() => navigate(slides[current].link)}
+                                >
                                     <ShoppingCart size={18} />
                                     {slides[current].cta}
                                 </button>
-                                <button className="btn btn-secondary hero-btn">
+                                <button
+                                    className="btn btn-secondary hero-btn"
+                                    onClick={() => navigate('/promo-details')}
+                                >
                                     <Info size={18} />
                                     Details
                                 </button>

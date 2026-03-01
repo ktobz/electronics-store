@@ -2,7 +2,7 @@
 
 .shipping-returns-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 50%, #f1f5f9 100%);
+    background-color: #050505; color: #e2e8f0;
 
     .container {
         max-width: 1200px;
@@ -13,7 +13,7 @@
     // Hero Section
     .hero-section {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
         color: white;
         text-align: center;
 
@@ -60,7 +60,7 @@
             font-size: 2.5rem;
             font-weight: 800;
             margin-bottom: 16px;
-            color: #1e293b;
+            color: #ffffff;
 
             @media (max-width: 768px) {
                 font-size: 2rem;
@@ -69,7 +69,7 @@
 
         p {
             font-size: 1.1rem;
-            color: #64748b;
+            color: #a0a0a0;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -85,21 +85,21 @@
             gap: 32px;
 
             .shipping-card {
-                background: white;
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 20px;
                 padding: 32px;
-                border: 2px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 cursor: pointer;
                 transition: all 0.3s ease;
                 position: relative;
 
                 &:hover {
-                    border-color: #667eea;
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                    border-color: #c5a059;
+                    box-shadow: 0 20px 40px rgba(197, 160, 89, 0.1);
                 }
 
                 &.selected {
-                    border-color: #667eea;
+                    border-color: #c5a059;
                     background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
                 }
 
@@ -107,7 +107,7 @@
                     position: absolute;
                     top: -12px;
                     right: 20px;
-                    background: #667eea;
+                    background: linear-gradient(135deg, #c5a059 0%, #b08d48 100%);
                     color: white;
                     padding: 6px 16px;
                     border-radius: 20px;
@@ -118,7 +118,7 @@
                 .shipping-icon {
                     width: 60px;
                     height: 60px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
                     border-radius: 16px;
                     display: flex;
                     align-items: center;
@@ -131,18 +131,18 @@
                     font-size: 1.5rem;
                     font-weight: 700;
                     margin-bottom: 8px;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 .shipping-price {
                     font-size: 2rem;
                     font-weight: 800;
-                    color: #667eea;
+                    color: #c5a059;
                     margin-bottom: 8px;
                 }
 
                 .shipping-time {
-                    color: #64748b;
+                    color: #a0a0a0;
                     margin-bottom: 24px;
                     font-weight: 600;
                 }
@@ -156,7 +156,7 @@
                         align-items: center;
                         gap: 8px;
                         margin-bottom: 12px;
-                        color: #64748b;
+                        color: #a0a0a0;
                         font-size: 0.9rem;
 
                         svg {
@@ -172,7 +172,7 @@
     // Returns Section
     .returns-section {
         padding: 80px 0;
-        background: white;
+        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
 
         .returns-grid {
             display: grid;
@@ -182,32 +182,32 @@
             .return-card {
                 text-align: center;
                 padding: 32px;
-                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 20px;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
 
                 .return-icon {
                     width: 60px;
                     height: 60px;
-                    background: white;
+                    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin: 0 auto 24px;
-                    color: #667eea;
-                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                    color: #c5a059;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
                 }
 
                 h3 {
                     font-size: 1.3rem;
                     font-weight: 700;
                     margin-bottom: 12px;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 p {
-                    color: #64748b;
+                    color: #a0a0a0;
                     line-height: 1.6;
                 }
             }
@@ -219,15 +219,15 @@
         padding: 80px 0;
 
         .international-table {
-            background: white;
+            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
             .table-header {
                 display: grid;
                 grid-template-columns: 2fr 1fr 1fr 1.5fr;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
                 color: white;
                 padding: 20px;
                 font-weight: 700;
@@ -242,11 +242,11 @@
                 display: grid;
                 grid-template-columns: 2fr 1fr 1fr 1.5fr;
                 padding: 20px;
-                border-bottom: 1px solid #e2e8f0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
                 transition: all 0.3s ease;
 
                 &:hover {
-                    background: #f8fafc;
+                    background: rgba(255, 255, 255, 0.05);
                 }
 
                 @media (max-width: 768px) {
@@ -259,11 +259,11 @@
                     align-items: center;
                     gap: 8px;
                     font-weight: 600;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 div {
-                    color: #64748b;
+                    color: #a0a0a0;
                 }
             }
         }
@@ -272,7 +272,7 @@
     // Process Section
     .process-section {
         padding: 80px 0;
-        background: white;
+        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
 
         .process-timeline {
             display: grid;
@@ -305,7 +305,7 @@
                 .step-number {
                     width: 60px;
                     height: 60px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
@@ -322,11 +322,11 @@
                     font-size: 1.3rem;
                     font-weight: 700;
                     margin-bottom: 12px;
-                    color: #1e293b;
+                    color: #ffffff;
                 }
 
                 p {
-                    color: #64748b;
+                    color: #a0a0a0;
                     line-height: 1.6;
                 }
             }
@@ -342,11 +342,11 @@
             margin: 0 auto;
 
             .faq-item {
-                background: white;
+                background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
                 border-radius: 16px;
                 margin-bottom: 16px;
                 overflow: hidden;
-                border: 1px solid #e2e8f0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
 
                 .faq-question {
                     width: 100%;
@@ -359,19 +359,19 @@
                     cursor: pointer;
                     font-size: 1.1rem;
                     font-weight: 600;
-                    color: #1e293b;
+                    color: #ffffff;
                     transition: all 0.3s ease;
 
                     &:hover {
-                        background: #f8fafc;
+                        background: rgba(255, 255, 255, 0.05);
                     }
                 }
 
                 .faq-answer {
                     padding: 0 24px 24px;
-                    color: #64748b;
+                    color: #a0a0a0;
                     line-height: 1.7;
-                    border-top: 1px solid #e2e8f0;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
                 }
             }
         }
@@ -380,7 +380,7 @@
     // Contact CTA
     .contact-cta {
         padding: 80px 0;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle at top, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 1) 100%);
 
         .cta-content {
             text-align: center;
@@ -424,8 +424,8 @@
                     transition: all 0.3s ease;
 
                     &.primary {
-                        background: white;
-                        color: #667eea;
+                        background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(10px);
+                        color: #c5a059;
 
                         &:hover {
                             transform: translateY(-2px);
