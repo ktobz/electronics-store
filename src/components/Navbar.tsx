@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  ShoppingCart, Star, X, Heart, User,
+  ShoppingBag, Star, X, Heart, User,
   ChevronDown, Moon, Sun, Trophy, Search, Zap,
   Smartphone, Laptop, Headphones, Gamepad2, Watch,
-  Globe, FileText, Megaphone, AppWindow, Rocket
+  Globe, FileText, Megaphone, AppWindow, Rocket, Package
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { getCurrentUser } from '../services/supabase';
@@ -12,6 +12,7 @@ import '../styles/Navbar.scss';
 
 // ─── Accordion Section ────────────────────────────────────────────────────────
 interface AccordionSectionProps {
+  id?: string;
   label: string;
   icon: React.ReactNode;
   isOpen: boolean;
@@ -127,11 +128,11 @@ const Navbar: React.FC = () => {
         <div className="navbar__inner">
 
           {/* ── Logo ─────────────────────────────────────────── */}
-          <NavLink to="/" className="navbar__logo" aria-label="Electro Store Home">
+          <NavLink to="/" className="navbar__logo" aria-label="Lecman Store Home">
             <div className="navbar__logo-icon">
               <Zap size={18} />
             </div>
-            <span className="navbar__logo-text">Electro<em>Store</em></span>
+            <span className="navbar__logo-text">Lecman<em>Store</em></span>
           </NavLink>
 
           {/* ── Desktop Links ─────────────────────────────────── */}
@@ -210,7 +211,7 @@ const Navbar: React.FC = () => {
 
             {/* Cart */}
             <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
-              <ShoppingCart size={18} />
+              <ShoppingBag size={18} />
               {cart.length > 0 && <span className="navbar__badge">{cart.length}</span>}
             </button>
 
@@ -239,7 +240,7 @@ const Navbar: React.FC = () => {
                         <User size={15} /> Profile
                       </NavLink>
                       <NavLink to="/orders" className="user-menu__item" onClick={() => setShowUserMenu(false)}>
-                        <ShoppingCart size={15} /> Orders
+                        <Package size={15} /> Orders
                       </NavLink>
                       <button className="user-menu__item user-menu__item--danger" onClick={handleLogout}>
                         <X size={15} /> Logout
@@ -283,7 +284,7 @@ const Navbar: React.FC = () => {
             <div className="navbar__logo-icon">
               <Zap size={18} />
             </div>
-            <span className="navbar__logo-text">Electro<em>Store</em></span>
+            <span className="navbar__logo-text">Lecman<em>Store</em></span>
           </NavLink>
           <button className="mobile-drawer__close" onClick={closeMenu} aria-label="Close menu">
             <X size={22} />
@@ -398,7 +399,7 @@ const Navbar: React.FC = () => {
                   <User size={15} /> Profile
                 </NavLink>
                 <NavLink to="/orders" className="mobile-action-link" onClick={closeMenu}>
-                  <ShoppingCart size={15} /> Orders
+                  <Package size={15} /> Orders
                 </NavLink>
                 <button className="mobile-action-link mobile-action-link--danger" onClick={handleLogout}>
                   <X size={15} /> Logout
