@@ -11,6 +11,8 @@ $text: #1a1a2e;
 $text-muted: #6b7280;
 $drawer-width: 320px;
 $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$breakpoint-tablet: 900px;
+$breakpoint-mobile: 640px;
 
 // ─── Base ───────────────────────────────────────────────────────────────────
 .navbar {
@@ -191,7 +193,7 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     gap: 2px;
     flex-shrink: 0;
 
-    @media (max-width: 900px) {
+    @media (max-width: $breakpoint-tablet) {
         display: none;
     }
 }
@@ -337,7 +339,7 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: $breakpoint-mobile) {
         display: none;
     }
 }
@@ -388,9 +390,27 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         color: $accent;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: $breakpoint-mobile) {
         &:not(.navbar__cart-btn) {
             display: none;
+        }
+    }
+
+    &.navbar__cart-btn {
+        color: $accent !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        &:hover {
+            color: darken($accent, 10%) !important;
+        }
+
+        .navbar--dark & {
+            color: $accent-2 !important;
+
+            &:hover {
+                color: lighten($accent-2, 10%) !important;
+            }
         }
     }
 }
@@ -417,7 +437,7 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 .navbar__user {
     position: relative;
 
-    @media (max-width: 640px) {
+    @media (max-width: $breakpoint-mobile) {
         display: none;
     }
 }
@@ -636,7 +656,7 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: $breakpoint-tablet) {
         display: flex;
     }
 }
@@ -651,7 +671,7 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(2px);
     animation: fadeIn 0.25s ease;
 
-    @media (max-width: 900px) {
+    @media (max-width: $breakpoint-tablet) {
         display: block;
     }
 }
@@ -797,34 +817,6 @@ $transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         padding: 16px;
         border-top: 1px solid rgba(0, 0, 0, 0.06);
         flex-shrink: 0;
-    }
-}
-
-// ─── Mobile Nav Links ────────────────────────────────────────────────────────
-.mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    font-size: 15px;
-    font-weight: 500;
-    color: $text;
-    text-decoration: none;
-    transition: background $transition, color $transition;
-
-    &:hover,
-    &.active {
-        color: $accent;
-        background: rgba(108, 99, 255, 0.06);
-    }
-
-    .nav-count {
-        background: $accent;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 700;
-        padding: 1px 6px;
-        border-radius: 10px;
     }
 }
 

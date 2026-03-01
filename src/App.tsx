@@ -24,6 +24,8 @@ import PromoDetailsPage from './pages/PromoDetailsPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import AboutUsPage from './pages/AboutUsPage';
 import ContactPage from './pages/ContactPage';
+import ProfilePage from './pages/ProfilePage';
+import OrdersPage from './pages/OrdersPage';
 import { StoreProvider } from './context/StoreContext';
 import Toast from './components/Toast';
 import CartDrawer from './components/CartDrawer';
@@ -64,6 +66,8 @@ function App() {
               <Route path="/terms" element={<TermsOfServicePage />} />
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/orders" element={<OrdersPage />} />
             </Routes>
           </main>
           <BlogSection />
