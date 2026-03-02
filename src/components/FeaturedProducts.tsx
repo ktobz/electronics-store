@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import { fetchProducts, type Product } from '../services/mockApi';
-import { ChevronLeft, ChevronRight, Loader2, Quote, Star, User, ShoppingCart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Quote, Star, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '../styles/FeaturedProducts.scss';
 
@@ -155,8 +155,8 @@ const FeaturedProducts: React.FC = () => {
                                 >
                                     <div className="story-header">
                                         <div className="user-info">
-                                            <img 
-                                                src={userStories[currentStory].avatar} 
+                                            <img
+                                                src={userStories[currentStory].avatar}
                                                 alt={userStories[currentStory].user}
                                                 className="user-avatar"
                                             />
@@ -165,11 +165,11 @@ const FeaturedProducts: React.FC = () => {
                                                 <p className="user-role">{userStories[currentStory].role}</p>
                                                 <div className="user-rating">
                                                     {[...Array(5)].map((_, i) => (
-                                                        <Star 
-                                                            key={i} 
-                                                            size={14} 
-                                                            fill={i < userStories[currentStory].rating ? "#c5a059" : "none"} 
-                                                            color={i < userStories[currentStory].rating ? "#c5a059" : "#ddd"} 
+                                                        <Star
+                                                            key={i}
+                                                            size={14}
+                                                            fill={i < userStories[currentStory].rating ? "#c5a059" : "none"}
+                                                            color={i < userStories[currentStory].rating ? "#c5a059" : "#ddd"}
                                                         />
                                                     ))}
                                                 </div>
@@ -186,7 +186,7 @@ const FeaturedProducts: React.FC = () => {
                                     </div>
                                 </motion.div>
                             </div>
-                            
+
                             <div className="story-dots">
                                 {userStories.map((_, index) => (
                                     <button

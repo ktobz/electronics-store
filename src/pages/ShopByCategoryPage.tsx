@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-    Search, Filter, Grid, List, Star, TrendingUp, 
-    ShoppingBag, Heart, Share2, ChevronRight, 
-    Laptop, Smartphone, Headphones, Camera, Watch, 
-    Gamepad, Tv, Tablet, Home, Package, Monitor, 
-    Cpu, Printer, Wifi, HardDrive, Code, Plane, 
-    Shield, Headphones as Vr, Projector, Zap, 
-    Award, Clock, ArrowRight, Sparkles
+import {
+    Search, Grid, List, TrendingUp,
+    ShoppingBag, Heart, Share2, ChevronRight,
+    Laptop, Smartphone, Headphones, Camera, Watch,
+    Gamepad, Tv, Tablet, Home, Package, Monitor,
+    Cpu, Printer, Wifi, HardDrive, Code, Plane,
+    Shield, Headphones as Vr, Projector, Zap,
+    Award, ArrowRight, Sparkles
 } from 'lucide-react';
 import { fetchProducts, type Product } from '../services/mockApi';
 import '../styles/ShopByCategoryPage.scss';
@@ -314,15 +314,15 @@ const ShopByCategoryPage: React.FC = () => {
     };
 
     const categoryVariants = {
-        hidden: { 
-            opacity: 0, 
-            scale: 0.8, 
+        hidden: {
+            opacity: 0,
+            scale: 0.8,
             y: 30,
             rotateX: -15
         },
-        visible: { 
-            opacity: 1, 
-            scale: 1, 
+        visible: {
+            opacity: 1,
+            scale: 1,
             y: 0,
             rotateX: 0,
             transition: {
@@ -332,7 +332,7 @@ const ShopByCategoryPage: React.FC = () => {
                 duration: 0.6
             }
         },
-        hover: { 
+        hover: {
             scale: 1.05,
             y: -10,
             rotateX: 5,
@@ -345,7 +345,7 @@ const ShopByCategoryPage: React.FC = () => {
     };
 
     const getProductCount = (categoryId: string) => {
-        return products.filter(product => 
+        return products.filter(product =>
             product.category.toLowerCase().includes(categoryId.replace('-', ' '))
         ).length;
     };
@@ -372,7 +372,7 @@ const ShopByCategoryPage: React.FC = () => {
     return (
         <div className="shop-by-category-page">
             {/* Hero Section */}
-            <motion.section 
+            <motion.section
                 className="category-hero"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -380,7 +380,7 @@ const ShopByCategoryPage: React.FC = () => {
             >
                 <div className="container">
                     <div className="hero-content">
-                        <motion.div 
+                        <motion.div
                             className="hero-text"
                             initial={{ opacity: 0, x: -50 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -408,8 +408,8 @@ const ShopByCategoryPage: React.FC = () => {
                                 </div>
                             </div>
                         </motion.div>
-                        
-                        <motion.div 
+
+                        <motion.div
                             className="hero-visual"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -442,7 +442,7 @@ const ShopByCategoryPage: React.FC = () => {
             {/* Featured Categories */}
             <section className="featured-categories">
                 <div className="container">
-                    <motion.div 
+                    <motion.div
                         className="section-header"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -452,7 +452,7 @@ const ShopByCategoryPage: React.FC = () => {
                         <p className="section-subtitle">Handpicked collections for the best experience</p>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         className="featured-grid"
                         variants={containerVariants}
                         initial="hidden"
@@ -486,7 +486,7 @@ const ShopByCategoryPage: React.FC = () => {
                                             <div className="featured-badge">{category.badge}</div>
                                         )}
                                     </div>
-                                    <motion.div 
+                                    <motion.div
                                         className="featured-overlay"
                                         animate={{ opacity: hoveredCategory === category.id ? 1 : 0 }}
                                     >
@@ -556,7 +556,7 @@ const ShopByCategoryPage: React.FC = () => {
             {/* All Categories Grid */}
             <section className="all-categories">
                 <div className="container">
-                    <motion.div 
+                    <motion.div
                         className="section-header"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -569,7 +569,7 @@ const ShopByCategoryPage: React.FC = () => {
                     </motion.div>
 
                     <AnimatePresence mode="wait">
-                        <motion.div 
+                        <motion.div
                             className={`categories-container ${viewMode}`}
                             variants={containerVariants}
                             initial="hidden"
@@ -620,7 +620,7 @@ const ShopByCategoryPage: React.FC = () => {
                     </AnimatePresence>
 
                     {filteredAndSortedCategories.length === 0 && (
-                        <motion.div 
+                        <motion.div
                             className="no-results"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -636,7 +636,7 @@ const ShopByCategoryPage: React.FC = () => {
             {/* Trending Categories */}
             <section className="trending-section">
                 <div className="container">
-                    <motion.div 
+                    <motion.div
                         className="section-header"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { X, Scale, ShoppingCart } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { products } from '../services/mockApi';

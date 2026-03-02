@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Quote, User as UserIcon, ShoppingCart, TrendingUp, Heart, Share2, Filter } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Star, Quote, ShoppingCart, TrendingUp, Heart, Share2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts, type Product } from '../services/mockApi';
 import '../styles/CustomersBoughtPage.scss';
@@ -41,7 +41,6 @@ const userStories = [
 const CustomersBoughtPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedCategory, setSelectedCategory] = useState('all');
     const [hoveredStory, setHoveredStory] = useState<number | null>(null);
 
     useEffect(() => {
@@ -49,7 +48,7 @@ const CustomersBoughtPage: React.FC = () => {
             try {
                 const data = await fetchProducts(1, 50);
                 // Get products that are frequently bought together
-                const frequentlyBought = data.products.filter(p => 
+                const frequentlyBought = data.products.filter((p: any) =>
                     p.rating >= 4.5 && p.reviews > 100
                 ).slice(0, 12);
                 setProducts(frequentlyBought);
@@ -73,15 +72,15 @@ const CustomersBoughtPage: React.FC = () => {
     };
 
     const storyVariants = {
-        hidden: { 
-            opacity: 0, 
-            scale: 0.8, 
+        hidden: {
+            opacity: 0,
+            scale: 0.8,
             y: 30,
             rotateX: -10
         },
-        visible: { 
-            opacity: 1, 
-            scale: 1, 
+        visible: {
+            opacity: 1,
+            scale: 1,
             y: 0,
             rotateX: 0,
             transition: {
@@ -90,7 +89,7 @@ const CustomersBoughtPage: React.FC = () => {
                 damping: 15
             }
         },
-        hover: { 
+        hover: {
             scale: 1.02,
             y: -5,
             transition: {
@@ -123,7 +122,7 @@ const CustomersBoughtPage: React.FC = () => {
     return (
         <div className="customers-bought-page">
             <div className="container">
-                <motion.header 
+                <motion.header
                     className="page-header"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -134,7 +133,7 @@ const CustomersBoughtPage: React.FC = () => {
                             <h1 className="page-title">Customers Also Bought</h1>
                             <p className="page-subtitle">Real people, real tech, real stories.</p>
                         </div>
-                        <motion.div 
+                        <motion.div
                             className="header-stats"
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -152,14 +151,14 @@ const CustomersBoughtPage: React.FC = () => {
                     </div>
                 </motion.header>
 
-                <motion.section 
+                <motion.section
                     className="user-stories"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
                 >
                     <div className="stories-grid">
-                        {userStories.map((story, index) => (
+                        {userStories.map((story) => (
                             <motion.div
                                 key={story.id}
                                 className="story-card"
@@ -169,7 +168,7 @@ const CustomersBoughtPage: React.FC = () => {
                                 onMouseLeave={() => setHoveredStory(null)}
                             >
                                 <div className="story-card__header">
-                                    <motion.div 
+                                    <motion.div
                                         className="quote-icon"
                                         animate={{
                                             rotate: hoveredStory === story.id ? 360 : 0,
@@ -180,9 +179,9 @@ const CustomersBoughtPage: React.FC = () => {
                                         <Quote size={24} />
                                     </motion.div>
                                     <div className="user-info">
-                                        <motion.img 
-                                            src={story.avatar} 
-                                            alt={story.user} 
+                                        <motion.img
+                                            src={story.avatar}
+                                            alt={story.user}
                                             className="avatar"
                                             whileHover={{ scale: 1.05, rotate: 5 }}
                                         />
@@ -192,7 +191,7 @@ const CustomersBoughtPage: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="story-content">
                                     <p className="story-text">"{story.story}"</p>
                                     <div className="purchase-info">
@@ -204,7 +203,7 @@ const CustomersBoughtPage: React.FC = () => {
                                             <span className="items-label">Also bought:</span>
                                             <div className="items-list">
                                                 {story.additionalItems.map((item, i) => (
-                                                    <motion.span 
+                                                    <motion.span
                                                         key={i}
                                                         className="item-tag"
                                                         initial={{ opacity: 0, x: -10 }}
@@ -218,7 +217,7 @@ const CustomersBoughtPage: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="story-footer">
                                     <div className="story-rating">
                                         {[...Array(5)].map((_, i) => (
@@ -228,23 +227,23 @@ const CustomersBoughtPage: React.FC = () => {
                                                 animate={{ scale: 1 }}
                                                 transition={{ delay: 0.3 + i * 0.1 }}
                                             >
-                                                <Star 
-                                                    size={16} 
-                                                    fill={i < story.rating ? "#c5a059" : "none"} 
-                                                    color={i < story.rating ? "#c5a059" : "#ddd"} 
+                                                <Star
+                                                    size={16}
+                                                    fill={i < story.rating ? "#c5a059" : "none"}
+                                                    color={i < story.rating ? "#c5a059" : "#ddd"}
                                                 />
                                             </motion.div>
                                         ))}
                                     </div>
                                     <div className="story-actions">
-                                        <motion.button 
+                                        <motion.button
                                             className="action-btn"
                                             whileHover={{ scale: 1.1 }}
                                             whileTap={{ scale: 0.9 }}
                                         >
                                             <Heart size={16} />
                                         </motion.button>
-                                        <motion.button 
+                                        <motion.button
                                             className="action-btn"
                                             whileHover={{ scale: 1.1 }}
                                             whileTap={{ scale: 0.9 }}
@@ -258,7 +257,7 @@ const CustomersBoughtPage: React.FC = () => {
                     </div>
                 </motion.section>
 
-                <motion.section 
+                <motion.section
                     className="trending-products"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -268,7 +267,7 @@ const CustomersBoughtPage: React.FC = () => {
                         <h2 className="section-title">Trending Post-Purchase</h2>
                         <p className="section-subtitle">Popular items customers love to buy together</p>
                     </div>
-                    
+
                     <div className="product-grid">
                         {products.map((product, index) => (
                             <motion.div

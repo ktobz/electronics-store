@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-    Truck, Package, Clock, Shield, CreditCard, MapPin, 
-    CheckCircle, AlertCircle, RefreshCw, DollarSign, 
-    Globe, Home, Award, Users, Phone, Mail, ArrowRight
+import {
+    Truck, Package, Clock, MapPin,
+    CheckCircle, RefreshCw, DollarSign,
+    Globe, Phone, Mail, ArrowRight
 } from 'lucide-react';
 import '../styles/ShippingReturnsPage.scss';
 
@@ -115,7 +115,7 @@ const ShippingReturnsPage: React.FC = () => {
     return (
         <div className="shipping-returns-page">
             {/* Hero Section */}
-            <motion.section 
+            <motion.section
                 className="hero-section"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -145,14 +145,14 @@ const ShippingReturnsPage: React.FC = () => {
                         <p>Choose the delivery method that works best for you</p>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         className="shipping-grid"
                         variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {shippingOptions.map((option, index) => (
+                        {shippingOptions.map((option) => (
                             <motion.div
                                 key={option.name}
                                 className={`shipping-card ${selectedShipping === option.name ? 'selected' : ''}`}

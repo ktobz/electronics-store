@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-    Shield, Lock, Eye, Database, UserCheck, Cookie, 
-    Globe, Mail, Phone, FileText, AlertCircle, CheckCircle,
+import {
+    Shield, Lock, Eye, Database, UserCheck, Cookie,
+    Globe, Mail, Phone, FileText, CheckCircle,
     Calendar, Users, Settings, Download, Trash2, Share2
 } from 'lucide-react';
 import '../styles/PrivacyPolicyPage.scss';
@@ -116,7 +116,7 @@ const PrivacyPolicyPage: React.FC = () => {
     return (
         <div className="privacy-policy-page">
             {/* Hero Section */}
-            <motion.section 
+            <motion.section
                 className="hero-section"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -148,8 +148,8 @@ const PrivacyPolicyPage: React.FC = () => {
                     >
                         <h2>Our Commitment to Privacy</h2>
                         <p>
-                            At ElectroStore, we are committed to protecting your personal information and 
-                            ensuring transparency about how we collect, use, and share your data. This 
+                            At ElectroStore, we are committed to protecting your personal information and
+                            ensuring transparency about how we collect, use, and share your data. This
                             privacy policy outlines our practices and your rights regarding your information.
                         </p>
                         <div className="commitment-cards">
@@ -173,7 +173,7 @@ const PrivacyPolicyPage: React.FC = () => {
             {/* Privacy Sections */}
             <section className="privacy-sections">
                 <div className="container">
-                    <motion.div 
+                    <motion.div
                         className="sections-grid"
                         variants={containerVariants}
                         initial="hidden"
@@ -252,101 +252,101 @@ const PrivacyPolicyPage: React.FC = () => {
                 </div>
             </section>
 
-    {/* Data Protection Section */}
-    <section className="protection-section">
-        <div className="container">
-            <motion.div
-                className="protection-content"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-            >
-                <h2>Data Protection Measures</h2>
-                <div className="protection-grid">
-                    <div className="protection-item">
-                        <Lock size={32} />
-                        <div>
-                            <h3>Encryption</h3>
-                            <p>All data is encrypted using industry-standard SSL/TLS protocols</p>
+            {/* Data Protection Section */}
+            <section className="protection-section">
+                <div className="container">
+                    <motion.div
+                        className="protection-content"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2>Data Protection Measures</h2>
+                        <div className="protection-grid">
+                            <div className="protection-item">
+                                <Lock size={32} />
+                                <div>
+                                    <h3>Encryption</h3>
+                                    <p>All data is encrypted using industry-standard SSL/TLS protocols</p>
+                                </div>
+                            </div>
+                            <div className="protection-item">
+                                <Shield size={32} />
+                                <div>
+                                    <h3>Access Control</h3>
+                                    <p>Strict access controls limit who can view your information</p>
+                                </div>
+                            </div>
+                            <div className="protection-item">
+                                <Users size={32} />
+                                <div>
+                                    <h3>Training</h3>
+                                    <p>Regular privacy training for all employees handling data</p>
+                                </div>
+                            </div>
+                            <div className="protection-item">
+                                <FileText size={32} />
+                                <div>
+                                    <h3>Compliance</h3>
+                                    <p>Full compliance with GDPR, CCPA, and other privacy laws</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="protection-item">
-                        <Shield size={32} />
-                        <div>
-                            <h3>Access Control</h3>
-                            <p>Strict access controls limit who can view your information</p>
-                        </div>
-                    </div>
-                    <div className="protection-item">
-                        <Users size={32} />
-                        <div>
-                            <h3>Training</h3>
-                            <p>Regular privacy training for all employees handling data</p>
-                        </div>
-                    </div>
-                    <div className="protection-item">
-                        <FileText size={32} />
-                        <div>
-                            <h3>Compliance</h3>
-                            <p>Full compliance with GDPR, CCPA, and other privacy laws</p>
-                        </div>
-                    </div>
+                    </motion.div>
                 </div>
-            </motion.div>
-        </div>
-    </section>
+            </section>
 
-    {/* Contact Section */}
-    <section className="contact-section">
-        <div className="container">
-            <motion.div
-                className="contact-content"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-            >
-                <h2>Privacy Questions?</h2>
-                <p>If you have questions about this privacy policy or your data rights, contact us</p>
-                <div className="contact-grid">
-                    {contactInfo.map((contact, index) => (
-                        <motion.div
-                            key={contact.label}
-                            className="contact-card"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <div className="contact-icon">{contact.icon}</div>
-                            <h3>{contact.label}</h3>
-                            <p>{contact.value}</p>
-                        </motion.div>
-                    ))}
+            {/* Contact Section */}
+            <section className="contact-section">
+                <div className="container">
+                    <motion.div
+                        className="contact-content"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2>Privacy Questions?</h2>
+                        <p>If you have questions about this privacy policy or your data rights, contact us</p>
+                        <div className="contact-grid">
+                            {contactInfo.map((contact, index) => (
+                                <motion.div
+                                    key={contact.label}
+                                    className="contact-card"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                >
+                                    <div className="contact-icon">{contact.icon}</div>
+                                    <h3>{contact.label}</h3>
+                                    <p>{contact.value}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
                 </div>
-            </motion.div>
-        </div>
-    </section>
+            </section>
 
-    {/* Footer Section */}
-    <section className="footer-section">
-        <div className="container">
-            <motion.div
-                className="footer-content"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-            >
-                <div className="footer-links">
-                    <a href="#terms">Terms of Service</a>
-                    <a href="#cookies">Cookie Policy</a>
-                    <a href="#contact">Contact Us</a>
+            {/* Footer Section */}
+            <section className="footer-section">
+                <div className="container">
+                    <motion.div
+                        className="footer-content"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                    >
+                        <div className="footer-links">
+                            <a href="#terms">Terms of Service</a>
+                            <a href="#cookies">Cookie Policy</a>
+                            <a href="#contact">Contact Us</a>
+                        </div>
+                        <p className="copyright">
+                            © 2024 ElectroStore. All rights reserved.
+                        </p>
+                    </motion.div>
                 </div>
-                <p className="copyright">
-                    © 2024 ElectroStore. All rights reserved.
-                </p>
-            </motion.div>
-        </div>
-    </section>
+            </section>
         </div>
     );
 };

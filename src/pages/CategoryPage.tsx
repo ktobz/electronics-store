@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    Search, Filter, Grid, List, Heart, ShoppingBag, Star, 
-    ChevronLeft, ChevronRight, X, Check, Sparkles, TrendingUp,
-    Award, Clock, ArrowRight, ShoppingCart, Eye
+import {
+    Search, Filter, Grid, List, Heart, ShoppingBag, Star,
+    ChevronLeft, ChevronRight, X, Check, ShoppingCart, Eye
 } from 'lucide-react';
 import { fetchProducts, type Product } from '../services/mockApi';
 import { useStore } from '../context/StoreContext';
@@ -42,122 +41,122 @@ const brands: Brand[] = [
 ];
 
 const categoryInfo: Record<string, { name: string; description: string; icon: string; color: string }> = {
-    laptops: { 
-        name: 'Laptops', 
+    laptops: {
+        name: 'Laptops',
         description: 'High-performance laptops for work, gaming, and creativity',
         icon: '💻',
         color: '#3b82f6'
     },
-    smartphones: { 
-        name: 'Smartphones', 
+    smartphones: {
+        name: 'Smartphones',
         description: 'Latest smartphones with cutting-edge technology',
         icon: '📱',
         color: '#10b981'
     },
-    audio: { 
-        name: 'Audio', 
+    audio: {
+        name: 'Audio',
         description: 'Premium headphones, speakers, and audio equipment',
         icon: '🎧',
         color: '#f59e0b'
     },
-    cameras: { 
-        name: 'Cameras', 
+    cameras: {
+        name: 'Cameras',
         description: 'Professional cameras and photography gear',
         icon: '📷',
         color: '#ef4444'
     },
-    wearables: { 
-        name: 'Wearables', 
+    wearables: {
+        name: 'Wearables',
         description: 'Smart watches and fitness trackers',
         icon: '⌚',
         color: '#8b5cf6'
     },
-    gaming: { 
-        name: 'Gaming', 
+    gaming: {
+        name: 'Gaming',
         description: 'Gaming consoles and accessories',
         icon: '🎮',
         color: '#ec4899'
     },
-    tvs: { 
-        name: 'TVs & Home Theater', 
+    tvs: {
+        name: 'TVs & Home Theater',
         description: 'Smart TVs and home entertainment systems',
         icon: '📺',
         color: '#06b6d4'
     },
-    tablets: { 
-        name: 'Tablets', 
+    tablets: {
+        name: 'Tablets',
         description: 'Tablets for work and entertainment',
         icon: '📱',
         color: '#84cc16'
     },
-    'smart-home': { 
-        name: 'Smart Home', 
+    'smart-home': {
+        name: 'Smart Home',
         description: 'IoT devices and smart home solutions',
         icon: '🏠',
         color: '#f97316'
     },
-    accessories: { 
-        name: 'Accessories', 
+    accessories: {
+        name: 'Accessories',
         description: 'Tech accessories and essentials',
         icon: '📦',
         color: '#6366f1'
     },
-    monitors: { 
-        name: 'Monitors', 
+    monitors: {
+        name: 'Monitors',
         description: 'Professional and gaming monitors',
         icon: '🖥️',
         color: '#14b8a6'
     },
-    components: { 
-        name: 'Components', 
+    components: {
+        name: 'Components',
         description: 'PC components and hardware',
         icon: '🔧',
         color: '#dc2626'
     },
-    printers: { 
-        name: 'Printers', 
+    printers: {
+        name: 'Printers',
         description: 'Printers and office equipment',
         icon: '🖨️',
         color: '#7c3aed'
     },
-    networking: { 
-        name: 'Networking', 
+    networking: {
+        name: 'Networking',
         description: 'Networking equipment and routers',
         icon: '📡',
         color: '#0891b2'
     },
-    storage: { 
-        name: 'Storage', 
+    storage: {
+        name: 'Storage',
         description: 'Storage solutions and drives',
         icon: '💾',
         color: '#059669'
     },
-    software: { 
-        name: 'Software', 
+    software: {
+        name: 'Software',
         description: 'Software and digital products',
         icon: '💿',
         color: '#0d9488'
     },
-    drones: { 
-        name: 'Drones', 
+    drones: {
+        name: 'Drones',
         description: 'Drones and aerial photography',
         icon: '🚁',
         color: '#b91c1c'
     },
-    security: { 
-        name: 'Security', 
+    security: {
+        name: 'Security',
         description: 'Security cameras and systems',
         icon: '🔒',
         color: '#1e40af'
     },
-    'vr-ar': { 
-        name: 'VR/AR', 
+    'vr-ar': {
+        name: 'VR/AR',
         description: 'Virtual and augmented reality devices',
         icon: '🥽',
         color: '#7c2d12'
     },
-    projectors: { 
-        name: 'Projectors', 
+    projectors: {
+        name: 'Projectors',
         description: 'Projectors and presentation equipment',
         icon: '📽️',
         color: '#422006'
@@ -168,7 +167,7 @@ const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>();
     const navigate = useNavigate();
     const { addToCart, toggleWishlist, wishlist, cart } = useStore();
-    
+
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -177,9 +176,8 @@ const CategoryPage: React.FC = () => {
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [showFilters, setShowFilters] = useState(false);
-    const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
     const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+    const [showFilters, setShowFilters] = useState(false);
 
     const itemsPerPage = 30;
     const category = categoryInfo[categoryId || ''] || categoryInfo.laptops;
@@ -200,7 +198,7 @@ const CategoryPage: React.FC = () => {
     }, []);
 
     const filteredProducts = useMemo(() => {
-        let filtered = products.filter(product => 
+        let filtered = products.filter(product =>
             product.category.toLowerCase().includes(categoryId?.replace('-', ' ') || 'laptops')
         );
 
@@ -254,15 +252,15 @@ const CategoryPage: React.FC = () => {
     };
 
     const productVariants = {
-        hidden: { 
-            opacity: 0, 
-            scale: 0.8, 
+        hidden: {
+            opacity: 0,
+            scale: 0.8,
             y: 30,
             rotateX: -15
         },
-        visible: { 
-            opacity: 1, 
-            scale: 1, 
+        visible: {
+            opacity: 1,
+            scale: 1,
             y: 0,
             rotateX: 0,
             transition: {
@@ -272,7 +270,7 @@ const CategoryPage: React.FC = () => {
                 duration: 0.6
             }
         },
-        hover: { 
+        hover: {
             scale: 1.05,
             y: -10,
             rotateX: 5,
@@ -324,21 +322,21 @@ const CategoryPage: React.FC = () => {
     return (
         <div className="category-page">
             {/* Header */}
-            <motion.section 
+            <motion.section
                 className="category-header"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
                 <div className="container">
-                    <button 
+                    <button
                         onClick={() => navigate('/shop-by-category')}
                         className="back-button"
                     >
                         <ChevronLeft size={20} />
                         Back to Categories
                     </button>
-                    
+
                     <div className="category-hero">
                         <div className="category-icon">{category.icon}</div>
                         <div className="category-info">
@@ -426,7 +424,7 @@ const CategoryPage: React.FC = () => {
                                                 key={brand.id}
                                                 className={`brand-chip ${selectedBrands.includes(brand.id) ? 'selected' : ''}`}
                                                 onClick={() => {
-                                                    setSelectedBrands(prev => 
+                                                    setSelectedBrands(prev =>
                                                         prev.includes(brand.id)
                                                             ? prev.filter(b => b !== brand.id)
                                                             : [...prev, brand.id]
@@ -469,26 +467,26 @@ const CategoryPage: React.FC = () => {
             {/* Products Grid */}
             <section className="products-section">
                 <div className="container">
-                    <motion.div 
+                    <motion.div
                         className={`products-container ${viewMode}`}
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
                     >
                         <AnimatePresence mode="wait">
-                            {paginatedProducts.map((product, index) => (
+                            {paginatedProducts.map((product) => (
                                 <motion.div
                                     key={product.id}
                                     className={`product-card ${viewMode}`}
                                     variants={productVariants}
                                     whileHover="hover"
-                                    onMouseEnter={() => setHoveredProduct(product.id)}
-                                    onMouseLeave={() => setHoveredProduct(null)}
+                                    onMouseEnter={() => { }}
+                                    onMouseLeave={() => { }}
                                     layout
                                 >
                                     <div className="product-visual">
-                                        <img 
-                                            src={product.image} 
+                                        <img
+                                            src={product.image}
                                             alt={product.name}
                                             className="product-image"
                                         />
@@ -507,7 +505,7 @@ const CategoryPage: React.FC = () => {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                     <div className="product-info">
                                         <h3 className="product-name">{product.name}</h3>
                                         <p className="product-description">High-quality {product.category} from {product.brand}</p>
@@ -525,7 +523,7 @@ const CategoryPage: React.FC = () => {
                                             </div>
                                             <div className="product-price">${product.price}</div>
                                         </div>
-                                        
+
                                         <div className="product-actions">
                                             <button
                                                 className={`action-btn wishlist-btn ${isInWishlist(product.id) ? 'active' : ''}`}
@@ -599,7 +597,7 @@ const CategoryPage: React.FC = () => {
                             >
                                 <X size={24} />
                             </button>
-                            
+
                             <div className="quick-view-grid">
                                 <div className="quick-view-image">
                                     <img src={quickViewProduct.image} alt={quickViewProduct.name} />

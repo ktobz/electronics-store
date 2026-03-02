@@ -9,6 +9,7 @@ export interface Product {
     isSale?: boolean;
     isNew?: boolean;
     brand: string;
+    reviews: number;
 }
 
 export interface BlogPost {
@@ -41,7 +42,8 @@ export const products: Product[] = [
         rating: 4.9,
         image: "https://picsum.photos/seed/iphone15pro/400/300.jpg",
         category: "Phones",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 2,
@@ -51,7 +53,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("phone", 6),
         category: "Phones",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 3,
@@ -60,7 +63,8 @@ export const products: Product[] = [
         price: 349.99,
         rating: 4.9,
         image: generateImageUrl("audio", 8),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 4,
@@ -69,7 +73,8 @@ export const products: Product[] = [
         price: 1999.99,
         rating: 4.9,
         image: generateImageUrl("laptop", 4),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 5,
@@ -78,7 +83,8 @@ export const products: Product[] = [
         price: 499.99,
         rating: 4.8,
         image: generateImageUrl("gaming", 10),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 6,
@@ -88,7 +94,8 @@ export const products: Product[] = [
         rating: 4.7,
         image: generateImageUrl("phone", 6),
         category: "Phones",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 7,
@@ -97,7 +104,8 @@ export const products: Product[] = [
         price: 399.99,
         rating: 4.8,
         image: generateImageUrl("product", 7),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 8,
@@ -106,7 +114,8 @@ export const products: Product[] = [
         price: 429.99,
         rating: 4.9,
         image: generateImageUrl("audio", 8),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 9,
@@ -115,7 +124,8 @@ export const products: Product[] = [
         price: 1299.99,
         rating: 4.6,
         image: generateImageUrl("laptop", 4),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 10,
@@ -124,7 +134,8 @@ export const products: Product[] = [
         price: 699.99,
         rating: 4.7,
         image: generateImageUrl("gaming", 10),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 11,
@@ -133,7 +144,8 @@ export const products: Product[] = [
         price: 1999.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Cameras"
+        category: "Cameras",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 12,
@@ -142,7 +154,8 @@ export const products: Product[] = [
         price: 1499.99,
         rating: 4.8,
         image: generateImageUrl("product", 7),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 13,
@@ -151,7 +164,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.5,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 14,
@@ -160,7 +174,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.7,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 15,
@@ -169,7 +184,8 @@ export const products: Product[] = [
         price: 129.99,
         rating: 4.4,
         image: generateImageUrl("audio", 8),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 16,
@@ -178,7 +194,8 @@ export const products: Product[] = [
         price: 89.99,
         rating: 4.8,
         image: generateImageUrl("product", 7),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 17,
@@ -187,7 +204,8 @@ export const products: Product[] = [
         price: 159.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 18,
@@ -196,7 +214,8 @@ export const products: Product[] = [
         price: 59.99,
         rating: 4.6,
         image: generateImageUrl("product", 7),
-        category: "Communication"
+        category: "Communication",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 19,
@@ -205,7 +224,8 @@ export const products: Product[] = [
         price: 199.99,
         rating: 4.8,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 20,
@@ -214,7 +234,8 @@ export const products: Product[] = [
         price: 79.99,
         rating: 4.7,
         image: generateImageUrl("product", 7),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 21,
@@ -224,7 +245,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("phone", 6),
         category: "Phones",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 22,
@@ -233,7 +255,8 @@ export const products: Product[] = [
         price: 2999.99,
         rating: 5.0,
         image: generateImageUrl("product", 7),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 23,
@@ -242,7 +265,8 @@ export const products: Product[] = [
         price: 799.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 24,
@@ -251,7 +275,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.7,
         image: generateImageUrl("product", 7),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 25,
@@ -260,7 +285,8 @@ export const products: Product[] = [
         price: 1299.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Monitors"
+        category: "Monitors",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 26,
@@ -269,7 +295,8 @@ export const products: Product[] = [
         price: 169.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Components"
+        category: "Components",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 27,
@@ -278,7 +305,8 @@ export const products: Product[] = [
         price: 229.99,
         rating: 4.8,
         image: generateImageUrl("audio", 8),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 28,
@@ -287,7 +315,8 @@ export const products: Product[] = [
         price: 2499.99,
         rating: 4.6,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 29,
@@ -296,7 +325,8 @@ export const products: Product[] = [
         price: 899.99,
         rating: 4.7,
         image: generateImageUrl("product", 7),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 30,
@@ -305,7 +335,8 @@ export const products: Product[] = [
         price: 1399.99,
         rating: 4.9,
         image: generateImageUrl("audio", 8),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 31,
@@ -314,7 +345,8 @@ export const products: Product[] = [
         price: 1099.99,
         rating: 4.9,
         image: generateImageUrl("product", 7),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 32,
@@ -323,7 +355,8 @@ export const products: Product[] = [
         price: 1899.99,
         rating: 4.8,
         image: generateImageUrl("laptop", 32),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 33,
@@ -332,7 +365,8 @@ export const products: Product[] = [
         price: 599.99,
         rating: 4.7,
         image: generateImageUrl("tablet", 33),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 34,
@@ -341,7 +375,8 @@ export const products: Product[] = [
         price: 799.99,
         rating: 4.6,
         image: generateImageUrl("tablet", 34),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 35,
@@ -350,7 +385,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.8,
         image: generateImageUrl("audio", 35),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 36,
@@ -359,7 +395,8 @@ export const products: Product[] = [
         price: 199.99,
         rating: 4.5,
         image: generateImageUrl("audio", 36),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 37,
@@ -368,7 +405,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.9,
         image: generateImageUrl("audio", 37),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 38,
@@ -377,7 +415,8 @@ export const products: Product[] = [
         price: 329.99,
         rating: 4.7,
         image: generateImageUrl("audio", 38),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 39,
@@ -386,7 +425,8 @@ export const products: Product[] = [
         price: 499.99,
         rating: 4.8,
         image: generateImageUrl("gaming", 39),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 40,
@@ -395,7 +435,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.6,
         image: generateImageUrl("gaming", 40),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 41,
@@ -404,7 +445,8 @@ export const products: Product[] = [
         price: 399.99,
         rating: 4.5,
         image: generateImageUrl("gaming", 41),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 42,
@@ -413,7 +455,8 @@ export const products: Product[] = [
         price: 799.99,
         rating: 4.8,
         image: generateImageUrl("wearable", 42),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 43,
@@ -422,7 +465,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.6,
         image: generateImageUrl("wearable", 43),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 44,
@@ -431,7 +475,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.4,
         image: generateImageUrl("wearable", 44),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 45,
@@ -440,7 +485,8 @@ export const products: Product[] = [
         price: 699.99,
         rating: 4.7,
         image: generateImageUrl("wearable", 45),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 46,
@@ -449,7 +495,8 @@ export const products: Product[] = [
         price: 3899.99,
         rating: 4.9,
         image: generateImageUrl("camera", 46),
-        category: "Cameras"
+        category: "Cameras",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 47,
@@ -458,7 +505,8 @@ export const products: Product[] = [
         price: 2499.99,
         rating: 4.8,
         image: generateImageUrl("camera", 47),
-        category: "Cameras"
+        category: "Cameras",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 48,
@@ -467,7 +515,8 @@ export const products: Product[] = [
         price: 5499.99,
         rating: 4.9,
         image: generateImageUrl("camera", 48),
-        category: "Cameras"
+        category: "Cameras",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 49,
@@ -476,7 +525,8 @@ export const products: Product[] = [
         price: 1499.99,
         rating: 4.8,
         image: generateImageUrl("tv", 49),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 50,
@@ -485,7 +535,8 @@ export const products: Product[] = [
         price: 1999.99,
         rating: 4.7,
         image: generateImageUrl("tv", 50),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 51,
@@ -494,7 +545,8 @@ export const products: Product[] = [
         price: 2999.99,
         rating: 5.0,
         image: generateImageUrl("tv", 51),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 52,
@@ -503,7 +555,8 @@ export const products: Product[] = [
         price: 749.99,
         rating: 4.6,
         image: generateImageUrl("appliance", 52),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 53,
@@ -512,7 +565,8 @@ export const products: Product[] = [
         price: 899.99,
         rating: 4.5,
         image: generateImageUrl("appliance", 53),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 54,
@@ -521,7 +575,8 @@ export const products: Product[] = [
         price: 99.99,
         rating: 4.4,
         image: generateImageUrl("appliance", 54),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 55,
@@ -530,7 +585,8 @@ export const products: Product[] = [
         price: 379.99,
         rating: 4.8,
         image: generateImageUrl("appliance", 55),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 56,
@@ -539,7 +595,8 @@ export const products: Product[] = [
         price: 199.99,
         rating: 4.3,
         image: generateImageUrl("appliance", 56),
-        category: "Appliances"
+        category: "Appliances",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 57,
@@ -548,7 +605,8 @@ export const products: Product[] = [
         price: 599.99,
         rating: 4.5,
         image: generateImageUrl("grooming", 57),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 58,
@@ -557,7 +615,8 @@ export const products: Product[] = [
         price: 79.99,
         rating: 4.2,
         image: generateImageUrl("grooming", 58),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 59,
@@ -566,7 +625,8 @@ export const products: Product[] = [
         price: 299.99,
         rating: 4.6,
         image: generateImageUrl("grooming", 59),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 60,
@@ -575,7 +635,8 @@ export const products: Product[] = [
         price: 199.99,
         rating: 4.4,
         image: generateImageUrl("grooming", 60),
-        category: "Grooming"
+        category: "Grooming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     // 20 Additional Samsung Products
     {
@@ -587,7 +648,8 @@ export const products: Product[] = [
         rating: 4.7,
         image: generateImageUrl("watch", 61),
         category: "Wearables",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 62,
@@ -597,7 +659,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("tablet", 62),
         category: "Tablets",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 63,
@@ -606,7 +669,8 @@ export const products: Product[] = [
         price: 449.99,
         rating: 4.5,
         image: generateImageUrl("phone", 63),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 64,
@@ -617,7 +681,8 @@ export const products: Product[] = [
         rating: 4.6,
         image: generateImageUrl("audio", 64),
         category: "Audio",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 65,
@@ -626,7 +691,8 @@ export const products: Product[] = [
         price: 699.99,
         rating: 4.4,
         image: generateImageUrl("monitor", 65),
-        category: "Monitors"
+        category: "Monitors",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 66,
@@ -636,7 +702,8 @@ export const products: Product[] = [
         rating: 4.6,
         image: generateImageUrl("phone", 66),
         category: "Phones",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 67,
@@ -645,7 +712,8 @@ export const products: Product[] = [
         price: 1399.99,
         rating: 4.7,
         image: generateImageUrl("laptop", 67),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 68,
@@ -654,7 +722,8 @@ export const products: Product[] = [
         price: 99.99,
         rating: 4.3,
         image: generateImageUrl("wearable", 68),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 69,
@@ -663,7 +732,8 @@ export const products: Product[] = [
         price: 349.99,
         rating: 4.4,
         image: generateImageUrl("phone", 69),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 70,
@@ -672,7 +742,8 @@ export const products: Product[] = [
         price: 149.99,
         rating: 4.5,
         image: generateImageUrl("smart", 70),
-        category: "Smart Home"
+        category: "Smart Home",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 71,
@@ -681,7 +752,8 @@ export const products: Product[] = [
         price: 279.99,
         rating: 4.3,
         image: generateImageUrl("tablet", 71),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 72,
@@ -692,7 +764,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("phone", 72),
         category: "Phones",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 73,
@@ -701,7 +774,8 @@ export const products: Product[] = [
         price: 349.99,
         rating: 4.6,
         image: generateImageUrl("watch", 73),
-        category: "Wearables"
+        category: "Wearables",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 74,
@@ -711,7 +785,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("tablet", 74),
         category: "Tablets",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 75,
@@ -720,7 +795,8 @@ export const products: Product[] = [
         price: 199.99,
         rating: 4.2,
         image: generateImageUrl("phone", 75),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 76,
@@ -729,7 +805,8 @@ export const products: Product[] = [
         price: 99.99,
         rating: 4.4,
         image: generateImageUrl("audio", 76),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 77,
@@ -738,7 +815,8 @@ export const products: Product[] = [
         price: 599.99,
         rating: 4.6,
         image: generateImageUrl("tv", 77),
-        category: "TVs"
+        category: "TVs",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 78,
@@ -747,7 +825,8 @@ export const products: Product[] = [
         price: 279.99,
         rating: 4.3,
         image: generateImageUrl("phone", 78),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 79,
@@ -756,7 +835,8 @@ export const products: Product[] = [
         price: 699.99,
         rating: 4.5,
         image: generateImageUrl("tablet", 79),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 80,
@@ -767,7 +847,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("watch", 80),
         category: "Wearables",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     // 20 Additional Products from Other Brands
     {
@@ -778,7 +859,8 @@ export const products: Product[] = [
         rating: 4.7,
         image: generateImageUrl("phone", 81),
         category: "Phones",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 82,
@@ -787,7 +869,8 @@ export const products: Product[] = [
         price: 799.99,
         rating: 4.6,
         image: generateImageUrl("phone", 82),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 83,
@@ -796,7 +879,8 @@ export const products: Product[] = [
         price: 699.99,
         rating: 4.5,
         image: generateImageUrl("phone", 83),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 84,
@@ -805,7 +889,8 @@ export const products: Product[] = [
         price: 899.99,
         rating: 4.4,
         image: generateImageUrl("phone", 84),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 85,
@@ -814,7 +899,8 @@ export const products: Product[] = [
         price: 749.99,
         rating: 4.3,
         image: generateImageUrl("phone", 85),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 86,
@@ -823,7 +909,8 @@ export const products: Product[] = [
         price: 599.99,
         rating: 4.4,
         image: generateImageUrl("phone", 86),
-        category: "Phones"
+        category: "Phones",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 87,
@@ -833,7 +920,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("phone", 87),
         category: "Phones",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 88,
@@ -842,7 +930,8 @@ export const products: Product[] = [
         price: 1099.99,
         rating: 4.7,
         image: generateImageUrl("gaming", 88),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 89,
@@ -851,7 +940,8 @@ export const products: Product[] = [
         price: 899.99,
         rating: 4.5,
         image: generateImageUrl("gaming", 89),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 90,
@@ -860,7 +950,8 @@ export const products: Product[] = [
         price: 799.99,
         rating: 4.3,
         image: generateImageUrl("gaming", 90),
-        category: "Gaming"
+        category: "Gaming",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 91,
@@ -869,7 +960,8 @@ export const products: Product[] = [
         price: 1099.99,
         rating: 4.9,
         image: generateImageUrl("tablet", 91),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 92,
@@ -878,7 +970,8 @@ export const products: Product[] = [
         price: 999.99,
         rating: 4.6,
         image: generateImageUrl("tablet", 92),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 93,
@@ -887,7 +980,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.5,
         image: generateImageUrl("tablet", 93),
-        category: "Tablets"
+        category: "Tablets",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 94,
@@ -898,7 +992,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("audio", 94),
         category: "Audio",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 95,
@@ -907,7 +1002,8 @@ export const products: Product[] = [
         price: 329.99,
         rating: 4.7,
         image: generateImageUrl("audio", 95),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 96,
@@ -916,7 +1012,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.4,
         image: generateImageUrl("audio", 96),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 97,
@@ -925,7 +1022,8 @@ export const products: Product[] = [
         price: 249.99,
         rating: 4.8,
         image: generateImageUrl("audio", 97),
-        category: "Audio"
+        category: "Audio",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 98,
@@ -934,7 +1032,8 @@ export const products: Product[] = [
         price: 1199.99,
         rating: 4.7,
         image: generateImageUrl("laptop", 98),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 99,
@@ -943,7 +1042,8 @@ export const products: Product[] = [
         price: 1099.99,
         rating: 4.6,
         image: generateImageUrl("laptop", 99),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 100,
@@ -952,7 +1052,8 @@ export const products: Product[] = [
         price: 1399.99,
         rating: 4.5,
         image: generateImageUrl("laptop", 100),
-        category: "Laptops"
+        category: "Laptops",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     // 40 Car Products
     {
@@ -965,7 +1066,8 @@ export const products: Product[] = [
         image: generateImageUrl("tesla", 101),
         category: "Cars",
         isSale: true,
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 102,
@@ -975,7 +1077,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("tesla", 102),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 103,
@@ -984,7 +1087,8 @@ export const products: Product[] = [
         price: 42999.99,
         rating: 4.7,
         image: generateImageUrl("tesla", 103),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 104,
@@ -995,7 +1099,8 @@ export const products: Product[] = [
         rating: 4.6,
         image: generateImageUrl("tesla", 104),
         category: "Cars",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 105,
@@ -1005,7 +1110,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("bmw", 105),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 106,
@@ -1014,7 +1120,8 @@ export const products: Product[] = [
         price: 84999.99,
         rating: 4.7,
         image: generateImageUrl("bmw", 106),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 107,
@@ -1023,7 +1130,8 @@ export const products: Product[] = [
         price: 94999.99,
         rating: 4.8,
         image: generateImageUrl("bmw", 107),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 108,
@@ -1033,7 +1141,8 @@ export const products: Product[] = [
         rating: 4.6,
         image: generateImageUrl("mercedes", 108),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 109,
@@ -1042,7 +1151,8 @@ export const products: Product[] = [
         price: 62999.99,
         rating: 4.5,
         image: generateImageUrl("mercedes", 109),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 110,
@@ -1051,7 +1161,8 @@ export const products: Product[] = [
         price: 42999.99,
         rating: 4.4,
         image: generateImageUrl("mercedes", 110),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 111,
@@ -1061,7 +1172,8 @@ export const products: Product[] = [
         rating: 4.7,
         image: generateImageUrl("audi", 111),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 112,
@@ -1070,7 +1182,8 @@ export const products: Product[] = [
         price: 49999.99,
         rating: 4.5,
         image: generateImageUrl("audi", 112),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 113,
@@ -1079,7 +1192,8 @@ export const products: Product[] = [
         price: 74999.99,
         rating: 4.6,
         image: generateImageUrl("audi", 113),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 114,
@@ -1089,7 +1203,8 @@ export const products: Product[] = [
         rating: 4.8,
         image: generateImageUrl("porsche", 114),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 115,
@@ -1098,7 +1213,8 @@ export const products: Product[] = [
         price: 62999.99,
         rating: 4.6,
         image: generateImageUrl("porsche", 115),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 116,
@@ -1109,7 +1225,8 @@ export const products: Product[] = [
         rating: 4.3,
         image: generateImageUrl("vw", 116),
         category: "Cars",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 117,
@@ -1118,7 +1235,8 @@ export const products: Product[] = [
         price: 42999.99,
         rating: 4.4,
         image: generateImageUrl("vw", 117),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 118,
@@ -1128,7 +1246,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("ford", 118),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 119,
@@ -1137,7 +1256,8 @@ export const products: Product[] = [
         price: 54999.99,
         rating: 4.6,
         image: generateImageUrl("ford", 119),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 120,
@@ -1146,7 +1266,8 @@ export const products: Product[] = [
         price: 38999.99,
         rating: 4.4,
         image: generateImageUrl("hyundai", 120),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 121,
@@ -1157,7 +1278,8 @@ export const products: Product[] = [
         rating: 4.3,
         image: generateImageUrl("kia", 121),
         category: "Cars",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 122,
@@ -1166,7 +1288,8 @@ export const products: Product[] = [
         price: 42999.99,
         rating: 4.2,
         image: generateImageUrl("nissan", 122),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 123,
@@ -1176,7 +1299,8 @@ export const products: Product[] = [
         rating: 4.7,
         image: generateImageUrl("lucid", 123),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 124,
@@ -1185,7 +1309,8 @@ export const products: Product[] = [
         price: 69999.99,
         rating: 4.5,
         image: generateImageUrl("rivian", 124),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 125,
@@ -1194,7 +1319,8 @@ export const products: Product[] = [
         price: 74999.99,
         rating: 4.6,
         image: generateImageUrl("rivian", 125),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 126,
@@ -1203,7 +1329,8 @@ export const products: Product[] = [
         price: 54999.99,
         rating: 4.4,
         image: generateImageUrl("genesis", 126),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 127,
@@ -1212,7 +1339,8 @@ export const products: Product[] = [
         price: 61999.99,
         rating: 4.3,
         image: generateImageUrl("cadillac", 127),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 128,
@@ -1221,7 +1349,8 @@ export const products: Product[] = [
         price: 85999.99,
         rating: 4.2,
         image: generateImageUrl("gmc", 128),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 129,
@@ -1232,7 +1361,8 @@ export const products: Product[] = [
         rating: 4.1,
         image: generateImageUrl("chevy", 129),
         category: "Cars",
-        isSale: true
+        isSale: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 130,
@@ -1242,7 +1372,8 @@ export const products: Product[] = [
         rating: 4.5,
         image: generateImageUrl("toyota", 130),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 131,
@@ -1251,7 +1382,8 @@ export const products: Product[] = [
         price: 34999.99,
         rating: 4.3,
         image: generateImageUrl("honda", 131),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 132,
@@ -1260,7 +1392,8 @@ export const products: Product[] = [
         price: 32999.99,
         rating: 4.2,
         image: generateImageUrl("mazda", 132),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 133,
@@ -1269,7 +1402,8 @@ export const products: Product[] = [
         price: 37999.99,
         rating: 4.1,
         image: generateImageUrl("subaru", 133),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 134,
@@ -1278,7 +1412,8 @@ export const products: Product[] = [
         price: 29999.99,
         rating: 4.0,
         image: generateImageUrl("mini", 134),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 135,
@@ -1287,7 +1422,8 @@ export const products: Product[] = [
         price: 41999.99,
         rating: 4.3,
         image: generateImageUrl("volvo", 135),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 136,
@@ -1296,7 +1432,8 @@ export const products: Product[] = [
         price: 64999.99,
         rating: 4.4,
         image: generateImageUrl("jaguar", 136),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 137,
@@ -1305,7 +1442,8 @@ export const products: Product[] = [
         price: 98999.99,
         rating: 4.6,
         image: generateImageUrl("landrover", 137),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 138,
@@ -1315,7 +1453,8 @@ export const products: Product[] = [
         rating: 4.2,
         image: generateImageUrl("fisker", 138),
         category: "Cars",
-        isNew: true
+        isNew: true,
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 139,
@@ -1324,7 +1463,8 @@ export const products: Product[] = [
         price: 45999.99,
         rating: 4.3,
         image: generateImageUrl("polestar", 139),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     },
     {
         id: 140,
@@ -1333,7 +1473,8 @@ export const products: Product[] = [
         price: 24999.99,
         rating: 3.9,
         image: generateImageUrl("smart", 140),
-        category: "Cars"
+        category: "Cars",
+        reviews: Math.floor(Math.random() * 500) + 50
     }
 ];
 

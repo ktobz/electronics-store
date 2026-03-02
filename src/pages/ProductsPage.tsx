@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import { fetchProducts, type Product } from '../services/mockApi';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Package, AlertCircle, Filter, SlidersHorizontal, Star, ChevronDown, DollarSign } from 'lucide-react';
+import { Search, AlertCircle, SlidersHorizontal, Star, DollarSign } from 'lucide-react';
 import '../styles/ProductsPage.scss';
 
 const ProductsPage: React.FC = () => {
@@ -15,8 +15,8 @@ const ProductsPage: React.FC = () => {
     const [minRating, setMinRating] = useState(0);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
-    const [sortBy, setSortBy] = useState<'price' | 'rating' | 'name'>('rating');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [sortBy] = useState<'price' | 'rating' | 'name'>('rating');
+    const [sortOrder] = useState<'asc' | 'desc'>('desc');
     const limit = 12;
 
     useEffect(() => {
