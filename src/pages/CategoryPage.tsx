@@ -5,7 +5,8 @@ import {
     Search, Filter, Grid, List, Heart, ShoppingBag, Star,
     ChevronLeft, ChevronRight, X, Check, ShoppingCart, Eye
 } from 'lucide-react';
-import { fetchProducts, type Product } from '../services/mockApi';
+import { productsAPI } from '../services/api';
+import type { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 import '../styles/CategoryPage.scss';
 
@@ -186,7 +187,7 @@ const CategoryPage: React.FC = () => {
         const loadProducts = async () => {
             setLoading(true);
             try {
-                const data = await fetchProducts(1, 100);
+                const data = await productsAPI.getProducts({ page: 1, limit: 100, category: categoryId });
                 setProducts(data.products);
             } catch (error) {
                 console.error('Failed to load products:', error);
@@ -195,7 +196,7 @@ const CategoryPage: React.FC = () => {
             }
         };
         loadProducts();
-    }, []);
+    }, [categoryId]);
 
     const filteredProducts = useMemo(() => {
         let filtered = products.filter(product =>

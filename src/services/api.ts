@@ -1,349 +1,188 @@
 import axios from 'axios';
-import type { Product } from './mockApi';
 
-// API Base URL - in production, this would be your backend URL
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to add auth token
+// Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// Response interceptor for error handling
+// Add response interceptor to handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('auth_token');
+      // Token expired or invalid, redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
 
-// Product APIs
-export const productAPI = {
-  // Get all products with pagination and filtering
-  getProducts: async (params?: {
-    page?: number;
-    limit?: number;
-    category?: string;
-    brand?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    search?: string;
-    sortBy?: 'price' | 'rating' | 'name';
-    sortOrder?: 'asc' | 'desc';
-  }) => {
-    const response = await api.get('/products', { params });
-    return response.data;
-  },
-
-  // Get single product by ID
-  getProduct: async (id: number) => {
-    const response = await api.get(`/products/${id}`);
-    return response.data;
-  },
-
-  // Create new product (admin)
-  createProduct: async (product: Omit<Product, 'id'>) => {
-    const response = await api.post('/products', product);
-    return response.data;
-  },
-
-  // Update product (admin)
-  updateProduct: async (id: number, product: Partial<Product>) => {
-    const response = await api.put(`/products/${id}`, product);
-    return response.data;
-  },
-
-  // Delete product (admin)
-  deleteProduct: async (id: number) => {
-    const response = await api.delete(`/products/${id}`);
-    return response.data;
-  },
-
-  // Get related products
-  getRelatedProducts: async (id: number, limit: number = 4) => {
-    const response = await api.get(`/products/${id}/related`, { params: { limit } });
-    return response.data;
-  },
-
-  // Get featured products for carousel
-  getFeaturedProducts: async (limit: number = 8) => {
-    const response = await api.get('/products/featured', { params: { limit } });
-    return response.data;
-  },
-
-  // Get products on sale
-  getSaleProducts: async (limit: number = 10) => {
-    const response = await api.get('/products/sale', { params: { limit } });
-    return response.data;
-  },
-
-  // Get new arrivals
-  getNewProducts: async (limit: number = 10) => {
-    const response = await api.get('/products/new', { params: { limit } });
-    return response.data;
-  },
-};
-
-// Category APIs
-export const categoryAPI = {
-  // Get all categories
-  getCategories: async () => {
-    const response = await api.get('/categories');
-    return response.data;
-  },
-
-  // Get category with products
-  getCategory: async (slug: string, params?: { page?: number; limit?: number }) => {
-    const response = await api.get(`/categories/${slug}`, { params });
-    return response.data;
-  },
-};
-
-// Brand-specific APIs
-export const brandAPI = {
-  // Get all brands
-  getBrands: async () => {
-    const response = await api.get('/brands');
-    return response.data;
-  },
-
-  // Get brand with products
-  getBrand: async (slug: string, params?: { page?: number; limit?: number }) => {
-    const response = await api.get(`/brands/${slug}`, { params });
-    return response.data;
-  },
-
-  // Get Samsung products
-  getSamsungProducts: async (params?: { 
-    page?: number; 
-    limit?: number; 
-    category?: string; 
-    minPrice?: number; 
-    maxPrice?: number 
-  }) => {
-    const response = await api.get('/brands/samsung', { params });
-    return response.data;
-  },
-
-  // Get Panasonic products
-  getPanasonicProducts: async (params?: { 
-    page?: number; 
-    limit?: number; 
-    category?: string; 
-    minPrice?: number; 
-    maxPrice?: number 
-  }) => {
-    const response = await api.get('/brands/panasonic', { params });
-    return response.data;
-  },
-};
-
-// User Authentication APIs
+// Auth API
 export const authAPI = {
-  // Login
-  login: async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password });
-    return response.data;
-  },
-
-  // Register
   register: async (userData: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
+    phone?: string;
   }) => {
     const response = await api.post('/auth/register', userData);
     return response.data;
   },
 
-  // Logout
-  logout: async () => {
-    const response = await api.post('/auth/logout');
-    localStorage.removeItem('auth_token');
-    return response.data;
-  },
-
-  // Get current user
-  getCurrentUser: async () => {
-    const response = await api.get('/auth/me');
-    return response.data;
-  },
-
-  // Refresh token
-  refreshToken: async () => {
-    const response = await api.post('/auth/refresh');
+  login: async (credentials: { email: string; password: string }) => {
+    const response = await api.post('/auth/login', credentials);
     return response.data;
   },
 };
 
-// Shopping Cart APIs
-export const cartAPI = {
-  // Get cart items
-  getCart: async () => {
-    const response = await api.get('/cart');
-    return response.data;
-  },
-
-  // Add item to cart
-  addToCart: async (productId: number, quantity: number = 1) => {
-    const response = await api.post('/cart/items', { productId, quantity });
-    return response.data;
-  },
-
-  // Update cart item quantity
-  updateCartItem: async (itemId: number, quantity: number) => {
-    const response = await api.put(`/cart/items/${itemId}`, { quantity });
-    return response.data;
-  },
-
-  // Remove item from cart
-  removeFromCart: async (itemId: number) => {
-    const response = await api.delete(`/cart/items/${itemId}`);
-    return response.data;
-  },
-
-  // Clear cart
-  clearCart: async () => {
-    const response = await api.delete('/cart');
-    return response.data;
-  },
-};
-
-// Wishlist APIs
-export const wishlistAPI = {
-  // Get wishlist items
-  getWishlist: async () => {
-    const response = await api.get('/wishlist');
-    return response.data;
-  },
-
-  // Add item to wishlist
-  addToWishlist: async (productId: number) => {
-    const response = await api.post('/wishlist/items', { productId });
-    return response.data;
-  },
-
-  // Remove item from wishlist
-  removeFromWishlist: async (productId: number) => {
-    const response = await api.delete(`/wishlist/items/${productId}`);
-    return response.data;
-  },
-
-  // Check if product is in wishlist
-  isInWishlist: async (productId: number) => {
-    const response = await api.get(`/wishlist/check/${productId}`);
-    return response.data;
-  },
-};
-
-// Review APIs
-export const reviewAPI = {
-  // Get product reviews
-  getProductReviews: async (productId: number, params?: { page?: number; limit?: number }) => {
-    const response = await api.get(`/reviews/product/${productId}`, { params });
-    return response.data;
-  },
-
-  // Add review
-  addReview: async (productId: number, review: {
-    rating: number;
-    title: string;
-    content: string;
-  }) => {
-    const response = await api.post(`/reviews/product/${productId}`, review);
-    return response.data;
-  },
-
-  // Update review
-  updateReview: async (reviewId: number, review: {
-    rating?: number;
-    title?: string;
-    content?: string;
-  }) => {
-    const response = await api.put(`/reviews/${reviewId}`, review);
-    return response.data;
-  },
-
-  // Delete review
-  deleteReview: async (reviewId: number) => {
-    const response = await api.delete(`/reviews/${reviewId}`);
-    return response.data;
-  },
-};
-
-// Search APIs
-export const searchAPI = {
-  // General search
-  search: async (query: string, params?: {
+// Products API
+export const productsAPI = {
+  getProducts: async (params?: {
     page?: number;
     limit?: number;
     category?: string;
     brand?: string;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: string;
   }) => {
-    const response = await api.get('/search', { params: { q: query, ...params } });
+    const response = await api.get('/products', { params });
     return response.data;
   },
 
-  // Get search suggestions
-  getSuggestions: async (query: string) => {
-    const response = await api.get('/search/suggestions', { params: { q: query } });
+  getProduct: async (id: string) => {
+    const response = await api.get(`/products/${id}`);
     return response.data;
   },
 
-  // Get popular searches
-  getPopularSearches: async () => {
-    const response = await api.get('/search/popular');
+  searchProducts: async (query: string, filters?: any) => {
+    const response = await api.get('/products', {
+      params: { search: query, ...filters }
+    });
     return response.data;
   },
 };
 
-// Order APIs
-export const orderAPI = {
-  // Create order
-  createOrder: async (orderData: {
-    items: Array<{ productId: number; quantity: number }>;
-    shippingAddress: any;
-    paymentMethod: string;
+// User API
+export const userAPI = {
+  getProfile: async () => {
+    const response = await api.get('/user/profile');
+    return response.data;
+  },
+
+  updateProfile: async (userData: any) => {
+    const response = await api.put('/user/profile', userData);
+    return response.data;
+  },
+
+  addToWishlist: async (productId: string) => {
+    const response = await api.put('/user/wishlist', { productId });
+    return response.data;
+  },
+
+  removeFromWishlist: async (productId: string) => {
+    const response = await api.delete(`/user/wishlist/${productId}`);
+    return response.data;
+  },
+
+  getWishlist: async () => {
+    const response = await api.get('/user/wishlist');
+    return response.data;
+  },
+
+  addToCart: async (productId: string, quantity: number = 1) => {
+    const response = await api.put('/user/cart', { productId, quantity });
+    return response.data;
+  },
+
+  getCart: async () => {
+    const response = await api.get('/user/cart');
+    return response.data;
+  },
+
+  updateCartItem: async (productId: string, quantity: number) => {
+    const response = await api.put(`/user/cart/${productId}`, { quantity });
+    return response.data;
+  },
+
+  removeFromCart: async (productId: string) => {
+    const response = await api.delete(`/user/cart/${productId}`);
+    return response.data;
+  },
+};
+
+// Orders API
+export const ordersAPI = {
+  getOrders: async () => {
+    const response = await api.get('/user/orders');
+    return response.data;
+  },
+
+  getOrder: async (id: string) => {
+    const response = await api.get(`/user/orders/${id}`);
+    return response.data;
+  },
+
+  createOrder: async (orderData: any) => {
+    const response = await api.post('/user/orders', orderData);
+    return response.data;
+  },
+};
+
+// Blog API
+export const blogAPI = {
+  getBlogs: async (params?: {
+    page?: number;
+    limit?: number;
+    category?: string;
+    featured?: boolean;
   }) => {
-    const response = await api.post('/orders', orderData);
+    const response = await api.get('/blogs', { params });
     return response.data;
   },
 
-  // Get user orders
-  getOrders: async (params?: { page?: number; limit?: number; status?: string }) => {
-    const response = await api.get('/orders', { params });
+  getBlog: async (slug: string) => {
+    const response = await api.get(`/blogs/${slug}`);
     return response.data;
   },
 
-  // Get order details
-  getOrder: async (orderId: string) => {
-    const response = await api.get(`/orders/${orderId}`);
+  getBlogByCategory: async (category: string) => {
+    const response = await api.get('/blogs', { params: { category } });
+    return response.data;
+  },
+};
+
+// Categories API
+export const categoriesAPI = {
+  getCategories: async () => {
+    const response = await api.get('/categories');
     return response.data;
   },
 
-  // Track order
-  trackOrder: async (trackingNumber: string) => {
-    const response = await api.get(`/orders/track/${trackingNumber}`);
+  getCategory: async (id: string) => {
+    const response = await api.get(`/categories/${id}`);
     return response.data;
   },
 };

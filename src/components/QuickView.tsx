@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Star, ShoppingBag, ShieldCheck, Truck } from 'lucide-react';
-import { type Product } from '../services/mockApi';
+import type { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 import '../styles/QuickView.scss';
 
@@ -12,6 +12,10 @@ interface QuickViewProps {
 
 const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
     const { addToCart } = useStore();
+
+    const getProductId = () => {
+        return product._id || product.id?.toString() || '';
+    };
 
     // Mock reviews
     const reviews = [
@@ -58,7 +62,7 @@ const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
                             </div>
 
                             <div className="action-row">
-                                <button className="btn btn-primary add-to-cart" onClick={() => { addToCart(product.id); onClose(); }}>
+                                <button className="btn btn-primary add-to-cart" onClick={() => { addToCart(getProductId()); onClose(); }}>
                                     <ShoppingBag size={20} />
                                     Add to Collection
                                 </button>

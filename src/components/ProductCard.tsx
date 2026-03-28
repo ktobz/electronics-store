@@ -4,8 +4,7 @@ import { ShoppingBag, Star, Heart, Repeat, Eye } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import QuickView from './QuickView';
 import '../styles/ProductCard.scss';
-
-import { type Product } from '../services/mockApi';
+import type { Product } from '../types';
 
 interface ProductCardProps {
     product: Product;
@@ -16,6 +15,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const [showQuickView, setShowQuickView] = React.useState(false);
     const [imageError, setImageError] = React.useState(false);
+
+    const getProductId = () => {
+        return product._id || product.id?.toString() || '';
+    };
 
     const discountPercentage = product.originalPrice
         ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -86,22 +89,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                             transition={{ duration: 0.2 }}
                         >
                             <button
-                                className={`action-btn action-btn--cart ${isInCompare(product.id) ? 'active' : ''}`}
-                                onClick={() => addToCart(product.id)}
+                                className={`action-btn action-btn--cart ${isInCompare(getProductId()) ? 'active' : ''}`}
+                                onClick={() => addToCart(getProductId())}
                                 title="Add to Cart"
                             >
                                 <ShoppingBag size={18} />
                             </button>
                             <button
-                                className={`action-btn action-btn--wishlist ${isInWishlist(product.id) ? 'active' : ''}`}
-                                onClick={() => toggleWishlist(product.id)}
+                                className={`action-btn action-btn--wishlist ${isInWishlist(getProductId()) ? 'active' : ''}`}
+                                onClick={() => toggleWishlist(getProductId())}
                                 title="Add to Wishlist"
                             >
-                                <Heart size={18} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
+                                <Heart size={18} fill={isInWishlist(getProductId()) ? "currentColor" : "none"} />
                             </button>
                             <button
-                                className={`action-btn action-btn--compare ${isInCompare(product.id) ? 'active' : ''}`}
-                                onClick={() => toggleCompare(product.id)}
+                                className={`action-btn action-btn--compare ${isInCompare(getProductId()) ? 'active' : ''}`}
+                                onClick={() => toggleCompare(product)}
                                 title="Compare"
                             >
                                 <Repeat size={18} />
