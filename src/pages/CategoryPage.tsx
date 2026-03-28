@@ -167,7 +167,7 @@ const categoryInfo: Record<string, { name: string; description: string; icon: st
 const CategoryPage: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>();
     const navigate = useNavigate();
-    const { addToCart, toggleWishlist, wishlist, cart } = useStore();
+    const store = useStore();
 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -187,54 +187,107 @@ const CategoryPage: React.FC = () => {
         const loadProducts = async () => {
             setLoading(true);
             try {
-                const data = await productsAPI.getProducts({ page: 1, limit: 100, category: categoryId });
-                setProducts(data.products);
+                const data = await productsAPI.getProducts({ page: 1, limit: 100 });
+                setProducts(data.products || []);
             } catch (error) {
                 console.error('Failed to load products:', error);
+                // Fallback to empty array on error
+                setProducts([]);
             } finally {
                 setLoading(false);
             }
         };
         loadProducts();
-    }, [categoryId]);
+    }, []);
+
+    // Handle search query from URL params
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchParam = urlParams.get('search');
+        if (searchParam) {
+            setSearchTerm(searchParam);
+        }
+    }, []);
 
     const filteredProducts = useMemo(() => {
-        let filtered = products.filter(product =>
-            product.category.toLowerCase().includes(categoryId?.replace('-', ' ') || 'laptops')
-        );
-
-        if (searchTerm) {
-            filtered = filtered.filter(product =>
+        let filtered = products.filter(product => {
+            const categoryMatch = !categoryId || 
+                product.category.toLowerCase() === categoryId.toLowerCase() ||
+                product.category.toLowerCase().includes(categoryId.replace('-', ' '));
+            
+            const searchMatch = !searchTerm || 
                 product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                product.category.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
+                product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                product.brand.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            return categoryMatch && searchMatch;
+        });
 
+        // Apply brand filter
         if (selectedBrands.length > 0) {
             filtered = filtered.filter(product =>
                 selectedBrands.includes(product.brand.toLowerCase())
             );
         }
 
+        // Apply price filter
         filtered = filtered.filter(product =>
             product.price >= priceRange[0] && product.price <= priceRange[1]
         );
 
-        return filtered.sort((a, b) => {
+        // Apply sorting
+        filtered.sort((a, b) => {
             switch (sortBy) {
-                case 'name':
-                    return a.name.localeCompare(b.name);
                 case 'price':
-                    return a.price - b.price;
+                    return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
                 case 'rating':
-                    return b.rating - a.rating;
+                    return sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
+                case 'name':
+                    return sortOrder === 'asc' 
+                        ? a.name.localeCompare(b.name) 
+                        : b.name.localeCompare(a.name);
                 case 'newest':
-                    return b.id - a.id;
+                    return 0; // All products are treated as equally new for now
                 default:
                     return 0;
             }
         });
-    }, [products, categoryId, searchTerm, selectedBrands, priceRange, sortBy]);
+
+        return filtered;
+    }, [products, categoryId, searchTerm, selectedBrands, priceRange, sortBy, sortOrder]);
+
+    // Helper function to get product ID
+    const getProductId = (product: Product) => {
+        return product._id || product.id?.toString() || '';
+    };
+
+    const toggleWishlist = async (product: Product) => {
+        const productId = getProductId(product);
+        try {
+            await store.toggleWishlist(productId);
+        } catch (error) {
+            console.error('Failed to toggle wishlist:', error);
+        }
+    };
+
+    const addToCart = async (product: Product) => {
+        const productId = getProductId(product);
+        try {
+            await store.addToCart(productId);
+        } catch (error) {
+            console.error('Failed to add to cart:', error);
+        }
+    };
+
+    const isInWishlist = (product: Product) => {
+        const productId = getProductId(product);
+        return store.isInWishlist(productId);
+    };
+
+    const isInCart = (product: Product) => {
+        const productId = getProductId(product);
+        return store.cart.some(item => (item.product as any)._id === productId || (item.product as any).id?.toString() === productId);
+    };
 
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     const paginatedProducts = filteredProducts.slice(
@@ -477,7 +530,7 @@ const CategoryPage: React.FC = () => {
                         <AnimatePresence mode="wait">
                             {paginatedProducts.map((product) => (
                                 <motion.div
-                                    key={product.id}
+                                    key={getProductId(product)}
                                     className={`product-card ${viewMode}`}
                                     variants={productVariants}
                                     whileHover="hover"
@@ -527,17 +580,16 @@ const CategoryPage: React.FC = () => {
 
                                         <div className="product-actions">
                                             <button
-                                                className={`action-btn wishlist-btn ${isInWishlist(product.id) ? 'active' : ''}`}
-                                                onClick={() => handleAddToWishlist(product)}
+                                                className={`action-btn wishlist-btn ${isInWishlist(product) ? 'active' : ''}`}
+                                                onClick={() => toggleWishlist(product)}
                                             >
-                                                <Heart size={16} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
+                                                <Heart size={16} fill={isInWishlist(product) ? 'currentColor' : 'none'} />
                                             </button>
                                             <button
-                                                className={`action-btn cart-btn ${isInCart(product.id) ? 'active' : ''}`}
-                                                onClick={() => handleAddToCart(product)}
+                                                className={`action-btn cart-btn ${isInCart(product) ? 'active' : ''}`}
+                                                onClick={() => addToCart(product)}
                                             >
-                                                <ShoppingCart size={16} />
-                                                {isInCart(product.id) ? 'In Cart' : 'Add to Cart'}
+                                                {isInCart(product) ? 'In Cart' : 'Add to Cart'}
                                             </button>
                                         </div>
                                     </div>

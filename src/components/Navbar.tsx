@@ -99,7 +99,8 @@ const Navbar: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+      // Navigate to products page with search query
+      navigate(`/category/all?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
       setIsOpen(false);
     }

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { authAPI, userAPI, productsAPI } from '../services/api';
+import { supabase, getCurrentUser, onAuthStateChange } from '../services/supabase';
 import type { User, Product, CartItem } from '../types';
 
 interface StoreContextType {
@@ -53,20 +54,61 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [loading, setLoading] = useState(false);
   const [toasts, setToasts] = useState<{ id: string, message: string, type: 'success' | 'info' | 'error' }[]>([]);
 
-  // Initialize user from localStorage
+  // Initialize user from Supabase
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error('Failed to parse user data:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+    const initializeAuth = async () => {
+      const currentUser = await getCurrentUser();
+      if (currentUser) {
+        // Transform Supabase user to our User interface
+        const userData: User = {
+          id: currentUser.id,
+          firstName: currentUser.user_metadata?.name?.split(' ')[0] || 'User',
+          lastName: currentUser.user_metadata?.name?.split(' ')[1] || '',
+          email: currentUser.email || '',
+          avatar: currentUser.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${currentUser.user_metadata?.name || currentUser.email || 'User'}&background=random`,
+          role: 'user'
+        };
+        setUser(userData);
       }
-    }
+    };
+
+    initializeAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        const userData: User = {
+          id: session.user.id,
+          firstName: session.user.user_metadata?.name?.split(' ')[0] || 'User',
+          lastName: session.user.user_metadata?.name?.split(' ')[1] || '',
+          email: session.user.email || '',
+          avatar: session.user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${session.user.user_metadata?.name || session.user.email || 'User'}&background=random`,
+          role: 'user'
+        };
+        setUser(userData);
+        
+        // Load user data from backend
+        try {
+          const profileData = await userAPI.getProfile();
+          setCart(profileData.cart || []);
+          setWishlist(profileData.wishlist || []);
+          setPoints(profileData.points || 0);
+        } catch (error) {
+          console.error('Failed to load user data:', error);
+          // For mock auth, set some default values
+          setCart([]);
+          setWishlist([]);
+          setPoints(100);
+        }
+      } else {
+        setUser(null);
+        setCart([]);
+        setWishlist([]);
+        setPoints(0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Apply dark mode
@@ -116,13 +158,22 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    setCart([]);
-    setWishlist([]);
-    addToast('Logged out successfully', 'info');
+  const logout = async () => {
+    try {
+      const { signOut } = await import('../services/supabase');
+      await signOut();
+      
+      // Clear mock session
+      localStorage.removeItem('mockUserSession');
+      
+      setUser(null);
+      setCart([]);
+      setWishlist([]);
+      addToast('Logged out successfully', 'info');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      addToast('Logout failed', 'error');
+    }
   };
 
   // Cart functions

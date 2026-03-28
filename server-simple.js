@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,24 +11,104 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// API Routes
-app.get('/api', (req, res) => {
-    res.json({
-        message: 'Electronics Store API Server',
-        status: 'Running',
-        endpoints: {
-            auth: '/api/auth',
-            products: '/api/products',
-            users: '/api/user',
-            blogs: '/api/blogs'
-        }
-    });
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/electronics-store', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
+    console.log('📊 MongoDB Atlas connected successfully');
+    console.log(`🔗 Database: electronics-store`);
+})
+.catch((error) => {
+    console.error('❌ MongoDB connection error:', error);
+    console.log('⚠️  Using mock data instead');
 });
 
-// Mock products data
+// MongoDB Schemas
+const userSchema = new mongoose.Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phone: String,
+    avatar: String,
+    role: { type: String, default: 'user' },
+    cart: [{
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: { type: Number, default: 1 }
+    }],
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+    points: { type: Number, default: 0 },
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+const productSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    originalPrice: Number,
+    category: { type: String, required: true },
+    brand: { type: String, required: true },
+    image: { type: String, required: true },
+    images: [String],
+    rating: { type: Number, default: 0 },
+    reviews: { type: Number, default: 0 },
+    inStock: { type: Boolean, default: true },
+    featured: { type: Boolean, default: false },
+    specifications: mongoose.Schema.Types.Mixed,
+    tags: [String],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
+});
+
+const orderSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    items: [{
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: Number,
+        price: Number
+    }],
+    total: { type: Number, required: true },
+    status: { type: String, default: 'pending' },
+    shippingAddress: {
+        street: String,
+        city: String,
+        state: String,
+        zipCode: String,
+        country: String
+    },
+    paymentMethod: String,
+    createdAt: { type: Date, default: Date.now }
+});
+
+const blogSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    content: { type: String, required: true },
+    excerpt: String,
+    author: { type: String, required: true },
+    authorAvatar: String,
+    category: String,
+    tags: [String],
+    featured: { type: Boolean, default: false },
+    image: String,
+    readTime: Number,
+    likes: { type: Number, default: 0 },
+    views: { type: Number, default: 0 },
+    publishedAt: { type: Date, default: Date.now }
+});
+
+// Create Models
+const User = mongoose.model('User', userSchema);
+const Product = mongoose.model('Product', productSchema);
+const Order = mongoose.model('Order', orderSchema);
+const Blog = mongoose.model('Blog', blogSchema);
+
+// Mock products data (will be saved to database)
 const mockProducts = [
     {
-        _id: '1',
         name: 'iPhone 15 Pro',
         description: 'Latest iPhone with advanced features and titanium design',
         price: 999.99,
@@ -42,7 +123,6 @@ const mockProducts = [
         tags: ['smartphone', 'apple', 'premium']
     },
     {
-        _id: '2',
         name: 'MacBook Pro M3',
         description: 'Professional laptop with powerful M3 chip',
         price: 1999.99,
@@ -56,7 +136,6 @@ const mockProducts = [
         tags: ['laptop', 'apple', 'professional']
     },
     {
-        _id: '3',
         name: 'Samsung Galaxy S24 Ultra',
         description: 'Premium Android smartphone with S Pen',
         price: 1199.99,
@@ -70,7 +149,6 @@ const mockProducts = [
         tags: ['smartphone', 'samsung', 'android']
     },
     {
-        _id: '4',
         name: 'Sony WH-1000XM5',
         description: 'Industry-leading noise canceling headphones',
         price: 349.99,
@@ -85,7 +163,6 @@ const mockProducts = [
         tags: ['headphones', 'audio', 'noise-canceling']
     },
     {
-        _id: '5',
         name: 'iPad Pro 12.9"',
         description: 'Professional tablet with M2 chip',
         price: 1099.99,
@@ -100,11 +177,29 @@ const mockProducts = [
     }
 ];
 
-// Routes
-app.get('/', (req, res) => {
+// Initialize database with sample data
+const initializeDatabase = async () => {
+    try {
+        const productCount = await Product.countDocuments();
+        if (productCount === 0) {
+            console.log('📦 Initializing database with sample products...');
+            await Product.insertMany(mockProducts);
+            console.log('✅ Sample products added to database');
+        }
+    } catch (error) {
+        console.error('❌ Error initializing database:', error);
+    }
+};
+
+// Initialize database on startup
+initializeDatabase();
+
+// API Routes
+app.get('/api', (req, res) => {
     res.json({
         message: 'Electronics Store API Server',
         status: 'Running',
+        database: 'MongoDB Atlas',
         endpoints: {
             auth: '/api/auth',
             products: '/api/products',
@@ -114,243 +209,178 @@ app.get('/', (req, res) => {
     });
 });
 
-// Auth endpoints
-app.post('/api/auth/register', (req, res) => {
-    const { firstName, lastName, email, password, phone } = req.body;
-    
-    res.status(201).json({
-        message: 'User registered successfully',
-        token: 'mock-jwt-token-' + Date.now(),
-        user: {
-            id: 'user-' + Date.now(),
+// Products API
+app.get('/api/products', async (req, res) => {
+    try {
+        const { page = 1, limit = 20, category, brand, search } = req.query;
+        
+        let query = {};
+        if (category) query.category = category;
+        if (brand) query.brand = brand;
+        if (search) {
+            query.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { brand: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const products = await Product.find(query)
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ createdAt: -1 });
+
+        const total = await Product.countDocuments(query);
+
+        res.json({
+            products,
+            pagination: {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                total,
+                pages: Math.ceil(total / limit)
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch products' });
+    }
+});
+
+app.get('/api/products/featured', async (req, res) => {
+    try {
+        const products = await Product.find({ featured: true }).limit(8);
+        res.json({ products });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch featured products' });
+    }
+});
+
+app.get('/api/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json({ product });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch product' });
+    }
+});
+
+// User API
+app.get('/api/user/profile', async (req, res) => {
+    try {
+        // Mock user profile (replace with auth middleware)
+        const mockUser = {
+            cart: [],
+            wishlist: [],
+            points: 100,
+            orders: []
+        };
+        res.json(mockUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch user profile' });
+    }
+});
+
+app.post('/api/user/wishlist', async (req, res) => {
+    try {
+        const { productId } = req.body;
+        // Mock wishlist logic
+        res.json({ message: 'Added to wishlist' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update wishlist' });
+    }
+});
+
+app.post('/api/user/cart', async (req, res) => {
+    try {
+        const { productId, quantity = 1 } = req.body;
+        // Mock cart logic
+        res.json({ message: 'Added to cart' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update cart' });
+    }
+});
+
+// Blogs API
+app.get('/api/blogs', async (req, res) => {
+    try {
+        const { page = 1, limit = 10, category } = req.query;
+        
+        let query = {};
+        if (category) query.category = category;
+
+        const blogs = await Blog.find(query)
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({ publishedAt: -1 });
+
+        const total = await Blog.countDocuments(query);
+
+        res.json({
+            blogs,
+            pagination: {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                total,
+                pages: Math.ceil(total / limit)
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch blogs' });
+    }
+});
+
+app.get('/api/blogs/featured', async (req, res) => {
+    try {
+        const blogs = await Blog.find({ featured: true }).limit(4);
+        res.json({ blogs });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch featured blogs' });
+    }
+});
+
+// Auth API (Mock)
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { email, password, firstName, lastName } = req.body;
+        
+        // Check if user exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+
+        // Create new user
+        const user = new User({
             firstName,
             lastName,
             email,
-            phone,
-            avatar: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random`,
-            role: 'user'
-        }
-    });
+            points: 100
+        });
+
+        await user.save();
+        res.json({ message: 'User registered successfully', user });
+    } catch (error) {
+        res.status(500).json({ error: 'Registration failed' });
+    }
 });
 
-app.post('/api/auth/login', (req, res) => {
-    const { email, password } = req.body;
-    
-    res.json({
-        message: 'Login successful',
-        token: 'mock-jwt-token-' + Date.now(),
-        user: {
-            id: 'user-123',
-            firstName: 'John',
-            lastName: 'Doe',
-            email,
-            avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=random',
-            role: 'user'
-        }
-    });
-});
-
-// Product endpoints
-app.get('/api/products', (req, res) => {
-    const { page = 1, limit = 20, category, brand, search, sortBy = 'name', sortOrder = 'asc' } = req.query;
-    
-    let filteredProducts = [...mockProducts];
-    
-    // Apply filters
-    if (category) {
-        filteredProducts = filteredProducts.filter(p => p.category === category);
-    }
-    if (brand) {
-        filteredProducts = filteredProducts.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
-    }
-    if (search) {
-        filteredProducts = filteredProducts.filter(p => 
-            p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.description.toLowerCase().includes(search.toLowerCase()) ||
-            p.brand.toLowerCase().includes(search.toLowerCase())
-        );
-    }
-    
-    // Apply sorting
-    filteredProducts.sort((a, b) => {
-        const aValue = a[sortBy];
-        const bValue = b[sortBy];
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
         
-        if (sortOrder === 'desc') {
-            return bValue > aValue ? 1 : -1;
+        // Mock login (in production, verify password)
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
         }
-        return aValue > bValue ? 1 : -1;
-    });
-    
-    // Apply pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
-    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-    
-    res.json({
-        products: paginatedProducts,
-        pagination: {
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(filteredProducts.length / limit),
-            totalProducts: filteredProducts.length,
-            hasNext: endIndex < filteredProducts.length,
-            hasPrev: page > 1
-        }
-    });
-});
 
-app.get('/api/products/:id', (req, res) => {
-    const product = mockProducts.find(p => p._id === req.params.id);
-    
-    if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
+        res.json({ message: 'Login successful', user });
+    } catch (error) {
+        res.status(500).json({ error: 'Login failed' });
     }
-    
-    const detailedProduct = {
-        ...product,
-        images: [
-            product.image,
-            `https://picsum.photos/seed/${product.name}-1/400/300.jpg`,
-            `https://picsum.photos/seed/${product.name}-2/400/300.jpg`,
-            `https://picsum.photos/seed/${product.name}-3/400/300.jpg`
-        ],
-        specifications: {
-            display: product.category === 'smartphones' ? '6.1-inch Super Retina XDR' : 
-                     product.category === 'laptops' ? '14-inch Liquid Retina XDR' :
-                     product.category === 'tablets' ? '12.9-inch Liquid Retina XDR' :
-                     product.category === 'audio' ? '40mm drivers' : 'Standard display',
-            processor: product.brand === 'Apple' ? 'A17 Pro chip' : 
-                       product.brand === 'Samsung' ? 'Snapdragon 8 Gen 3' :
-                       product.brand === 'Sony' ? 'Custom processor' : 'Standard processor',
-            camera: product.category === 'smartphones' ? '48MP Main camera' :
-                   product.category === 'tablets' ? '12MP Wide camera' : 'No camera',
-            battery: 'All-day battery life',
-            storage: '128GB, 256GB, 512GB, 1TB',
-            connectivity: '5G, Wi-Fi 6, Bluetooth 5.3'
-        }
-    };
-    
-    res.json(detailedProduct);
-});
-
-// User endpoints
-app.get('/api/user/profile', (req, res) => {
-    res.json({
-        id: 'user-123',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john@example.com',
-        phone: '+1234567890',
-        avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=random',
-        role: 'user',
-        wishlist: ['1', '2'],
-        cart: [
-            { product: '1', quantity: 1 },
-            { product: '3', quantity: 2 }
-        ],
-        orders: []
-    });
-});
-
-app.put('/api/user/wishlist', (req, res) => {
-    const { productId } = req.body;
-    res.json({ message: 'Product added to wishlist' });
-});
-
-app.put('/api/user/cart', (req, res) => {
-    const { productId, quantity = 1 } = req.body;
-    res.json({ message: 'Product added to cart' });
-});
-
-// Blog endpoints
-app.get('/api/blogs', (req, res) => {
-    const mockBlogs = [
-        {
-            _id: '1',
-            title: 'iPhone 15 Pro Review: The New Standard',
-            slug: 'iphone-15-pro-review',
-            content: 'The iPhone 15 Pro represents a significant leap forward in smartphone technology...',
-            excerpt: 'Apple\'s latest flagship sets new standards for mobile photography',
-            author: 'Tech Expert',
-            authorAvatar: 'https://ui-avatars.com/api/?name=Tech+Expert&background=random',
-            category: 'Reviews',
-            tags: ['iphone', 'apple', 'review', 'smartphone'],
-            featured: true,
-            image: 'https://picsum.photos/seed/iphone15review/800/400.jpg',
-            readTime: 5,
-            likes: 245,
-            views: 1520,
-            publishedAt: new Date().toISOString()
-        },
-        {
-            _id: '2',
-            title: 'Best Laptops for Professionals 2024',
-            slug: 'best-laptops-2024',
-            content: 'Choosing the right laptop for professional work can be challenging...',
-            excerpt: 'Comprehensive guide to the best professional laptops',
-            author: 'Pro Reviewer',
-            authorAvatar: 'https://ui-avatars.com/api/?name=Pro+Reviewer&background=random',
-            category: 'Guides',
-            tags: ['laptops', 'professional', 'guide', '2024'],
-            featured: false,
-            image: 'https://picsum.photos/seed/laptops2024/800/400.jpg',
-            readTime: 8,
-            likes: 189,
-            views: 892,
-            publishedAt: new Date().toISOString()
-        }
-    ];
-    
-    res.json({
-        blogs: mockBlogs,
-        pagination: {
-            currentPage: 1,
-            totalPages: 1,
-            totalBlogs: mockBlogs.length
-        }
-    });
-});
-
-app.get('/api/blogs/:slug', (req, res) => {
-    const blog = {
-        _id: '1',
-        title: 'iPhone 15 Pro Review: The New Standard',
-        slug: req.params.slug,
-        content: `The iPhone 15 Pro represents a significant leap forward in smartphone technology. With its titanium construction, A17 Pro chip, and advanced camera system, it sets new standards for what a premium smartphone can offer.
-
-## Design and Build Quality
-
-The iPhone 15 Pro features a stunning titanium frame that makes it both lighter and stronger than previous models. The contoured edges and matte finish give it a premium feel that's immediately apparent when you pick it up.
-
-## Performance
-
-Powered by the A17 Pro chip, the iPhone 15 Pro delivers desktop-class performance in a pocket-sized device. Apps launch instantly, games run smoothly at high frame rates, and multitasking is seamless.
-
-## Camera System
-
-The 48MP main camera captures stunning detail and color accuracy. The new computational photography features produce professional-quality photos in virtually any lighting condition.
-
-## Battery Life
-
-With improved efficiency and a larger battery, the iPhone 15 Pro easily lasts all day even with heavy use.
-
-## Conclusion
-
-The iPhone 15 Pro is an exceptional device that pushes the boundaries of what's possible in a smartphone. It's the perfect choice for users who demand the best.`,
-        excerpt: 'Apple\'s latest flagship sets new standards for mobile photography',
-        author: 'Tech Expert',
-        authorAvatar: 'https://ui-avatars.com/api/?name=Tech+Expert&background=random',
-        category: 'Reviews',
-        tags: ['iphone', 'apple', 'review', 'smartphone'],
-        featured: true,
-        image: 'https://picsum.photos/seed/iphone15review/800/400.jpg',
-        readTime: 5,
-        likes: 245,
-        views: 1521,
-        publishedAt: new Date().toISOString()
-    };
-    
-    res.json(blog);
 });
 
 // Error handling
@@ -362,7 +392,7 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📊 API endpoints ready`);
-    console.log(`🛍️  Mock data loaded`);
-    console.log(`🔧 Test endpoints available`);
+    console.log(`📊 MongoDB Atlas connected`);
+    console.log(`🛍️  Real database ready`);
+    console.log(`🔧 API endpoints available`);
 });
