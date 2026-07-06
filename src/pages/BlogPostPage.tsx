@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, ArrowLeft, Share2, Twitter, Facebook } from 'lucide-react';
-import { fetchBlogPostById, type BlogPost } from '../services/mockApi';
+import { blogAPI } from '../services/api';
+import type { BlogPost } from '../types';
 import '../styles/BlogPostPage.scss';
 
 const BlogPostPage: React.FC = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // works for both slug and legacy numeric id
     const [post, setPost] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -14,11 +15,16 @@ const BlogPostPage: React.FC = () => {
     useEffect(() => {
         const loadPost = async () => {
             if (id) {
-                const data = await fetchBlogPostById(parseInt(id));
-                if (data) {
-                    setPost(data);
+                try {
+                    const data = await blogAPI.getBlog(id);
+                    if (data) {
+                        setPost(data);
+                    }
+                } catch (err) {
+                    console.error('Failed to load blog post:', err);
+                } finally {
+                    setLoading(false);
                 }
-                setLoading(false);
             }
         };
         loadPost();
@@ -37,6 +43,9 @@ const BlogPostPage: React.FC = () => {
             </div>
         );
     }
+
+    const authorImage = post.authorImage || post.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=random`;
+    const postDate = post.date || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : '');
 
     return (
         <article className="blog-post-page">
@@ -63,13 +72,13 @@ const BlogPostPage: React.FC = () => {
                         </motion.h1>
 
                         <div className="post-author-bar">
-                            <img src={post.authorImage} alt={post.author} />
+                            <img src={authorImage} alt={post.author} />
                             <div className="author-info">
                                 <strong>{post.author}</strong>
-                                <span>{post.authorRole} • {post.date}</span>
+                                <span>{post.authorRole || 'Tech Writer'} • {postDate}</span>
                             </div>
                             <div className="meta-reading">
-                                <Clock size={16} /> {post.readTime}
+                                <Clock size={16} /> {post.readTime}{typeof post.readTime === 'number' ? ' min read' : ''}
                             </div>
                         </div>
                     </div>
@@ -96,7 +105,7 @@ const BlogPostPage: React.FC = () => {
                         <div className="tags-box">
                             <span>Tags</span>
                             <div className="tags">
-                                {post.tags.map(tag => <span key={tag} className="tag">#{tag}</span>)}
+                                {(post.tags || []).map(tag => <span key={tag} className="tag">#{tag}</span>)}
                             </div>
                         </div>
                     </aside>
@@ -113,10 +122,10 @@ const BlogPostPage: React.FC = () => {
 
                         <div className="post-footer">
                             <div className="author-card">
-                                <img src={post.authorImage} alt={post.author} />
+                                <img src={authorImage} alt={post.author} />
                                 <div className="card-content">
                                     <h3>About {post.author}</h3>
-                                    <p>{post.authorRole} covering the latest in consumer electronics and future technology trends at Electron Store.</p>
+                                    <p>{post.authorRole || 'Tech Writer'} covering the latest in consumer electronics and future technology trends at Electron Store.</p>
                                 </div>
                             </div>
                         </div>
@@ -128,3 +137,5 @@ const BlogPostPage: React.FC = () => {
 };
 
 export default BlogPostPage;
+
+

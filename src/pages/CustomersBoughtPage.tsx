@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote, ShoppingCart, TrendingUp, Heart, Share2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { fetchProducts, type Product } from '../services/mockApi';
+import { productsAPI } from '../services/api';
+import type { Product } from '../types';
 import '../styles/CustomersBoughtPage.scss';
 
 const userStories = [
@@ -46,7 +47,7 @@ const CustomersBoughtPage: React.FC = () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const data = await fetchProducts(1, 50);
+                const data = await productsAPI.getProducts({ limit: 50, sortBy: 'rating', sortOrder: 'desc' });
                 // Get products that are frequently bought together
                 const frequentlyBought = data.products.filter((p: any) =>
                     p.rating >= 4.5 && p.reviews > 100

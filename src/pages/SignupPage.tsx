@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { signUp, signInWithGoogle } from '../services/supabase';
+import { signInWithGoogle } from '../services/supabase';
+import { useStore } from '../context/StoreContext';
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Check, Chrome } from 'lucide-react';
 import '../styles/AuthPages.scss';
 
@@ -18,6 +19,7 @@ const SignupPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const { register } = useStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -50,11 +52,14 @@ const SignupPage: React.FC = () => {
     setError(null);
 
     try {
-      await signUp(formData.email, formData.password, formData.name);
+      const nameParts = formData.name.trim().split(' ');
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || 'User';
+      await register({ firstName, lastName, email: formData.email, password: formData.password });
       setSuccess(true);
       setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+        navigate('/');
+      }, 1500);
     } catch (error: any) {
       setError(error.message || 'Failed to create account');
     } finally {

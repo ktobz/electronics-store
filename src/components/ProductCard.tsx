@@ -1,153 +1,97 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Star, Heart, Repeat, Eye } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ShoppingBag, Star, Heart, Repeat, Eye, ImageOff } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import QuickView from './QuickView';
 import '../styles/ProductCard.scss';
 import type { Product } from '../types';
 
-interface ProductCardProps {
-    product: Product;
-}
+interface ProductCardProps { product: Product; }
+
+const getColor = (str: string) => { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); const h = hash % 360; return `hsl(${h}, 55%, 85%)`; };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const { addToCart, toggleWishlist, toggleCompare, isInWishlist, isInCompare } = useStore();
-    const [isHovered, setIsHovered] = React.useState(false);
-    const [showQuickView, setShowQuickView] = React.useState(false);
-    const [imageError, setImageError] = React.useState(false);
+    const [showQuickView, setShowQuickView] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
+    const [imgErr, setImgErr] = useState(false);
+    const [adding, setAdding] = useState(false);
 
-    const getProductId = () => {
-        return product._id || product.id?.toString() || '';
+    const getProductId = () => product._id || product.id?.toString() || '';
+    const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+
+    const handleAddToCart = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setAdding(true);
+        await addToCart(getProductId());
+        setAdding(false);
     };
 
-    const discountPercentage = product.originalPrice
-        ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-        : 0;
-
     return (
-        <motion.div
-            className="product-card compact"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            whileHover={{ y: -5 }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+        <motion.article
+            className="pcard"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: .35 }}
         >
-            <div className="product-card__image-container">
-                <AnimatePresence mode="wait">
-                    {!isHovered ? (
-                        <motion.img
-                            key="static"
-                            src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image}
-                            alt={product.name}
-                            className="product-card__image"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onError={() => setImageError(true)}
-                        />
-                    ) : (
-                        <motion.div
-                            key="video"
-                            className="product-card__video-mock"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setShowQuickView(true)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <img
-                                src={imageError ? "/src/assets/images/placeholder-default.svg" : product.image}
-                                alt={product.name}
-                                className="blur-bg"
-                                onError={() => setImageError(true)}
-                            />
-                            <div className="video-overlay">
-                                <Eye size={32} />
-                                <span>Previewing Tech...</span>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+            <div className="pcard__img-box">
+                {!imgErr ? (
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        className={`pcard__img ${imgLoaded ? 'loaded' : ''}`}
+                        loading="lazy"
+                        onLoad={() => setImgLoaded(true)}
+                        onError={() => setImgErr(true)}
+                    />
+                ) : (
+                    <div className="pcard__placeholder" style={{ background: getColor(product.name) }}>
+                        <ImageOff size={36} opacity={.3} />
+                        <span>{product.brand}</span>
+                    </div>
+                )}
 
-                {/* Badges */}
-                <div className="product-card__badges">
-                    {product.isNew && <span className="badge badge--new">New</span>}
-                    {product.isSale && <span className="badge badge--sale">-{discountPercentage}%</span>}
+                <div className="pcard__badges">
+                    {discount > 0 && <span className="pcard__badge pcard__badge--sale">-{discount}%</span>}
+                    {product.featured && <span className="pcard__badge pcard__badge--hot">Hot</span>}
                 </div>
 
-                {/* Action Buttons Overlay - Inside Image */}
-                <AnimatePresence>
-                    {isHovered && (
-                        <motion.div
-                            className="product-card__image-actions"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 20 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <button
-                                className={`action-btn action-btn--cart ${isInCompare(getProductId()) ? 'active' : ''}`}
-                                onClick={() => addToCart(getProductId())}
-                                title="Add to Cart"
-                            >
-                                <ShoppingBag size={18} />
-                            </button>
-                            <button
-                                className={`action-btn action-btn--wishlist ${isInWishlist(getProductId()) ? 'active' : ''}`}
-                                onClick={() => toggleWishlist(getProductId())}
-                                title="Add to Wishlist"
-                            >
-                                <Heart size={18} fill={isInWishlist(getProductId()) ? "currentColor" : "none"} />
-                            </button>
-                            <button
-                                className={`action-btn action-btn--compare ${isInCompare(getProductId()) ? 'active' : ''}`}
-                                onClick={() => toggleCompare(product)}
-                                title="Compare"
-                            >
-                                <Repeat size={18} />
-                            </button>
-                            <button
-                                className="action-btn action-btn--quickview"
-                                onClick={() => setShowQuickView(true)}
-                                title="Quick View"
-                            >
-                                <Eye size={18} />
-                            </button>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-
-            <div className="product-card__content">
-                <div className="product-card__category">{product.category}</div>
-                <h3 className="product-card__title" title={product.name}>{product.name}</h3>
-
-                <div className="product-card__rating">
-                    {[...Array(5)].map((_, i) => (
-                        <Star
-                            key={i}
-                            size={14}
-                            fill={i < Math.floor(product.rating) ? "#ffc107" : "none"}
-                            stroke={i < Math.floor(product.rating) ? "#ffc107" : "#e4e5e9"}
-                        />
-                    ))}
-                    <span className="rating-text">({product.rating})</span>
-                </div>
-
-                <div className="product-card__price-box">
-                    <span className="price price--current">${product.price.toLocaleString()}</span>
-                    {product.originalPrice && (
-                        <span className="price price--original">${product.originalPrice.toLocaleString()}</span>
-                    )}
+                <div className="pcard__overlay-actions">
+                    <button className={`pcard__act ${isInWishlist(getProductId()) ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); toggleWishlist(getProductId()); }} title="Wishlist">
+                        <Heart size={18} fill={isInWishlist(getProductId()) ? 'currentColor' : 'none'} />
+                    </button>
+                    <button className={`pcard__act ${isInCompare(getProductId()) ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); toggleCompare(product); }} title="Compare">
+                        <Repeat size={18} />
+                    </button>
+                    <button className="pcard__act" onClick={(e) => { e.stopPropagation(); setShowQuickView(true); }} title="Quick View">
+                        <Eye size={18} />
+                    </button>
                 </div>
             </div>
-            {showQuickView && (
-                <QuickView product={product} onClose={() => setShowQuickView(false)} />
-            )}
-        </motion.div>
+
+            <div className="pcard__body">
+                <span className="pcard__brand">{product.brand}</span>
+                <h3 className="pcard__name">{product.name}</h3>
+                <div className="pcard__rating">
+                    <div className="pcard__stars">
+                        {[1,2,3,4,5].map(i => (
+                            <Star key={i} size={12} fill={i <= Math.round(product.rating) ? '#c5a059' : 'none'} stroke={i <= Math.round(product.rating) ? '#c5a059' : '#d1d5db'} />
+                        ))}
+                    </div>
+                    <span>{product.rating}</span>
+                </div>
+                <div className="pcard__price">
+                    <span className="pcard__curr">${product.price.toLocaleString()}</span>
+                    {product.originalPrice && <span className="pcard__orig">${product.originalPrice.toLocaleString()}</span>}
+                </div>
+                <motion.button className="pcard__atc" whileTap={{ scale: .95 }} onClick={handleAddToCart} disabled={adding}>
+                    <ShoppingBag size={16} />
+                    <span>{adding ? 'Adding...' : 'Add to Cart'}</span>
+                </motion.button>
+            </div>
+            {showQuickView && <QuickView product={product} onClose={() => setShowQuickView(false)} />}
+        </motion.article>
     );
 };
 

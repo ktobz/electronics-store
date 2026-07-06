@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, ArrowRight, Search, Clock, TrendingUp, Award, Zap } from 'lucide-react';
-import { fetchBlogPosts, type BlogPost } from '../services/mockApi';
+import { blogAPI } from '../services/api';
+import type { BlogPost } from '../types';
 import '../styles/BlogPage.scss';
 
 const BlogPage: React.FC = () => {
@@ -13,9 +14,14 @@ const BlogPage: React.FC = () => {
 
     useEffect(() => {
         const loadPosts = async () => {
-            const data = await fetchBlogPosts();
-            setPosts(data);
-            setLoading(false);
+            try {
+                const data = await blogAPI.getBlogs({ limit: 50 });
+                setPosts(data.blogs || []);
+            } catch (err) {
+                console.error('Failed to load blog posts:', err);
+            } finally {
+                setLoading(false);
+            }
         };
         loadPosts();
     }, []);
@@ -104,13 +110,13 @@ const BlogPage: React.FC = () => {
                 <div className="blog-grid">
                     {filteredPosts.map((post, idx) => (
                         <motion.article
-                            key={post.id}
+                            key={post._id || post.id}
                             className="blog-card-full"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
-                            onClick={() => navigate(`/blog/${post.id}`)}
+                            onClick={() => navigate(`/blog/${post.slug || post.id}`)}
                         >
                             <div className="blog-card-full__image">
                                 <img src={post.image} alt={post.title} />
@@ -118,8 +124,8 @@ const BlogPage: React.FC = () => {
                             </div>
                             <div className="blog-card-full__content">
                                 <div className="blog-card-full__meta">
-                                    <span><Calendar size={14} /> {post.date}</span>
-                                    <span><Clock size={14} /> {post.readTime}</span>
+                                    <span><Calendar size={14} /> {post.date || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : '')}</span>
+                                    <span><Clock size={14} /> {post.readTime}{typeof post.readTime === 'number' ? ' min read' : ''}</span>
                                 </div>
                                 <h2 className="blog-card-full__title">{post.title}</h2>
                                 <p className="blog-card-full__excerpt">{post.excerpt}</p>

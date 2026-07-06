@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { signIn, signInWithGoogle } from '../services/supabase';
+import { signInWithGoogle } from '../services/supabase';
+import { useStore } from '../context/StoreContext';
 import { Eye, EyeOff, Mail, Lock, AlertCircle, Chrome } from 'lucide-react';
 import '../styles/AuthPages.scss';
 
@@ -12,6 +13,7 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      await signIn(email, password);
+      await login(email, password);
       navigate('/');
     } catch (error: any) {
       setError(error.message || 'Failed to sign in');

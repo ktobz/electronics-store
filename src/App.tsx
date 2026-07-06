@@ -12,6 +12,7 @@ import BlogSection from './components/BlogSection';
 import WhatsAppChatbot from './components/WhatsAppChatbot';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import WishlistPage from './pages/WishlistPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import CustomersBoughtPage from './pages/CustomersBoughtPage';
@@ -53,10 +54,11 @@ function App() {
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/tracking" element={<OrderTracking />} />
               <Route path="/compare" element={<ComparisonPage />} />
               <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/customers-bought" element={<CustomersBoughtPage />} />
               <Route path="/shop-by-category" element={<ShopByCategoryPage />} />
               <Route path="/category/:categoryId" element={<CategoryPage />} />

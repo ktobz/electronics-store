@@ -1,15 +1,14 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
+import { X, ShoppingBag, Trash2, ArrowRight, Plus, Minus } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { products } from '../services/mockApi';
 import '../styles/CartDrawer.scss';
 
 const CartDrawer: React.FC = () => {
-    const { cart, removeFromCart, isCartOpen, setCartOpen } = useStore();
+    const { cart, removeFromCart, updateCartItem, isCartOpen, setCartOpen } = useStore();
 
-    const cartItems = cart.map(id => products.find(p => p.id === id)).filter(Boolean);
-    const total = cartItems.reduce((sum, item) => sum + (item?.price || 0), 0);
+    // Cart items now come pre-populated with product data from the API
+    const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
 
     return (
         <AnimatePresence>
@@ -40,7 +39,7 @@ const CartDrawer: React.FC = () => {
                         </div>
 
                         <div className="cart-drawer__content">
-                            {cartItems.length === 0 ? (
+                            {cart.length === 0 ? (
                                 <div className="cart-empty">
                                     <ShoppingBag size={48} opacity={0.2} />
                                     <p>Your cart is empty</p>
@@ -48,16 +47,25 @@ const CartDrawer: React.FC = () => {
                                 </div>
                             ) : (
                                 <div className="cart-items">
-                                    {cartItems.map((item, index) => (
-                                        <div key={index} className="cart-item">
+                                    {cart.map((item, index) => (
+                                        <div key={item._id || item.id || index} className="cart-item">
                                             <div className="cart-item__img">
-                                                <img src={item?.image} alt={item?.name} />
+                                                <img src={item.image} alt={item.name} />
                                             </div>
                                             <div className="cart-item__info">
-                                                <h4>{item?.name}</h4>
-                                                <p className="price">${item?.price.toLocaleString()}</p>
+                                                <h4>{item.name}</h4>
+                                                <p className="price">${item.price.toLocaleString()}</p>
+                                                <div className="cart-item__qty">
+                                                    <button onClick={() => updateCartItem((item._id || String(item.id))!, Math.max(1, (item.quantity || 1) - 1))}>
+                                                        <Minus size={12} />
+                                                    </button>
+                                                    <span>{item.quantity || 1}</span>
+                                                    <button onClick={() => updateCartItem((item._id || String(item.id))!, (item.quantity || 1) + 1)}>
+                                                        <Plus size={12} />
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <button className="remove-btn" onClick={() => removeFromCart(item!.id)}>
+                                            <button className="remove-btn" onClick={() => removeFromCart((item._id || String(item.id))!)}>
                                                 <Trash2 size={16} />
                                             </button>
                                         </div>
@@ -66,11 +74,11 @@ const CartDrawer: React.FC = () => {
                             )}
                         </div>
 
-                        {cartItems.length > 0 && (
+                        {cart.length > 0 && (
                             <div className="cart-drawer__footer">
                                 <div className="total">
                                     <span>Subtotal</span>
-                                    <span>${total.toLocaleString()}</span>
+                                    <span>${total.toFixed(2)}</span>
                                 </div>
                                 <button className="btn btn-primary checkout-btn">
                                     Checkout Now
@@ -86,3 +94,4 @@ const CartDrawer: React.FC = () => {
 };
 
 export default CartDrawer;
+

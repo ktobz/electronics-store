@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import { fetchProducts, type Product } from '../services/mockApi';
+import { productsAPI } from '../services/api';
+import type { Product } from '../types';
 import { ChevronLeft, ChevronRight, Loader2, Quote, Star, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import '../styles/FeaturedProducts.scss';
@@ -74,9 +75,10 @@ const FeaturedProducts: React.FC = () => {
         const loadProducts = async () => {
             setLoading(true);
             try {
-                const data = await fetchProducts(1, 100);
-                const featured = data.products
-                    .filter(p => p.rating >= 4.7)
+                const data = await productsAPI.getProducts({ limit: 100 });
+                const allProducts: Product[] = data.products || [];
+                const featured = allProducts
+                    .filter(p => p.rating >= 4.5)
                     .sort((a, b) => b.rating - a.rating);
                 setTotal(featured.length);
                 const start = (page - 1) * limit;
@@ -130,7 +132,7 @@ const FeaturedProducts: React.FC = () => {
                     <div className="product-grid">
                         {products.map((product, index) => (
                             <motion.div
-                                key={product.id}
+                                key={product._id || product.id}
                                 initial={{ opacity: 0, scale: 0.8, y: 30 }}
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}

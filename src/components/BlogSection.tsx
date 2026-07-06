@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { fetchBlogPosts, type BlogPost } from '../services/mockApi';
+import { blogAPI } from '../services/api';
+import type { BlogPost } from '../types';
 import '../styles/BlogSection.scss';
 
 const BlogSection: React.FC = () => {
@@ -12,9 +13,14 @@ const BlogSection: React.FC = () => {
 
     useEffect(() => {
         const loadPosts = async () => {
-            const data = await fetchBlogPosts();
-            setPosts(data.slice(0, 3));
-            setLoading(false);
+            try {
+                const data = await blogAPI.getBlogs({ limit: 3 });
+                setPosts(data.blogs || []);
+            } catch (err) {
+                console.error('Failed to load blog posts:', err);
+            } finally {
+                setLoading(false);
+            }
         };
         loadPosts();
     }, []);
@@ -38,13 +44,13 @@ const BlogSection: React.FC = () => {
                     <div className="blog-grid">
                         {posts.map((post, idx) => (
                             <motion.article
-                                key={post.id}
+                                key={post._id || post.id}
                                 className="blog-card"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                onClick={() => navigate(`/blog/${post.id}`)}
+                                onClick={() => navigate(`/blog/${post.slug || post.id}`)}
                             >
                                 <div className="blog-card__image">
                                     <img src={post.image} alt={post.title} />
@@ -52,12 +58,12 @@ const BlogSection: React.FC = () => {
                                 </div>
                                 <div className="blog-card__content">
                                     <div className="blog-card__meta">
-                                        <span><Calendar size={14} /> {post.date}</span>
+                                        <span><Calendar size={14} /> {post.date || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : '')}</span>
                                         <span><User size={14} /> {post.author}</span>
                                     </div>
                                     <h3 className="blog-card__title">{post.title}</h3>
                                     <p className="blog-card__excerpt">{post.excerpt}</p>
-                                    <Link to={`/blog/${post.id}`} className="read-more-btn">
+                                    <Link to={`/blog/${post.slug || post.id}`} className="read-more-btn">
                                         Read More <ArrowRight size={18} />
                                     </Link>
                                 </div>

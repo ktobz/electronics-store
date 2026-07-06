@@ -1,98 +1,96 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Star, ShoppingBag, ShieldCheck, Truck } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, Star, ShoppingBag, ShieldCheck, Truck, Award, Minus, Plus } from 'lucide-react';
 import type { Product } from '../types';
 import { useStore } from '../context/StoreContext';
 import '../styles/QuickView.scss';
 
-interface QuickViewProps {
-    product: Product;
-    onClose: () => void;
-}
+interface QuickViewProps { product: Product; onClose: () => void; }
 
 const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
-    const { addToCart } = useStore();
-
-    const getProductId = () => {
-        return product._id || product.id?.toString() || '';
-    };
-
-    // Mock reviews
-    const reviews = [
-        { id: 1, user: "Alex T.", rating: 5, comment: "Absolutely stunning quality. Best purchase this year!", date: "2 days ago", image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" },
-        { id: 2, user: "Sarah K.", rating: 4, comment: "Fast shipping and great performance. Highly recommend.", date: "1 week ago" }
-    ];
+    const { addToCart, toggleWishlist, isInWishlist } = useStore();
+    const [qty, setQty] = React.useState(1);
+    const getProductId = () => product._id || product.id?.toString() || '';
+    const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
 
     return (
-        <AnimatePresence>
-            <div className="quick-view-overlay" onClick={onClose}>
-                <motion.div
-                    className="quick-view-modal"
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <button className="close-btn" onClick={onClose}><X size={24} /></button>
+        <motion.div className="qvo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+            <motion.div
+                className="qvo__modal"
+                initial={{ opacity: 0, scale: 0.85, y: 60 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                onClick={e => e.stopPropagation()}
+            >
+                <button className="qvo__close" onClick={onClose}><X size={20} /></button>
 
-                    <div className="quick-view__grid">
-                        <div className="quick-view__image">
+                <div className="qvo__body">
+                    <div className="qvo__media">
+                        <div className="qvo__img-wrap">
                             <img src={product.image} alt={product.name} />
+                            {discount > 0 && <span className="qvo__discount">-{discount}%</span>}
                         </div>
-
-                        <div className="quick-view__info">
-                            <span className="category">{product.category}</span>
-                            <h2>{product.name}</h2>
-                            <div className="rating">
-                                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill={i < 4 ? "#ffc107" : "none"} stroke="#ffc107" />)}
-                                <span>(4.8 • {reviews.length} reviews)</span>
-                            </div>
-                            <div className="price-box">
-                                <span className="current-price">${product.price.toLocaleString()}</span>
-                                {product.originalPrice && <span className="original-price">${product.originalPrice.toLocaleString()}</span>}
-                            </div>
-
-                            <p className="description">
-                                Experience the pinnacle of performance and design. Built with premium materials and cutting-edge technology to ensure you stay ahead of the curve.
-                            </p>
-
-                            <div className="meta-info">
-                                <div className="meta-item"><Truck size={18} /> <span>Free Express Shipping</span></div>
-                                <div className="meta-item"><ShieldCheck size={18} /> <span>2-Year International Warranty</span></div>
-                            </div>
-
-                            <div className="action-row">
-                                <button className="btn btn-primary add-to-cart" onClick={() => { addToCart(getProductId()); onClose(); }}>
-                                    <ShoppingBag size={20} />
-                                    Add to Collection
-                                </button>
-                            </div>
-
-                            <div className="reviews-section">
-                                <h3>Customer Reviews</h3>
-                                <div className="reviews-list">
-                                    {reviews.map(review => (
-                                        <div key={review.id} className="review-item">
-                                            <div className="review-user">
-                                                {review.image && <img src={review.image} alt={review.user} className="user-avatar" />}
-                                                <div>
-                                                    <strong>{review.user}</strong>
-                                                    <div className="stars">
-                                                        {[...Array(5)].map((_, i) => <Star key={i} size={12} fill={i < review.rating ? "#ffc107" : "none"} stroke="#ffc107" />)}
-                                                        <span>• {review.date}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p className="comment">{review.comment}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                        <div className="qvo__trust">
+                            <div className="qvo__trust-item"><Truck size={16} /> Free Express Shipping</div>
+                            <div className="qvo__trust-item"><ShieldCheck size={16} /> 2-Year Warranty</div>
+                            <div className="qvo__trust-item"><Award size={16} /> Certified Authentic</div>
                         </div>
                     </div>
-                </motion.div>
-            </div>
-        </AnimatePresence>
+
+                    <div className="qvo__details">
+                        <span className="qvo__brand">{product.brand}</span>
+                        <h2 className="qvo__name">{product.name}</h2>
+                        <div className="qvo__rating">
+                            <div className="qvo__stars">
+                                {[1,2,3,4,5].map(i => (
+                                    <Star key={i} size={16} fill={i <= Math.round(product.rating) ? '#c5a059' : 'none'} stroke={i <= Math.round(product.rating) ? '#c5a059' : '#d1d5db'} />
+                                ))}
+                            </div>
+                            <span className="qvo__rating-num">{product.rating}</span>
+                            <span className="qvo__reviews">({product.reviews || 0} reviews)</span>
+                        </div>
+
+                        <div className="qvo__price-row">
+                            <span className="qvo__price">${product.price.toLocaleString()}</span>
+                            {product.originalPrice && <span className="qvo__orig-price">${product.originalPrice.toLocaleString()}</span>}
+                        </div>
+
+                        <p className="qvo__desc">{product.description}</p>
+
+                        {product.tags && product.tags.length > 0 && (
+                            <div className="qvo__tags">
+                                {product.tags.slice(0, 4).map(tag => (
+                                    <span key={tag} className="qvo__tag">{tag}</span>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="qvo__qty-row">
+                            <span className="qvo__qty-label">Quantity</span>
+                            <div className="qvo__qty-ctrl">
+                                <button onClick={() => setQty(q => Math.max(1, q - 1))} disabled={qty <= 1}><Minus size={14} /></button>
+                                <span>{qty}</span>
+                                <button onClick={() => setQty(q => q + 1)}><Plus size={14} /></button>
+                            </div>
+                        </div>
+
+                        <div className="qvo__actions">
+                            <button className="qvo__btn-cart" onClick={() => { addToCart(getProductId(), qty); onClose(); }}>
+                                <ShoppingBag size={20} /> Add to Cart — ${(product.price * qty).toLocaleString()}
+                            </button>
+                            <button className={`qvo__btn-wish ${isInWishlist(getProductId()) ? 'active' : ''}`} onClick={() => toggleWishlist(getProductId())}>
+                                {isInWishlist(getProductId()) ? '♥ Saved' : '♡ Wishlist'}
+                            </button>
+                        </div>
+
+                        <div className="qvo__in-stock">
+                            <span className="qvo__dot" /> {product.inStock !== false ? 'In Stock — Ships within 24h' : 'Out of Stock'}
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

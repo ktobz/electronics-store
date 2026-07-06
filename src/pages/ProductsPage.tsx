@@ -1,98 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ProductCard from '../components/ProductCard';
-import { fetchProducts, type Product } from '../services/mockApi';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, AlertCircle, SlidersHorizontal, Star, DollarSign } from 'lucide-react';
+import { productsAPI } from '../services/api';
+import type { Product } from '../types';
+import { motion } from 'framer-motion';
+import { Search, AlertCircle, X, Star, DollarSign, SlidersHorizontal } from 'lucide-react';
 import '../styles/ProductsPage.scss';
 
 const ProductsPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState<'all' | 'Samsung' | 'Panasonic'>('all');
+    const [searchInput, setSearchInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [priceRange, setPriceRange] = useState(3000);
     const [minRating, setMinRating] = useState(0);
     const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [sortBy] = useState<'price' | 'rating' | 'name'>('rating');
-    const [sortOrder] = useState<'asc' | 'desc'>('desc');
+    const [brand, setBrand] = useState<string | null>(null);
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const limit = 12;
 
-    useEffect(() => {
-        const loadProducts = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const brand = activeTab === 'all' ? undefined : activeTab;
-                // Fetch with brand filter; get enough items for client-side search
-                const fetchLimit = searchTerm.trim() ? 1000 : limit;
-                const fetchPage = searchTerm.trim() ? 1 : page;
-                let data = await fetchProducts(fetchPage, fetchLimit, brand);
+    const loadProducts = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await productsAPI.getProducts({
+                page, limit,
+                brand: brand || undefined,
+                search: searchTerm.trim() || undefined,
+            });
+            let filtered: Product[] = data.products || [];
+            filtered = filtered.filter(p => p.price <= priceRange);
+            if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
+            setProducts(filtered);
+        } catch {
+            setError('Failed to load products.');
+        } finally {
+            setLoading(false);
+        }
+    }, [page, limit, brand, searchTerm, priceRange, minRating]);
 
-                let filtered = data.products;
+    useEffect(() => { loadProducts(); }, [loadProducts]);
 
-                // Client-side search filter
-                if (searchTerm.trim()) {
-                    const term = searchTerm.toLowerCase();
-                    filtered = filtered.filter(p =>
-                        p.name.toLowerCase().includes(term) ||
-                        p.brand.toLowerCase().includes(term) ||
-                        p.category.toLowerCase().includes(term)
-                    );
-                }
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearchTerm(searchInput.trim());
+        setPage(1);
+    };
 
-                // Client-side price filter
-                filtered = filtered.filter(p => p.price <= priceRange);
-
-                // Client-side rating filter
-                if (minRating > 0) {
-                    filtered = filtered.filter(p => p.rating >= minRating);
-                }
-
-                // Client-side sort
-                filtered = [...filtered].sort((a, b) => {
-                    const mult = sortOrder === 'asc' ? 1 : -1;
-                    if (sortBy === 'price') return (a.price - b.price) * mult;
-                    if (sortBy === 'rating') return (a.rating - b.rating) * mult;
-                    return a.name.localeCompare(b.name) * mult;
-                });
-
-                // Client-side pagination when search is active
-                if (searchTerm.trim()) {
-                    const total = filtered.length;
-                    const start = (page - 1) * limit;
-                    filtered = filtered.slice(start, start + limit);
-                    setTotal(total);
-                } else {
-                    setTotal(data.total || 0);
-                }
-
-                setProducts(filtered);
-            } catch (error) {
-                console.error("Failed to fetch products:", error);
-                setError("Failed to load products. Please try again later.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProducts();
-    }, [activeTab, searchTerm, priceRange, minRating, page, sortBy, sortOrder]);
-
-    const totalPages = Math.ceil(total / limit);
+    const handleInput = (val: string) => {
+        setSearchInput(val);
+        clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => setSearchTerm(val.trim()), 400);
+    };
 
     return (
         <div className="products-page">
             <header className="products-page__header">
                 <div className="container">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <h1 className="products-header__title">Premium Collection</h1>
-                        <p className="products-header__subtitle">Discover our curated selection of high-end electronics</p>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                        <h1>Premium Collection</h1>
+                        <p>Curated high-end electronics</p>
                     </motion.div>
                 </div>
             </header>
@@ -100,146 +67,62 @@ const ProductsPage: React.FC = () => {
             <div className="container">
                 <div className="products-page__layout">
                     <aside className="products-page__sidebar">
-                        <div className="sidebar-header">
-                            <SlidersHorizontal size={20} />
-                            <h3>Filters</h3>
-                        </div>
-
+                        <div className="sidebar-header"><SlidersHorizontal size={18} /><h3>Filters</h3></div>
                         <div className="filter-group">
-                            <h4>
-                                <DollarSign size={16} />
-                                Price Range
-                            </h4>
-                            <div className="price-range-container">
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="3000"
-                                    step="50"
-                                    value={priceRange}
-                                    onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                                    className="price-slider"
-                                />
-                                <div className="range-display">
-                                    <span className="range-min">$0</span>
-                                    <span className="range-max">${priceRange.toLocaleString()}</span>
-                                </div>
-                            </div>
+                            <h4><DollarSign size={14} /> Max Price</h4>
+                            <input type="range" min="0" max="3000" step="50" value={priceRange} onChange={e => setPriceRange(parseInt(e.target.value))} />
+                            <div className="range-labels"><span>$0</span><span>${priceRange.toLocaleString()}</span></div>
                         </div>
-
                         <div className="filter-group">
-                            <h4>
-                                <Star size={16} />
-                                Minimum Rating
-                            </h4>
-                            <div className="stars-filter">
-                                {[4, 3, 2, 1].map(star => (
-                                    <label key={star} className="star-option">
-                                        <input
-                                            type="radio"
-                                            name="rating"
-                                            checked={minRating === star}
-                                            onChange={() => setMinRating(star)}
-                                        />
-                                        <div className="star-content">
-                                            <div className="stars">
-                                                {[...Array(5)].map((_, i) => (
-                                                    <Star
-                                                        key={i}
-                                                        size={12}
-                                                        fill={i < star ? "#f59e0b" : "none"}
-                                                        color={i < star ? "#f59e0b" : "#d1d5db"}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <span>{star}+ Stars</span>
-                                        </div>
-                                    </label>
+                            <h4><Star size={14} /> Min Rating</h4>
+                            <div className="rating-options">
+                                {[4,3,2,1].map(s => (
+                                    <button key={s} className={minRating === s ? 'active' : ''} onClick={() => setMinRating(minRating === s ? 0 : s)}>{s}+ ★</button>
                                 ))}
-                                <button className="clear-filter" onClick={() => setMinRating(0)}>Clear Rating</button>
                             </div>
                         </div>
                     </aside>
 
                     <div className="products-page__main">
                         <div className="products-page__controls">
-                            <div className="products-page__tabs">
-                                <button
-                                    className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('all')}
-                                >
-                                    All Products
-                                </button>
-                                <button
-                                    className={`tab-btn ${activeTab === 'Samsung' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('Samsung')}
-                                >
-                                    Samsung
-                                </button>
-                                <button
-                                    className={`tab-btn ${activeTab === 'Panasonic' ? 'active' : ''}`}
-                                    onClick={() => setActiveTab('Panasonic')}
-                                >
-                                    Panasonic
-                                </button>
+                            <div className="brand-tabs">
+                                <button className={!brand ? 'active' : ''} onClick={() => setBrand(null)}>All</button>
+                                <button className={brand === 'Samsung' ? 'active' : ''} onClick={() => setBrand('Samsung')}>Samsung</button>
+                                <button className={brand === 'Apple' ? 'active' : ''} onClick={() => setBrand('Apple')}>Apple</button>
+                                <button className={brand === 'Sony' ? 'active' : ''} onClick={() => setBrand('Sony')}>Sony</button>
+                                <button className={brand === 'Google' ? 'active' : ''} onClick={() => setBrand('Google')}>Google</button>
                             </div>
 
-                            <div className="products-page__search">
-                                <Search className="search-icon" size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="Search products..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
+                            <form className="products-search" onSubmit={handleSearch}>
+                                <Search size={16} />
+                                <input type="text" placeholder="Search products..." value={searchInput} onChange={e => handleInput(e.target.value)} />
+                                {searchInput && <button type="button" className="clear-btn" onClick={() => { setSearchInput(''); setSearchTerm(''); setPage(1); }}><X size={14} /></button>}
+                                <button type="submit" className="search-btn">Search</button>
+                            </form>
                         </div>
 
-                        <AnimatePresence mode="wait">
-                            {loading ? (
-                                <motion.div key="loader" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="products-loader">
-                                    <div className="spinner"></div>
-                                </motion.div>
-                            ) : error ? (
-                                <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="products-error">
-                                    <AlertCircle size={48} />
-                                    <p>{error}</p>
-                                    <button onClick={() => window.location.reload()} className="retry-btn">
-                                        Try Again
-                                    </button>
-                                </motion.div>
-                            ) : (
-                                <>
-                                    <div className="products-grid">
-                                        {products.map((product: Product) => (
-                                            <ProductCard key={product.id} product={product} />
-                                        ))}
-                                    </div>
-
-                                    {totalPages > 1 && (
-                                        <div className="pagination">
-                                            <button
-                                                className="pagination__btn"
-                                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                                disabled={page === 1}
-                                            >
-                                                Previous
-                                            </button>
-                                            <span className="pagination__info">
-                                                Page {page} of {totalPages}
-                                            </span>
-                                            <button
-                                                className="pagination__btn"
-                                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                                disabled={page === totalPages}
-                                            >
-                                                Next
-                                            </button>
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </AnimatePresence>
+                        {loading ? (
+                            <div className="products-loader"><div className="spinner" /></div>
+                        ) : error ? (
+                            <div className="products-error"><AlertCircle size={40} /><p>{error}</p><button onClick={loadProducts}>Retry</button></div>
+                        ) : products.length === 0 ? (
+                            <div className="products-empty"><Search size={48} opacity={.2} /><p>No products found</p></div>
+                        ) : (
+                            <>
+                                <div className="products-grid">
+                                    {products.map((p, i) => (
+                                        <motion.div key={p._id || i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * .03 }}>
+                                            <ProductCard product={p} />
+                                        </motion.div>
+                                    ))}
+                                </div>
+                                <div className="products-pagination">
+                                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}>Prev</button>
+                                    <span>Page {page}</span>
+                                    <button onClick={() => setPage(p => p + 1)} disabled={products.length < limit}>Next</button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
