@@ -6,6 +6,17 @@ import { ChevronLeft, ChevronRight, Loader2, Quote, Star, ShoppingCart } from 'l
 import { motion } from 'framer-motion';
 import '../styles/FeaturedProducts.scss';
 
+const fallbackProducts: Product[] = [
+    { _id: 'fb1', name: "iPhone 15 Pro", brand: "Apple", price: 999.99, originalPrice: 1099.99, rating: 4.9, reviews: 342, image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop&q=80", category: "smartphones", description: "Latest iPhone with titanium design.", inStock: true, featured: true, tags: ["smartphones","Apple"] },
+    { _id: 'fb2', name: "MacBook Pro M3", brand: "Apple", price: 1999.99, originalPrice: 2199.99, rating: 4.9, reviews: 456, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop&q=80", category: "laptops", description: "Powerful laptop with M3 chip.", inStock: true, featured: true, tags: ["laptops","Apple"] },
+    { _id: 'fb3', name: "Sony WH-1000XM5", brand: "Sony", price: 349.99, originalPrice: 399.99, rating: 4.9, reviews: 567, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop&q=80", category: "audio", description: "Industry-leading ANC headphones.", inStock: true, featured: true, tags: ["audio","Sony"] },
+    { _id: 'fb4', name: "PlayStation 5", brand: "Sony", price: 499.99, rating: 4.8, reviews: 678, image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop&q=80", category: "gaming", description: "Next-gen gaming console.", inStock: true, featured: true, tags: ["gaming","Sony"] },
+    { _id: 'fb5', name: "Galaxy S24 Ultra", brand: "Samsung", price: 1199.99, rating: 4.8, reviews: 298, image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop&q=80", category: "smartphones", description: "Premium Android with S Pen.", inStock: true, featured: true, tags: ["smartphones","Samsung"] },
+    { _id: 'fb6', name: "iPad Pro M4", brand: "Apple", price: 1099.99, originalPrice: 1299.99, rating: 4.9, reviews: 378, image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop&q=80", category: "tablets", description: "M4 chip tablet powerhouse.", inStock: true, featured: true, tags: ["tablets","Apple"] },
+    { _id: 'fb7', name: "Sony A7R V", brand: "Sony", price: 3899.99, rating: 4.9, reviews: 234, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=300&fit=crop&q=80", category: "cameras", description: "61MP full-frame powerhouse.", inStock: true, featured: true, tags: ["cameras","Sony"] },
+    { _id: 'fb8', name: "Apple Watch Ultra 2", brand: "Apple", price: 799.99, rating: 4.9, reviews: 389, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop&q=80", category: "wearables", description: "Ultimate adventure watch.", inStock: true, featured: true, tags: ["wearables","Apple"] },
+];
+
 const userStories = [
     {
         id: 1,
@@ -86,8 +97,11 @@ const FeaturedProducts: React.FC = () => {
                 const start = (page - 1) * limit;
                 setProducts(featured.slice(start, start + limit));
             } catch (err) {
-                console.error('Failed to load featured products:', err);
-                setError('Failed to load products. Please check your connection and try again.');
+                console.warn('API unavailable, using fallback products:', err);
+                const featured = fallbackProducts.sort((a, b) => b.rating - a.rating);
+                setTotal(featured.length);
+                const start = (page - 1) * limit;
+                setProducts(featured.slice(start, start + limit));
             } finally {
                 setLoading(false);
             }

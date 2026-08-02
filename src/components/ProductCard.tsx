@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, Star, Heart, Repeat, Eye } from 'lucide-react';
+import { ShoppingBag, Star, Heart, Repeat, Eye, ImageOff } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import QuickView from './QuickView';
 import '../styles/ProductCard.scss';
@@ -8,33 +8,17 @@ import type { Product } from '../types';
 
 interface ProductCardProps { product: Product; }
 
-const getHue = (str: string) => { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); return hash % 360; };
-
-const genSvgDataUri = (product: Product) => {
-  const hue = getHue(product.name);
-  const hue2 = (hue + 30) % 360;
-  const initials = product.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
-  <rect width="400" height="300" fill="hsl(${hue},60%,70%)"/>
-  <rect width="400" height="300" fill="hsl(${hue2},55%,55%)" opacity="0.6"/>
-  <circle cx="280" cy="340" r="200" fill="hsl(${(hue+60)%360},60%,80%)" opacity="0.3"/>
-  <circle cx="330" cy="180" r="120" fill="hsl(${(hue+90)%360},55%,75%)" opacity="0.3"/>
-  <text x="30" y="55" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#fff" opacity="0.8">${product.brand || ''}</text>
-  <text x="30" y="270" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#fff" opacity="0.85">${initials}</text>
-</svg>`;
-
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-};
+const getBgColor = (str: string) => { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); const h = hash % 360; return `hsl(${h}, 50%, 85%)`; };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const { addToCart, toggleWishlist, toggleCompare, isInWishlist, isInCompare } = useStore();
     const [showQuickView, setShowQuickView] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
+    const [imgErr, setImgErr] = useState(false);
     const [adding, setAdding] = useState(false);
 
     const getProductId = () => product._id || product.id?.toString() || '';
     const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
-    const svgUri = genSvgDataUri(product);
 
     const handleAddToCart = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -52,12 +36,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             transition={{ duration: .35 }}
         >
             <div className="pcard__img-box">
-                <img
-                    src={svgUri}
-                    alt={product.name}
-                    className="pcard__img"
-                    loading="lazy"
-                />
+                {imgErr ? (
+                    <div className="pcard__placeholder" style={{ background: getBgColor(product.name) }}>
+                        <ImageOff size={48} opacity={0.25} />
+                        <span>{product.name}</span>
+                    </div>
+                ) : (
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        className={`pcard__img ${imgLoaded ? 'loaded' : ''}`}
+                        loading="lazy"
+                        onLoad={() => setImgLoaded(true)}
+                        onError={() => setImgErr(true)}
+                    />
+                )}
 
                 <div className="pcard__badges">
                     {discount > 0 && <span className="pcard__badge pcard__badge--sale">-{discount}%</span>}

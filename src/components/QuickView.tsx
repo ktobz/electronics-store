@@ -7,31 +7,11 @@ import '../styles/QuickView.scss';
 
 interface QuickViewProps { product: Product; onClose: () => void; }
 
-const getHue = (str: string) => { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); return hash % 360; };
-
-const genProductImage = (product: Product) => {
-  const hue = getHue(product.name);
-  const hue2 = (hue + 30) % 360;
-  const initials = product.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
-  <rect width="400" height="300" fill="hsl(${hue},60%,70%)"/>
-  <rect width="400" height="300" fill="hsl(${hue2},55%,55%)" opacity="0.6"/>
-  <circle cx="280" cy="340" r="200" fill="hsl(${(hue+60)%360},60%,80%)" opacity="0.3"/>
-  <circle cx="330" cy="180" r="120" fill="hsl(${(hue+90)%360},55%,75%)" opacity="0.3"/>
-  <text x="30" y="55" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#fff" opacity="0.8">${product.brand || ''}</text>
-  <text x="30" y="270" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#fff" opacity="0.85">${initials}</text>
-</svg>`;
-
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-};
-
 const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
     const { addToCart, toggleWishlist, isInWishlist } = useStore();
     const [qty, setQty] = React.useState(1);
     const getProductId = () => product._id || product.id?.toString() || '';
     const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
-    const svgUri = genProductImage(product);
 
     return (
         <motion.div className="qvo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
@@ -48,7 +28,7 @@ const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
                 <div className="qvo__body">
                     <div className="qvo__media">
                         <div className="qvo__img-wrap">
-                            <img src={svgUri} alt={product.name} />
+                            <img src={product.image} alt={product.name} />
                             {discount > 0 && <span className="qvo__discount">-{discount}%</span>}
                         </div>
                         <div className="qvo__trust">

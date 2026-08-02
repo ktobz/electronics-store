@@ -24,13 +24,27 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 let pid = 1;
+
+const catImages = {
+  smartphones: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop&q=80',
+  laptops: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop&q=80',
+  audio: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop&q=80',
+  gaming: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop&q=80',
+  wearables: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop&q=80',
+  tablets: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop&q=80',
+  cameras: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=300&fit=crop&q=80',
+  tvs: 'https://images.unsplash.com/photo-1593359677879-a8830e0a38f3?w=400&h=300&fit=crop&q=80',
+  drones: 'https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=400&h=300&fit=crop&q=80',
+  default: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400&h=300&fit=crop&q=80',
+};
+
 const p = (name, brand, price, origPrice, rating, reviews, category, desc, image, tags, featured, inStock) => ({
   _id: `prod_${pid++}`,
   name, brand, price, originalPrice: origPrice, rating, reviews,
-  image: image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300`,
+  image: image || catImages[category] || catImages.default,
   category, description: desc || `${name} by ${brand}.`, inStock: inStock !== false,
   featured: !!featured, tags: tags || [category, brand],
-  images: [image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300`],
+  images: [image || catImages[category] || catImages.default],
   createdAt: new Date(), updatedAt: new Date()
 });
 
