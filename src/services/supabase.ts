@@ -20,23 +20,17 @@ export const signIn = async (email: string, _password: string) => {
     return { user: mockUser, session: { user: mockUser } };
 };
 
-export const signInWithGoogle = async () => {
-    const mockGoogleUser = {
-        id: `google-${Date.now()}`,
-        email: `user${Date.now()}@gmail.com`,
-        name: 'Google User',
-        avatar: 'https://ui-avatars.com/api/?name=Google+User&background=random',
-        googleId: `google-id-${Date.now()}`
+export const signInWithGoogle = async (credential: string) => {
+    const payload = JSON.parse(atob(credential.split('.')[1]));
+    const googleUser = {
+        email: payload.email,
+        name: payload.name,
+        avatar: payload.picture,
+        googleId: payload.sub
     };
 
     try {
-        const response = await api.post('/auth/google', {
-            email: mockGoogleUser.email,
-            name: mockGoogleUser.name,
-            avatar: mockGoogleUser.avatar,
-            googleId: mockGoogleUser.googleId
-        });
-
+        const response = await api.post('/auth/google', googleUser);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         window.location.href = '/';

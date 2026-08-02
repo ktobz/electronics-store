@@ -12,6 +12,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.13.5",
     "@supabase/supabase-js": "^2.98.0",
     "axios": "^1.13.5",
     "bcryptjs": "^2.4.3",

@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithGoogle } from '../services/supabase';
 import { useStore } from '../context/StoreContext';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Check, Chrome } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Check } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import '../styles/AuthPages.scss';
 
 const SignupPage: React.FC = () => {
@@ -67,13 +68,14 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleSignup = async (credentialResponse: { credential?: string }) => {
     setLoading(true);
     setError(null);
 
     try {
-      await signInWithGoogle();
-      // The redirect will handle the rest
+      if (credentialResponse.credential) {
+        await signInWithGoogle(credentialResponse.credential);
+      }
     } catch (error: any) {
       setError(error.message || 'Failed to sign up with Google');
       setLoading(false);
@@ -244,15 +246,15 @@ const SignupPage: React.FC = () => {
           </div>
 
           <div className="social-auth">
-            <motion.button
-              className="social-button google"
-              onClick={handleGoogleSignup}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Chrome size={20} />
-              Continue with Google
-            </motion.button>
+            <GoogleLogin
+              onSuccess={handleGoogleSignup}
+              onError={() => { setError('Google sign-up failed'); setLoading(false); }}
+              type="standard"
+              theme="outline"
+              size="large"
+              text="signup_with"
+              shape="pill"
+            />
           </div>
 
           <div className="auth-footer">

@@ -82,7 +82,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     <span>{product.rating}</span>
                 </div>
                 <div className="pcard__price">
-                    <span className="pcard__curr">${product.price.toLocaleString()}</span>
+                    <span className="pcard__curr">${(product.price ?? 0).toLocaleString()}</span>
                     {product.originalPrice && <span className="pcard__orig">${product.originalPrice.toLocaleString()}</span>}
                 </div>
                 <motion.button className="pcard__atc" whileTap={{ scale: .95 }} onClick={handleAddToCart} disabled={adding}>
