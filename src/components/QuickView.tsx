@@ -7,11 +7,35 @@ import '../styles/QuickView.scss';
 
 interface QuickViewProps { product: Product; onClose: () => void; }
 
+const getHue = (str: string) => { let hash = 0; for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash); return hash % 360; };
+
+const genProductImage = (product: Product) => {
+  const hue = getHue(product.name);
+  const initials = product.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+
+  return 'data:image/svg+xml,' + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:hsl(${hue},65%,75%)"/>
+          <stop offset="100%" style="stop-color:hsl(${(hue+30)%360},60%,60%)"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="300" fill="url(#bg)"/>
+      <circle cx="300" cy="220" r="180" fill="rgba(255,255,255,0.15)"/>
+      <circle cx="320" cy="200" r="140" fill="rgba(255,255,255,0.1)"/>
+      <text x="40" y="50" font-family="system-ui,sans-serif" font-size="16" font-weight="600" fill="rgba(255,255,255,0.85)">${product.brand || ''}</text>
+      <text x="40" y="260" font-family="system-ui,sans-serif" font-size="32" font-weight="700" fill="rgba(255,255,255,0.95)">${initials}</text>
+    </svg>`
+  );
+};
+
 const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
     const { addToCart, toggleWishlist, isInWishlist } = useStore();
     const [qty, setQty] = React.useState(1);
     const getProductId = () => product._id || product.id?.toString() || '';
     const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+    const svgUri = genProductImage(product);
 
     return (
         <motion.div className="qvo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
@@ -28,7 +52,7 @@ const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
                 <div className="qvo__body">
                     <div className="qvo__media">
                         <div className="qvo__img-wrap">
-                            <img src={product.image} alt={product.name} />
+                            <img src={svgUri} alt={product.name} />
                             {discount > 0 && <span className="qvo__discount">-{discount}%</span>}
                         </div>
                         <div className="qvo__trust">
