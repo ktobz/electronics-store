@@ -144,7 +144,7 @@ const LoginPage: React.FC = () => {
           <div className="social-auth">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
-              onError={() => { setError('Google sign-in failed'); setLoading(false); }}
+              onError={() => { setError('Google sign-in unavailable — origin not registered in Google Cloud Console. Use email/password above.'); setLoading(false); }}
               type="standard"
               theme="outline"
               size="large"
