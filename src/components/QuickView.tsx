@@ -11,23 +11,19 @@ const getHue = (str: string) => { let hash = 0; for (let i = 0; i < str.length; 
 
 const genProductImage = (product: Product) => {
   const hue = getHue(product.name);
+  const hue2 = (hue + 30) % 360;
   const initials = product.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
-  return 'data:image/svg+xml,' + encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-      <defs>
-        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:hsl(${hue},65%,75%)"/>
-          <stop offset="100%" style="stop-color:hsl(${(hue+30)%360},60%,60%)"/>
-        </linearGradient>
-      </defs>
-      <rect width="400" height="300" fill="url(#bg)"/>
-      <circle cx="300" cy="220" r="180" fill="rgba(255,255,255,0.15)"/>
-      <circle cx="320" cy="200" r="140" fill="rgba(255,255,255,0.1)"/>
-      <text x="40" y="50" font-family="system-ui,sans-serif" font-size="16" font-weight="600" fill="rgba(255,255,255,0.85)">${product.brand || ''}</text>
-      <text x="40" y="260" font-family="system-ui,sans-serif" font-size="32" font-weight="700" fill="rgba(255,255,255,0.95)">${initials}</text>
-    </svg>`
-  );
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+  <rect width="400" height="300" fill="hsl(${hue},60%,70%)"/>
+  <rect width="400" height="300" fill="hsl(${hue2},55%,55%)" opacity="0.6"/>
+  <circle cx="280" cy="340" r="200" fill="hsl(${(hue+60)%360},60%,80%)" opacity="0.3"/>
+  <circle cx="330" cy="180" r="120" fill="hsl(${(hue+90)%360},55%,75%)" opacity="0.3"/>
+  <text x="30" y="55" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#fff" opacity="0.8">${product.brand || ''}</text>
+  <text x="30" y="270" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#fff" opacity="0.85">${initials}</text>
+</svg>`;
+
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 };
 
 const QuickView: React.FC<QuickViewProps> = ({ product, onClose }) => {
