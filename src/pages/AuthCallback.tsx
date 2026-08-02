@@ -1,19 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const AuthCallback: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setTimeout(() => navigate('/'), 500);
+    const token = searchParams.get('token');
+    const user = searchParams.get('user');
+
+    if (token && user) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(user));
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(userData));
+        navigate('/', { replace: true });
+      } catch {
+        navigate('/login?error=Failed+to+parse+user+data', { replace: true });
+      }
+    } else if (token && !user) {
+      localStorage.setItem('token', token);
+      navigate('/', { replace: true });
     } else {
-      setTimeout(() => navigate('/login'), 500);
+      const existing = localStorage.getItem('token');
+      if (existing) {
+        navigate('/', { replace: true });
+      } else {
+        navigate('/login', { replace: true });
+      }
     }
     setLoading(false);
-  }, [navigate]);
+  }, [navigate, searchParams]);
 
   if (loading) {
     return (

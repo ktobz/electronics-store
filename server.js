@@ -5,8 +5,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const path = require('path');
+const { OAuth2Client } = require('google-auth-library');
 
 dotenv.config();
+
+const GOOGLE_CLIENT_ID = process.env.VITE_GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3001/api/auth/google/callback';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, REDIRECT_URI);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,10 +27,10 @@ let pid = 1;
 const p = (name, brand, price, origPrice, rating, reviews, category, desc, image, tags, featured, inStock) => ({
   _id: `prod_${pid++}`,
   name, brand, price, originalPrice: origPrice, rating, reviews,
-  image: image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300.jpg`,
+  image: image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300`,
   category, description: desc || `${name} by ${brand}.`, inStock: inStock !== false,
   featured: !!featured, tags: tags || [category, brand],
-  images: [image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300.jpg`],
+  images: [image || `https://picsum.photos/seed/${name.replace(/\s+/g,'').toLowerCase()}/400/300`],
   createdAt: new Date(), updatedAt: new Date()
 });
 
@@ -300,6 +308,57 @@ app.post('/api/auth/login', async (req, res) => {
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET || 'your-secret-key', { expiresIn: '30d' });
     res.json({ message: 'Login successful', token, user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone, avatar: user.avatar, role: user.role } });
   } catch (error) { res.status(500).json({ error: 'Login failed', details: error.message }); }
+});
+
+// Google OAuth - Server-side flow (no JavaScript origin check needed)
+app.get('/api/auth/google', (req, res) => {
+  const url = googleClient.generateAuthUrl({
+    access_type: 'offline',
+    scope: ['profile', 'email', 'openid'],
+    prompt: 'consent',
+  });
+  res.redirect(url);
+});
+
+app.get('/api/auth/google/callback', async (req, res) => {
+  const { code, error: googleError } = req.query;
+  if (googleError) {
+    return res.redirect(`${FRONTEND_URL}/login?error=${encodeURIComponent('Google auth denied')}`);
+  }
+  if (!code) {
+    return res.redirect(`${FRONTEND_URL}/login?error=${encodeURIComponent('No authorization code received')}`);
+  }
+  try {
+    const { tokens } = await googleClient.getToken(code);
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { email, name, picture: avatar, sub: googleId } = payload;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      const nameParts = (name || 'Google User').split(' ');
+      user = new User({
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' ') || 'User',
+        email,
+        password: await bcrypt.hash(googleId || Date.now().toString(), 10),
+        avatar: avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(nameParts[0])}&background=random`,
+        role: 'user',
+      });
+      await user.save();
+    }
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET || 'your-secret-key', { expiresIn: '30d' });
+    res.redirect(`${FRONTEND_URL}/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify({
+      id: user._id, firstName: user.firstName, lastName: user.lastName,
+      email: user.email, avatar: user.avatar, role: user.role,
+    }))}`);
+  } catch (err) {
+    console.error('Google OAuth error:', err.message);
+    res.redirect(`${FRONTEND_URL}/login?error=${encodeURIComponent('Google auth failed: ' + err.message)}`);
+  }
 });
 
 app.post('/api/auth/google', async (req, res) => {
