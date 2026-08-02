@@ -66,6 +66,7 @@ const userStories = [
 const FeaturedProducts: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [currentStory, setCurrentStory] = useState(0);
@@ -74,6 +75,7 @@ const FeaturedProducts: React.FC = () => {
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const data = await productsAPI.getProducts({ limit: 100 });
                 const allProducts: Product[] = data.products || [];
@@ -85,6 +87,7 @@ const FeaturedProducts: React.FC = () => {
                 setProducts(featured.slice(start, start + limit));
             } catch (err) {
                 console.error('Failed to load featured products:', err);
+                setError('Failed to load products. Please check your connection and try again.');
             } finally {
                 setLoading(false);
             }
@@ -114,6 +117,21 @@ const FeaturedProducts: React.FC = () => {
                     <div className="product-loading">
                         <Loader2 className="animate-spin" size={48} />
                         <p>Loading the latest tech...</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="section featured-products" id="products">
+                <div className="container">
+                    <div className="product-loading">
+                        <p className="error-text">{error}</p>
+                        <button className="btn btn-primary" onClick={() => { setError(null); setPage(1); }} style={{ marginTop: '1rem' }}>
+                            Retry
+                        </button>
                     </div>
                 </div>
             </section>

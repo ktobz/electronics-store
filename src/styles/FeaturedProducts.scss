@@ -39,6 +39,12 @@
     svg {
         color: $primary-color;
     }
+
+    .error-text {
+        color: #dc3545;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
 }
 
 .featured-stories {
