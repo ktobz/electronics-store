@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import ProductCard from '../components/ProductCard';
 import { productsAPI } from '../services/api';
+import { mockProducts } from '../data/mockProducts';
 import type { Product } from '../types';
 import { motion } from 'framer-motion';
 import { Search, AlertCircle, X, Star, DollarSign, SlidersHorizontal } from 'lucide-react';
@@ -33,7 +34,12 @@ const ProductsPage: React.FC = () => {
             if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
             setProducts(filtered);
         } catch {
-            setError('Failed to load products.');
+            let filtered = [...mockProducts];
+            filtered = filtered.filter(p => p.price <= priceRange);
+            if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
+            if (searchTerm) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            if (brand) filtered = filtered.filter(p => p.brand === brand);
+            setProducts(filtered);
         } finally {
             setLoading(false);
         }
