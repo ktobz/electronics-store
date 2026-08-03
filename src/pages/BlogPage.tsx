@@ -54,7 +54,7 @@ const BlogPage: React.FC = () => {
                         className="hero-content"
                     >
                         <div className="hero-icon">
-                            <TrendingUp size={48} />
+                            <TrendingUp size={36} />
                         </div>
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}

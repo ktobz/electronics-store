@@ -12,7 +12,7 @@
 
     // Hero Section
     .blog-hero {
-        padding: 120px 0;
+        padding: 60px 0;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         position: relative;
@@ -35,69 +35,69 @@
             z-index: 1;
 
             .hero-icon {
-                width: 120px;
-                height: 120px;
+                width: 80px;
+                height: 80px;
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto 32px;
+                margin: 0 auto 20px;
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(255, 255, 255, 0.2);
             }
 
             .blog-hero__title {
-                font-size: 4rem;
+                font-size: 2.5rem;
                 font-weight: 800;
-                margin-bottom: 24px;
-                letter-spacing: -2px;
+                margin-bottom: 16px;
+                letter-spacing: -1px;
                 background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
 
                 @media (max-width: 768px) {
-                    font-size: 2.5rem;
+                    font-size: 1.8rem;
                 }
             }
 
             .blog-hero__subtitle {
-                font-size: 1.3rem;
+                font-size: 1.05rem;
                 opacity: 0.9;
-                margin-bottom: 48px;
+                margin-bottom: 20px;
                 max-width: 700px;
                 margin-left: auto;
                 margin-right: auto;
                 line-height: 1.6;
 
                 @media (max-width: 768px) {
-                    font-size: 1.1rem;
+                    font-size: 0.95rem;
                 }
             }
 
             .hero-stats {
                 display: flex;
                 justify-content: center;
-                gap: 48px;
-                margin-bottom: 32px;
+                gap: 24px;
+                margin-bottom: 16px;
 
                 @media (max-width: 768px) {
                     flex-direction: column;
-                    gap: 24px;
+                    gap: 12px;
                 }
 
                 .stat-item {
                     display: flex;
                     align-items: center;
-                    gap: 12px;
-                    padding: 16px 24px;
+                    gap: 8px;
+                    padding: 10px 18px;
                     background: rgba(255, 255, 255, 0.1);
                     backdrop-filter: blur(10px);
                     border: 1px solid rgba(255, 255, 255, 0.2);
                     border-radius: 50px;
                     font-weight: 600;
-                    font-size: 0.95rem;
+                    font-size: 0.85rem;
 
                     svg {
                         color: #fbbf24;
@@ -109,7 +109,7 @@
 
     // Blog Container
     .blog-container {
-        padding: 80px 0;
+        padding: 40px 0;
     }
 
     // Blog Controls

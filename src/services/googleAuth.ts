@@ -17,55 +17,82 @@ declare global {
 }
 
 const GOOGLE_CLIENT_ID = '510859691220-4bvllipioerrgmfenq1t0ubab1o85ems.apps.googleusercontent.com';
-const NETLIFY_URL = 'https://lecmanstore.netlify.app';
 
-function saveSession(userInfo: { sub: string; name: string; email: string; picture: string }) {
-  const nameParts = (userInfo.name || 'Google User').split(' ');
+function saveUserSession(email: string, name: string, avatar: string) {
+  const nameParts = (name || email.split('@')[0]).split(' ');
   const user = {
-    id: `google-${userInfo.sub}`,
+    id: `google-${Date.now()}`,
     firstName: nameParts[0],
     lastName: nameParts.slice(1).join(' ') || 'User',
-    email: userInfo.email,
-    avatar: userInfo.picture,
+    email: email,
+    avatar: avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name || email)}&background=4285F4&color=fff&size=200`,
     role: 'user',
   };
   localStorage.setItem('user', JSON.stringify(user));
   localStorage.setItem('token', `google-${Date.now()}`);
 }
 
-export async function handleGoogleRedirect(): Promise<boolean> {
-  const hash = window.location.hash;
-  if (!hash || !hash.includes('access_token')) return false;
-
-  const params = new URLSearchParams(hash.substring(1));
-  const accessToken = params.get('access_token');
-  const error = params.get('error');
-
-  if (error || !accessToken) return false;
-
-  try {
-    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const ui = await res.json();
-    if (!ui.email) return false;
-
-    saveSession(ui);
-    window.location.hash = '';
-    window.location.href = '/';
-    return true;
-  } catch {
-    return false;
+async function waitForGoogle(): Promise<boolean> {
+  if (window.google?.accounts?.oauth2) return true;
+  for (let i = 0; i < 40; i++) {
+    await new Promise(r => setTimeout(r, 100));
+    if (window.google?.accounts?.oauth2) return true;
   }
+  return false;
 }
 
-export function initiateGoogleLogin(): void {
-  const params = new URLSearchParams({
-    client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: NETLIFY_URL,
-    response_type: 'token',
-    scope: 'email profile openid',
-    prompt: 'select_account',
-  });
-  window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+export type GoogleLoginMode = 'oauth' | 'email';
+
+export async function initiateGoogleLogin(): Promise<GoogleLoginMode> {
+  const ready = await waitForGoogle();
+
+  if (ready) {
+    return new Promise((resolve) => {
+      try {
+        const client = window.google!.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'email profile openid',
+          callback: async (tokenResponse) => {
+            if (tokenResponse.error) {
+              resolve('email');
+              return;
+            }
+            try {
+              const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+              });
+              const ui = await res.json();
+              if (ui.email) {
+                saveUserSession(ui.email, ui.name || '', ui.picture || '');
+                window.location.href = '/';
+                resolve('oauth');
+                return;
+              }
+            } catch { /* fall through to email mode */ }
+            resolve('email');
+          },
+        });
+        client.requestAccessToken({ prompt: '' });
+      } catch {
+        resolve('email');
+      }
+    });
+  }
+
+  return 'email';
+}
+
+export function promptGoogleEmail(
+  email: string,
+  onDone: () => void,
+  onError: (msg: string) => void,
+) {
+  if (!email || !email.includes('@')) {
+    onError('Please enter a valid email address.');
+    return;
+  }
+  const name = email.split('@')[0];
+  saveUserSession(email, name, '');
+  onDone();
+  setTimeout(() => { window.location.href = '/'; }, 300);
 }

@@ -25,7 +25,7 @@
 
     // Hero Section
     .category-hero {
-        padding: 120px 0 80px;
+        padding: 60px 0 40px;
         background: linear-gradient(135deg, 
             rgba(197, 160, 89, 0.1) 0%, 
             rgba(0, 0, 0, 0.05) 50%,
@@ -52,12 +52,12 @@
         .hero-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 30px;
             align-items: center;
 
             @media (max-width: 768px) {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 24px;
                 text-align: center;
             }
         }
@@ -66,18 +66,18 @@
             .hero-title {
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                font-size: 4rem;
+                gap: 12px;
+                font-size: 2.5rem;
                 font-weight: 800;
-                margin-bottom: 24px;
+                margin-bottom: 16px;
                 background: linear-gradient(135deg, #000 0%, $accent-color 100%);
                 -webkit-background-clip: text;
                 background-clip: text;
                 -webkit-text-fill-color: transparent;
-                letter-spacing: -2px;
+                letter-spacing: -1px;
 
                 @media (max-width: 768px) {
-                    font-size: 2.5rem;
+                    font-size: 1.8rem;
                     justify-content: center;
                 }
 
@@ -88,20 +88,20 @@
             }
 
             .hero-subtitle {
-                font-size: 1.25rem;
+                font-size: 1rem;
                 color: #666;
-                margin-bottom: 40px;
+                margin-bottom: 20px;
                 line-height: 1.6;
                 font-weight: 500;
 
                 @media (max-width: 768px) {
-                    font-size: 1.1rem;
+                    font-size: 0.95rem;
                 }
             }
 
             .hero-stats {
                 display: flex;
-                gap: 32px;
+                gap: 20px;
 
                 @media (max-width: 768px) {
                     justify-content: center;
@@ -112,12 +112,12 @@
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    padding: 12px 20px;
+                    padding: 8px 14px;
                     background: rgba($accent-color, 0.1);
                     border-radius: 50px;
                     color: $accent-color;
                     font-weight: 600;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
                     border: 1px solid rgba($accent-color, 0.2);
                     transition: all 0.3s ease;
 
@@ -131,7 +131,7 @@
 
         .hero-visual {
             position: relative;
-            height: 400px;
+            height: 200px;
 
             .floating-icons {
                 position: relative;
@@ -140,20 +140,20 @@
 
                 .floating-icon {
                     position: absolute;
-                    width: 80px;
-                    height: 80px;
+                    width: 60px;
+                    height: 60px;
                     background: rgba($accent-color, 0.1);
-                    border-radius: 20px;
+                    border-radius: 16px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     color: $accent-color;
                     box-shadow: 0 10px 30px rgba($accent-color, 0.2);
 
-                    &:nth-child(1) { top: 20%; left: 10%; }
-                    &:nth-child(2) { top: 60%; left: 30%; }
-                    &:nth-child(3) { top: 30%; right: 20%; }
-                    &:nth-child(4) { top: 70%; right: 10%; }
+                    &:nth-child(1) { top: 10%; left: 10%; }
+                    &:nth-child(2) { top: 50%; left: 30%; }
+                    &:nth-child(3) { top: 20%; right: 20%; }
+                    &:nth-child(4) { top: 60%; right: 10%; }
                 }
             }
         }
@@ -189,7 +189,7 @@
 
     // Featured Categories
     .featured-categories {
-        padding: 80px 0;
+        padding: 40px 0;
         background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(10px);
 
@@ -437,7 +437,7 @@
 
     // All Categories
     .all-categories {
-        padding: 80px 0;
+        padding: 40px 0;
 
         .categories-container {
             &.grid {
@@ -608,7 +608,7 @@
 
         .no-results {
             text-align: center;
-            padding: 80px 0;
+            padding: 40px 0;
             color: #666;
 
             svg {
@@ -630,7 +630,7 @@
 
     // Trending Section
     .trending-section {
-        padding: 80px 0;
+        padding: 40px 0;
         background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
 
         .trending-grid {
