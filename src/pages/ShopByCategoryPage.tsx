@@ -40,6 +40,24 @@ const categoryIcons: Record<string, React.ReactNode> = {
     security: <Shield />, printers: <Package />, storage: <HardDrive />
 };
 
+const mockCategories: Category[] = [
+    { id: 'smartphones', name: 'Smartphones', productCount: 6, featured: true, trending: true },
+    { id: 'laptops', name: 'Laptops', productCount: 6, featured: true, trending: true },
+    { id: 'audio', name: 'Audio', productCount: 8, featured: true, trending: true },
+    { id: 'gaming', name: 'Gaming', productCount: 6, featured: true, trending: true },
+    { id: 'wearables', name: 'Wearables', productCount: 4, featured: true, trending: false },
+    { id: 'tablets', name: 'Tablets', productCount: 4, featured: true, trending: false },
+    { id: 'cameras', name: 'Cameras', productCount: 5, featured: true, trending: false },
+    { id: 'tvs', name: 'TVs', productCount: 4, featured: true, trending: true },
+    { id: 'drones', name: 'Drones', productCount: 2, featured: false, trending: false },
+    { id: 'smart-home', name: 'Smart Home', productCount: 3, featured: false, trending: false },
+    { id: 'components', name: 'Components', productCount: 4, featured: false, trending: true },
+    { id: 'monitors', name: 'Monitors', productCount: 2, featured: false, trending: false },
+    { id: 'vr-ar', name: 'VR & AR', productCount: 1, featured: false, trending: true },
+    { id: 'security', name: 'Security', productCount: 2, featured: false, trending: false },
+    { id: 'networking', name: 'Networking', productCount: 1, featured: false, trending: false },
+];
+
 const ShopByCategoryPage: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
@@ -51,8 +69,8 @@ const ShopByCategoryPage: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         categoriesAPI.getCategories()
-            .then(data => setCategories(data.categories || []))
-            .catch(() => {})
+            .then(data => setCategories(data.categories && data.categories.length > 0 ? data.categories : mockCategories))
+            .catch(() => setCategories(mockCategories))
             .finally(() => setLoading(false));
     }, []);
 
