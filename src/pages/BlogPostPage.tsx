@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, ArrowLeft, Share2, Twitter, Facebook } from 'lucide-react';
 import { blogAPI } from '../services/api';
+import { fallbackBlogs } from '../data/mockProducts';
 import type { BlogPost } from '../types';
 import '../styles/BlogPostPage.scss';
 
@@ -17,11 +18,15 @@ const BlogPostPage: React.FC = () => {
             if (id) {
                 try {
                     const data = await blogAPI.getBlog(id);
-                    if (data) {
+                    if (data && data.title) {
                         setPost(data);
+                    } else {
+                        const fallback = fallbackBlogs.find(b => b.slug === id || b._id === id);
+                        setPost(fallback || null);
                     }
-                } catch (err) {
-                    console.error('Failed to load blog post:', err);
+                } catch {
+                    const fallback = fallbackBlogs.find(b => b.slug === id || b._id === id);
+                    setPost(fallback || null);
                 } finally {
                     setLoading(false);
                 }

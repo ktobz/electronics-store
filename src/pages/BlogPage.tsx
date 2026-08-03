@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, ArrowRight, Search, Clock, TrendingUp, Award, Zap } from 'lucide-react';
 import { blogAPI } from '../services/api';
+import { fallbackBlogs } from '../data/mockProducts';
 import type { BlogPost } from '../types';
 import '../styles/BlogPage.scss';
 
@@ -16,9 +17,10 @@ const BlogPage: React.FC = () => {
         const loadPosts = async () => {
             try {
                 const data = await blogAPI.getBlogs({ limit: 50 });
-                setPosts(data.blogs || []);
-            } catch (err) {
-                console.error('Failed to load blog posts:', err);
+                const blogs = data.blogs;
+                setPosts(Array.isArray(blogs) && blogs.length > 0 ? blogs : fallbackBlogs as BlogPost[]);
+            } catch {
+                setPosts(fallbackBlogs as BlogPost[]);
             } finally {
                 setLoading(false);
             }
@@ -60,7 +62,7 @@ const BlogPage: React.FC = () => {
                             transition={{ delay: 0.2 }}
                             className="blog-hero__title"
                         >
-                            Tech Insights
+                            Tech Insights &amp; News
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +70,7 @@ const BlogPage: React.FC = () => {
                             transition={{ delay: 0.3 }}
                             className="blog-hero__subtitle"
                         >
-                            Discover cutting-edge technology trends, expert analysis, and in-depth reviews from industry leaders
+                            Stay updated with the latest trends and product guides.
                         </motion.p>
                         
                         <motion.div
@@ -119,7 +121,7 @@ const BlogPage: React.FC = () => {
                             onClick={() => navigate(`/blog/${post.slug || post.id}`)}
                         >
                             <div className="blog-card-full__image">
-                                <img src={post.image} alt={post.title} />
+                                <img src={post.image} alt={post.title} onError={(e) => { (e.target as HTMLImageElement).src = `https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400&fit=crop&q=80`; }} />
                                 <div className="blog-card-full__category">{post.category}</div>
                             </div>
                             <div className="blog-card-full__content">
@@ -131,10 +133,10 @@ const BlogPage: React.FC = () => {
                                 <p className="blog-card-full__excerpt">{post.excerpt}</p>
                                 <div className="blog-card-full__footer">
                                     <div className="author">
-                                        <img src={post.authorImage} alt={post.author} />
+                                        <img src={post.authorImage || post.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=667eea&color=fff`} alt={post.author} onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&background=667eea&color=fff`; }} />
                                         <div>
                                             <strong>{post.author}</strong>
-                                            <span>{post.authorRole}</span>
+                                            <span>{post.authorRole || 'Tech Writer'}</span>
                                         </div>
                                     </div>
                                     <button className="read-btn">
