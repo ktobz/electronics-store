@@ -26,7 +26,13 @@ api.interceptors.request.use(
 
 // Add response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const ct = response.headers['content-type'] || '';
+    if (ct.includes('text/html') || (typeof response.data === 'string' && response.data.trim().startsWith('<'))) {
+      return Promise.reject(new Error('API returned HTML — backend unavailable'));
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid, redirect to login

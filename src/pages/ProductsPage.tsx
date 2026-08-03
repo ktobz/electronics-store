@@ -24,7 +24,8 @@ const ProductsPage: React.FC = () => {
         setLoading(true);
         try {
             const data = await productsAPI.getProducts({ limit: 200 });
-            setAllProducts(data.products || []);
+            const prods = data.products;
+            setAllProducts(Array.isArray(prods) && prods.length > 0 ? prods : mockProducts);
         } catch {
             setAllProducts(mockProducts);
         } finally {

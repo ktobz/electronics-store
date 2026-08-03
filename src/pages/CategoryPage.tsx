@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { productsAPI } from '../services/api';
+import { mockProducts } from '../data/mockProducts';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '../types';
 import '../styles/CategoryPage.scss';
@@ -31,8 +32,8 @@ const CategoryPage: React.FC = () => {
         setLoading(true);
         setPage(1);
         productsAPI.getProducts({ limit: 200, category: categoryId || undefined })
-            .then(data => setProducts(data.products || []))
-            .catch(() => setProducts([]))
+            .then(data => setProducts(data.products && data.products.length > 0 ? data.products : mockProducts.filter(p => !categoryId || p.category === categoryId)))
+            .catch(() => setProducts(mockProducts.filter(p => !categoryId || p.category === categoryId)))
             .finally(() => setLoading(false));
     }, [categoryId]);
 
