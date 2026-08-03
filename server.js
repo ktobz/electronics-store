@@ -330,11 +330,7 @@ app.get('/api/auth/google/callback', async (req, res) => {
   }
   try {
     const { tokens } = await googleClient.getToken(code);
-    const ticket = await googleClient.verifyIdToken({
-      idToken: tokens.id_token,
-      audience: GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
+    const payload = JSON.parse(Buffer.from(tokens.id_token.split('.')[1], 'base64').toString());
     const { email, name, picture: avatar, sub: googleId } = payload;
 
     let user = await User.findOne({ email });
