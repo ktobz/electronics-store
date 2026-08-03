@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { handleGoogleRedirect } from './services/googleAuth';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import FeaturedProducts from './components/FeaturedProducts';
@@ -34,6 +36,8 @@ import CartDrawer from './components/CartDrawer';
 import './styles/main.scss';
 
 function App() {
+  useEffect(() => { handleGoogleRedirect(); }, []);
+
   return (
     <Router>
       <StoreProvider>

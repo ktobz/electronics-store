@@ -29,15 +29,9 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setLoading(true);
-    setError(null);
-    try {
-      await initiateGoogleLogin();
-    } catch (err: any) {
-      setError(err.message || 'Google sign-in failed');
-      setLoading(false);
-    }
+    initiateGoogleLogin();
   };
 
   return (
