@@ -18,7 +18,6 @@ const ProductsPage: React.FC = () => {
     const [minRating, setMinRating] = useState(0);
     const [page, setPage] = useState(1);
     const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-    const [showFilters, setShowFilters] = useState(false);
     const limit = 12;
 
     const loadProducts = useCallback(async () => {
@@ -75,14 +74,11 @@ const ProductsPage: React.FC = () => {
                             <button className="toolbar-clear" onClick={() => setSearchInput('')}><X size={16}/></button>
                         )}
                     </div>
-                    <button className="toolbar-filter-btn" onClick={() => setShowFilters(!showFilters)}>
-                        <SlidersHorizontal size={18} /> Filters {showFilters ? '▲' : '▼'}
-                    </button>
                 </div>
 
                 <div className="products-page__layout">
-                    <aside className={`products-page__sidebar ${showFilters ? 'open' : ''}`}>
-                        <div className="sidebar-header"><SlidersHorizontal size={18} /><h3>Filters</h3><button onClick={() => setShowFilters(false)} className="sidebar-close"><X size={18}/></button></div>
+                    <aside className="products-page__sidebar">
+                        <div className="sidebar-header"><SlidersHorizontal size={18} /><h3>Filters</h3></div>
 
                         <div className="filter-group">
                             <div className="filter-label"><DollarSign size={14} /> Price Range</div>

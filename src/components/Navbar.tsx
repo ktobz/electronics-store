@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ShoppingBag, Star, X, Heart, User,
-  ChevronDown, Moon, Sun, Trophy, Search, Zap,
+  ChevronDown, Trophy, Search, Zap,
   Smartphone, Laptop, Headphones, Gamepad2, Watch,
   Globe, FileText, Megaphone, AppWindow, Rocket, Package
 } from 'lucide-react';
@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { user, cart, wishlist, compare, points, isDarkMode, toggleDarkMode, setCartOpen, logout } = useStore();
+  const { user, cart, wishlist, compare, points, setCartOpen, logout } = useStore();
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -155,9 +155,6 @@ const Navbar: React.FC = () => {
             <div className="navbar__points" title={`${points} Electro Points`}>
               <Trophy size={15} /><span>{points}</span>
             </div>
-            <button className="navbar__icon-btn" onClick={toggleDarkMode} title="Toggle theme" aria-label="Toggle dark mode">
-              {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
-            </button>
             <NavLink to="/wishlist" className="navbar__icon-btn" aria-label="Wishlist">
               <Heart size={24} />
               {wishlist.length > 0 && <span className="navbar__badge">{wishlist.length}</span>}
