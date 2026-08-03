@@ -60,22 +60,14 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const savedUser = localStorage.getItem('user');
 
       if (token && savedUser) {
-        try {
-          const userData = JSON.parse(savedUser);
-          setUser(userData);
+        const userData = JSON.parse(savedUser);
+        setUser(userData);
 
-          // Load user's cart and wishlist from backend
-          const cartData = await userAPI.getCart();
-          setCart(cartData.products || []);
-
-          const wishlistData = await userAPI.getWishlist();
-          setWishlist(wishlistData.products || []);
-        } catch (error) {
-          console.error('Failed to restore session:', error);
-          // Token may be expired - clear it
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-        }
+        // Load user's cart and wishlist from backend (non-critical)
+        try { const cartData = await userAPI.getCart(); setCart(cartData.products || []); }
+        catch { /* backend unavailable — keep session alive */ }
+        try { const wishlistData = await userAPI.getWishlist(); setWishlist(wishlistData.products || []); }
+        catch { /* backend unavailable — keep session alive */ }
       }
     };
 
