@@ -71,3 +71,9 @@ export const mockProducts: Product[] = [
   {_id:'p57',name:"Arlo Pro 5S",brand:"Arlo",price:249.99,rating:4.5,reviews:298,category:"security",description:"2K HDR. Color night vision.",inStock:true,featured:false,tags:["security","Arlo"],image:I(14)},
   {_id:'p58',name:"Netgear Orbi 970",brand:"Netgear",price:2299.99,rating:4.6,reviews:189,category:"networking",description:"WiFi 7. Quad-band. 10GbE.",inStock:true,featured:false,tags:["networking","Netgear"],image:I(15)},
 ];
+
+export const fallbackBlogs = [
+  {_id:'fb1',title:"The Future of Gaming with PS5 Pro",slug:"future-of-gaming-ps5",excerpt:"Ray tracing, 8K upscaling, and AI-driven frame generation redefine console gaming.",content:"Full article about PS5 Pro gaming.",author:"Alex Mercer",authorAvatar:"https://i.pravatar.cc/150?u=alex",category:"Gaming",tags:["gaming","PS5"],featured:true,image:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=400&fit=crop&q=80",readTime:5,likes:124,views:450,date:"2026-07-15"},
+  {_id:'fb2',title:"Apple M4: A Quantum Leap",slug:"apple-m4-chip-leap",excerpt:"Apple's M4 family with second-gen 3nm and hardware-accelerated AI.",content:"Full article about Apple M4.",author:"Sarah Connor",authorAvatar:"https://i.pravatar.cc/150?u=sarah",category:"Laptops",tags:["laptops","Apple"],featured:true,image:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=400&fit=crop&q=80",readTime:7,likes:98,views:310,date:"2026-07-01"},
+  {_id:'fb3',title:"Sony vs Bose: ANC Headphone Showdown",slug:"sony-vs-bose-2026",excerpt:"WH-1000XM6 vs QuietComfort Ultra - in-depth comparison.",content:"Full article about headphone comparison.",author:"Mark Evans",authorAvatar:"https://i.pravatar.cc/150?u=mark",category:"Audio",tags:["audio","Sony","Bose"],featured:false,image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=400&fit=crop&q=80",readTime:6,likes:87,views:234,date:"2026-06-20"},
+];

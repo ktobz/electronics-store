@@ -1,63 +1,55 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ProductCard from '../components/ProductCard';
 import { productsAPI } from '../services/api';
 import { mockProducts } from '../data/mockProducts';
 import type { Product } from '../types';
 import { motion } from 'framer-motion';
-import { Search, AlertCircle, X, Star, DollarSign, SlidersHorizontal } from 'lucide-react';
+import { AlertCircle, X, Star, DollarSign, SlidersHorizontal } from 'lucide-react';
 import '../styles/ProductsPage.scss';
+
+const brands = ['Apple','Samsung','Sony','Google','Microsoft','DJI','NVIDIA','Bose','LG','Canon','Nikon','ASUS','Dell','Lenovo'];
 
 const ProductsPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
+    const [allProducts, setAllProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchInput, setSearchInput] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [priceRange, setPriceRange] = useState(3000);
+    const [priceRange, setPriceRange] = useState(5000);
     const [minRating, setMinRating] = useState(0);
     const [page, setPage] = useState(1);
-    const [brand, setBrand] = useState<string | null>(null);
-    const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+    const [showFilters, setShowFilters] = useState(false);
     const limit = 12;
 
     const loadProducts = useCallback(async () => {
         setLoading(true);
-        setError(null);
         try {
-            const data = await productsAPI.getProducts({
-                page, limit,
-                brand: brand || undefined,
-                search: searchTerm.trim() || undefined,
-            });
-            let filtered: Product[] = data.products || [];
-            filtered = filtered.filter(p => p.price <= priceRange);
-            if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
-            setProducts(filtered);
+            const data = await productsAPI.getProducts({ limit: 200 });
+            setAllProducts(data.products || []);
         } catch {
-            let filtered = [...mockProducts];
-            filtered = filtered.filter(p => p.price <= priceRange);
-            if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
-            if (searchTerm) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
-            if (brand) filtered = filtered.filter(p => p.brand === brand);
-            setProducts(filtered);
+            setAllProducts(mockProducts);
         } finally {
             setLoading(false);
         }
-    }, [page, limit, brand, searchTerm, priceRange, minRating]);
+    }, []);
 
     useEffect(() => { loadProducts(); }, [loadProducts]);
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        setSearchTerm(searchInput.trim());
+    useEffect(() => {
+        let filtered = [...allProducts];
+        if (searchInput.trim()) {
+            const q = searchInput.toLowerCase();
+            filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || (p.brand||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
+        }
+        if (selectedBrand) filtered = filtered.filter(p => p.brand === selectedBrand);
+        filtered = filtered.filter(p => p.price <= priceRange);
+        if (minRating > 0) filtered = filtered.filter(p => p.rating >= minRating);
+        setProducts(filtered);
         setPage(1);
-    };
+    }, [allProducts, searchInput, selectedBrand, priceRange, minRating]);
 
-    const handleInput = (val: string) => {
-        setSearchInput(val);
-        clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => setSearchTerm(val.trim()), 400);
-    };
+    const paginated = products.slice((page - 1) * limit, page * limit);
+    const totalPages = Math.ceil(products.length / limit);
 
     return (
         <div className="products-page">
@@ -71,62 +63,81 @@ const ProductsPage: React.FC = () => {
             </header>
 
             <div className="container">
+                <div className="products-page__toolbar">
+                    <div className="toolbar-search">
+                        <input
+                            type="text"
+                            placeholder="Search by name, brand, or category..."
+                            value={searchInput}
+                            onChange={e => setSearchInput(e.target.value)}
+                        />
+                        {searchInput && (
+                            <button className="toolbar-clear" onClick={() => setSearchInput('')}><X size={16}/></button>
+                        )}
+                    </div>
+                    <button className="toolbar-filter-btn" onClick={() => setShowFilters(!showFilters)}>
+                        <SlidersHorizontal size={18} /> Filters {showFilters ? '▲' : '▼'}
+                    </button>
+                </div>
+
                 <div className="products-page__layout">
-                    <aside className="products-page__sidebar">
-                        <div className="sidebar-header"><SlidersHorizontal size={18} /><h3>Filters</h3></div>
+                    <aside className={`products-page__sidebar ${showFilters ? 'open' : ''}`}>
+                        <div className="sidebar-header"><SlidersHorizontal size={18} /><h3>Filters</h3><button onClick={() => setShowFilters(false)} className="sidebar-close"><X size={18}/></button></div>
+
                         <div className="filter-group">
-                            <h4><DollarSign size={14} /> Max Price</h4>
-                            <input type="range" min="0" max="3000" step="50" value={priceRange} onChange={e => setPriceRange(parseInt(e.target.value))} />
-                            <div className="range-labels"><span>$0</span><span>${priceRange.toLocaleString()}</span></div>
+                            <div className="filter-label"><DollarSign size={14} /> Price Range</div>
+                            <input type="range" min="0" max="5000" step="100" value={priceRange} onChange={e => setPriceRange(parseInt(e.target.value))} className="price-slider" />
+                            <div className="range-values">$0 — <strong>${priceRange.toLocaleString()}</strong></div>
                         </div>
+
                         <div className="filter-group">
-                            <h4><Star size={14} /> Min Rating</h4>
-                            <div className="rating-options">
+                            <div className="filter-label"><Star size={14} /> Minimum Rating</div>
+                            <div className="rating-chips">
                                 {[4,3,2,1].map(s => (
-                                    <button key={s} className={minRating === s ? 'active' : ''} onClick={() => setMinRating(minRating === s ? 0 : s)}>{s}+ ★</button>
+                                    <button key={s} className={`chip ${minRating === s ? 'active' : ''}`} onClick={() => setMinRating(minRating === s ? 0 : s)}>
+                                        {s}+ <Star size={12} fill={minRating === s ? '#fff' : '#c5a059'} stroke={minRating === s ? '#fff' : '#c5a059'} />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="filter-group">
+                            <div className="filter-label">Brand</div>
+                            <div className="brand-chips">
+                                <button className={`chip ${!selectedBrand ? 'active' : ''}`} onClick={() => setSelectedBrand(null)}>All Brands</button>
+                                {brands.map(b => (
+                                    <button key={b} className={`chip ${selectedBrand === b ? 'active' : ''}`} onClick={() => setSelectedBrand(selectedBrand === b ? null : b)}>{b}</button>
                                 ))}
                             </div>
                         </div>
                     </aside>
 
                     <div className="products-page__main">
-                        <div className="products-page__controls">
-                            <div className="brand-tabs">
-                                <button className={!brand ? 'active' : ''} onClick={() => setBrand(null)}>All</button>
-                                <button className={brand === 'Samsung' ? 'active' : ''} onClick={() => setBrand('Samsung')}>Samsung</button>
-                                <button className={brand === 'Apple' ? 'active' : ''} onClick={() => setBrand('Apple')}>Apple</button>
-                                <button className={brand === 'Sony' ? 'active' : ''} onClick={() => setBrand('Sony')}>Sony</button>
-                                <button className={brand === 'Google' ? 'active' : ''} onClick={() => setBrand('Google')}>Google</button>
-                            </div>
-
-                            <form className="products-search" onSubmit={handleSearch}>
-                                <Search size={16} />
-                                <input type="text" placeholder="Search products..." value={searchInput} onChange={e => handleInput(e.target.value)} />
-                                {searchInput && <button type="button" className="clear-btn" onClick={() => { setSearchInput(''); setSearchTerm(''); setPage(1); }}><X size={14} /></button>}
-                                <button type="submit" className="search-btn">Search</button>
-                            </form>
-                        </div>
-
                         {loading ? (
                             <div className="products-loader"><div className="spinner" /></div>
-                        ) : error ? (
-                            <div className="products-error"><AlertCircle size={40} /><p>{error}</p><button onClick={loadProducts}>Retry</button></div>
-                        ) : products.length === 0 ? (
-                            <div className="products-empty"><Search size={48} opacity={.2} /><p>No products found</p></div>
+                        ) : paginated.length === 0 ? (
+                            <div className="products-empty">
+                                <AlertCircle size={48} opacity={.2} />
+                                <p>No products match your filters</p>
+                                <button className="btn" onClick={() => { setSearchInput(''); setSelectedBrand(null); setPriceRange(5000); setMinRating(0); }}>Clear All Filters</button>
+                            </div>
                         ) : (
                             <>
+                                <div className="products-meta">{products.length} products found</div>
                                 <div className="products-grid">
-                                    {products.map((p, i) => (
+                                    {paginated.map((p, i) => (
                                         <motion.div key={p._id || i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * .03 }}>
                                             <ProductCard product={p} />
                                         </motion.div>
                                     ))}
                                 </div>
-                                <div className="products-pagination">
-                                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}>Prev</button>
-                                    <span>Page {page}</span>
-                                    <button onClick={() => setPage(p => p + 1)} disabled={products.length < limit}>Next</button>
-                                </div>
+                                {totalPages > 1 && (
+                                    <div className="products-pagination">
+                                        <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}>← Prev</button>
+                                        <span>Page {page} of {totalPages}</span>
+                                        <button onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>Next →</button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>

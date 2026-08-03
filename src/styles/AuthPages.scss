@@ -255,6 +255,17 @@
   }
 
   .social-auth {
+    .google-login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      
+      > div {
+        width: 100%;
+      }
+    }
+
     .social-button {
       width: 100%;
       padding: 8px;
